@@ -1,0 +1,348 @@
+'use client'
+import { useState } from 'react'
+import Link from 'next/link'
+import { Button } from '@/components/ui/Button'
+
+// ── ModelsStrip ───────────────────────────────────────────
+export function ModelsStrip() {
+  const models = [
+    { label: 'Claude (Anthropic)', color: '#7b61ff' },
+    { label: 'GPT-4o (OpenAI)',    color: '#00e5a0' },
+    { label: 'Gemini Pro (Google)',color: '#ff6b6b' },
+    { label: 'Claude Code',        color: '#ff9f43' },
+    { label: 'Mistral',            color: '#6b6b85', soon: true },
+    { label: 'Llama 3',            color: '#6b6b85', soon: true },
+  ]
+  return (
+    <div className="border-y border-border bg-bg-surface/60 py-5">
+      <div className="max-w-content mx-auto px-[48px] flex items-center gap-10 flex-wrap">
+        <span className="font-mono text-[0.68rem] text-text-muted whitespace-nowrap">
+          Works with every major model →
+        </span>
+        <div className="flex gap-2.5 flex-wrap">
+          {models.map((m) => (
+            <div key={m.label}
+              className={`flex items-center gap-2 px-[18px] py-2 rounded-lg border border-border bg-bg-surface font-grotesk font-medium text-[0.82rem] ${m.soon ? 'opacity-50' : ''}`}>
+              <div className="w-[7px] h-[7px] rounded-full flex-shrink-0" style={{ background: m.color }} />
+              {m.label}
+              {m.soon && (
+                <span className="font-mono text-[0.55rem] text-text-muted bg-bg-s2 px-1.5 py-px rounded">soon</span>
+              )}
+            </div>
+          ))}
+        </div>
+      </div>
+    </div>
+  )
+}
+
+// ── Features ──────────────────────────────────────────────
+const FEATURES = [
+  { icon: 'compress.svg',       color: 'green',  title: 'Prompt Compressor',   desc: 'Paste any prompt and watch it shrink in real time. Three modes — Balanced, Aggressive, Smart — give you full control.', tag: 'Core feature' },
+  { icon: 'modals.svg',         color: 'purple', title: 'Multi-Model Support', desc: 'Switch between Claude, GPT-4, and Gemini from one dashboard. Cost estimates update per model automatically.', tag: 'Differentiator' },
+  { icon: 'live-tokens.svg',    color: 'green',  title: 'Live Token Counter',  desc: 'See exactly how many tokens your prompt costs before you send it. Updates character by character.', tag: 'Free' },
+  { icon: 'analytic-graph.svg', color: 'orange', title: 'Analytics Dashboard', desc: 'Track every compression across every model. Tokens saved, cost saved, compression ratios over time. Export to CSV.', tag: 'Pro' },
+  { icon: 'smart.svg',          color: 'purple', title: 'Smart Mode',          desc: 'Powered by Claude itself. Understands context — preserves technical terms and constraints while removing filler.', tag: 'AI-powered' },
+  { icon: 'history.svg',        color: 'teal',   title: 'Compression History', desc: 'Every compression is saved. Go back, restore, compare original vs compressed side by side.', tag: 'Pro' },
+]
+
+const iconBg: Record<string, string> = {
+  green:  'bg-accent/10 border border-accent/20',
+  purple: 'bg-accent-purple/10 border border-accent-purple/20',
+  orange: 'bg-accent-orange/10 border border-accent-orange/20',
+  teal:   'bg-accent-teal/10 border border-accent-teal/20',
+}
+
+const tagStyle: Record<string, string> = {
+  green:  'bg-accent/10 text-accent border border-accent/20',
+  purple: 'bg-accent-purple/10 text-accent-purple border border-accent-purple/20',
+  orange: 'bg-accent-orange/10 text-accent-orange border border-accent-orange/20',
+  teal:   'bg-accent-teal/10 text-accent-teal border border-accent-teal/20',
+}
+
+export function Features() {
+  return (
+    <section id="features" className="py-30">
+      <div className="max-w-content mx-auto px-[48px]">
+        <div className="text-center mb-18">
+          <div className="flex items-center justify-center gap-2.5 font-mono text-[0.68rem] font-bold tracking-[0.14em] uppercase text-accent mb-4">
+            Features
+          </div>
+          <h2 className="font-grotesk font-bold text-[clamp(2rem,4vw,3rem)] tracking-[-0.035em] leading-none mb-4">
+            Everything you need to<br />spend less on tokens.
+          </h2>
+          <p className="font-sans text-[1rem] text-text-muted leading-relaxed max-w-[520px] mx-auto">
+            Built for developers, power users and teams who use AI every day and hate watching their token budget disappear.
+          </p>
+        </div>
+
+        <div className="grid grid-cols-3 gap-5">
+          {FEATURES.map((f) => (
+            <div key={f.title}
+              className="bg-bg-card border border-border rounded-3xl p-8 hover:border-accent/25 hover:-translate-y-0.5 transition-all duration-200 relative overflow-hidden card-accent">
+              <div className={`w-11 h-11 rounded-xl flex items-center justify-center mb-5 ${iconBg[f.color]}`}>
+                <img src={`/${f.icon}`} alt={f.title} width={24} height={24} style={{ filter: 'brightness(0) invert(1)' }} />
+              </div>
+              <h3 className="font-grotesk font-bold text-[0.94rem] tracking-tight mb-2.5">{f.title}</h3>
+              <p className="font-sans text-[0.84rem] text-text-muted leading-relaxed">{f.desc}</p>
+              <span className={`inline-block mt-4 font-mono text-[0.62rem] font-bold px-2.5 py-1 rounded tracking-[0.06em] ${tagStyle[f.color]}`}>
+                {f.tag}
+              </span>
+            </div>
+          ))}
+        </div>
+      </div>
+    </section>
+  )
+}
+
+// ── HowItWorks ────────────────────────────────────────────
+const STEPS = [
+  { n: '01', title: 'Paste your prompt', desc: 'Drop in any prompt — a question, instruction, or long document. Tokko counts your tokens live as you type.' },
+  { n: '02', title: 'Choose your compression mode', desc: 'Pick Balanced (50%), Aggressive (75%), or Smart (AI-powered). Hit compress — done in under 2 seconds.' },
+  { n: '03', title: 'Copy and use anywhere', desc: 'Copy the compressed prompt and paste it directly into Claude, ChatGPT, Gemini, or any AI tool.' },
+  { n: '04', title: 'Track your savings over time', desc: 'Every compression is tracked. See your running total — tokens saved, money saved, compression ratios.' },
+]
+
+export function HowItWorks() {
+  return (
+    <section id="howitworks" className="py-30 border-y border-border bg-bg-surface/40">
+      <div className="max-w-content mx-auto px-[48px]">
+        <div className="grid grid-cols-2 gap-20 items-start">
+          <div>
+            <div className="flex items-center gap-2.5 font-mono text-[0.68rem] font-bold tracking-[0.14em] uppercase text-accent mb-4">
+              <span className="w-6 h-px bg-accent" /> How it works
+            </div>
+            <h2 className="font-grotesk font-bold text-[clamp(2rem,3.5vw,2.8rem)] tracking-tight leading-none mb-4">
+              Three steps.<br />Massive savings.
+            </h2>
+            <p className="font-sans text-text-muted leading-relaxed mb-12 max-w-[400px]">
+              No setup, no integration required. Just paste, compress, and copy. Works with any AI tool you already use.
+            </p>
+
+            <div className="space-y-0">
+              {STEPS.map((s, i) => (
+                <div key={s.n} className={`flex gap-5 py-7 ${i < STEPS.length - 1 ? 'border-b border-border' : ''}`}>
+                  <div className="w-10 h-10 rounded-xl bg-bg-s2 border border-border flex items-center justify-center font-mono text-[0.78rem] font-bold text-text-muted flex-shrink-0">
+                    {s.n}
+                  </div>
+                  <div>
+                    <div className="font-grotesk font-bold text-[0.94rem] mb-1.5">{s.title}</div>
+                    <div className="font-sans text-[0.82rem] text-text-muted leading-relaxed">{s.desc}</div>
+                  </div>
+                </div>
+              ))}
+            </div>
+          </div>
+
+          {/* Mini demo */}
+          <div className="sticky top-24">
+            <div className="bg-bg-card border border-border rounded-2xl overflow-hidden shadow-panel">
+              <div className="bg-bg-surface px-5 py-3 border-b border-border flex items-center justify-between">
+                <span className="font-mono text-[0.68rem] text-text-muted">Tokko · Optimizer</span>
+                <div className="flex items-center gap-1.5 font-mono text-[0.7rem] text-text bg-bg-s2 border border-border rounded px-2 py-1">
+                  <div className="w-1.5 h-1.5 rounded-full bg-accent-purple" />
+                  Claude
+                </div>
+              </div>
+              <div className="p-5 space-y-3">
+                <div className="flex gap-2">
+                  {['Balanced', 'Aggressive', 'Smart'].map((m, i) => (
+                    <div key={m} className={`px-3 py-1.5 rounded-md font-grotesk font-semibold text-[0.72rem] border ${i === 0 ? 'border-accent bg-accent/8 text-accent' : 'border-border bg-bg-s2 text-text-muted'}`}>
+                      {m}
+                    </div>
+                  ))}
+                </div>
+                <div className="bg-bg-s2 border border-border rounded-lg p-3 font-mono text-[0.72rem] text-text-muted leading-relaxed">
+                  Could you please help me write a Python function that filters even numbers...
+                </div>
+                <div className="w-full py-2.5 bg-accent rounded-lg font-grotesk font-bold text-[0.8rem] text-black text-center">
+                  Compress prompt →
+                </div>
+                <div className="bg-accent/6 border border-accent/20 rounded-lg p-3 font-mono text-[0.72rem] text-accent leading-relaxed">
+                  Python fn: filter even nums list. With examples.
+                </div>
+                <div className="flex justify-between">
+                  <span className="font-mono text-[0.68rem] bg-accent/10 text-accent border border-accent/20 px-2 py-0.5 rounded">−72% tokens</span>
+                  <span className="font-mono text-[0.65rem] text-text-muted">saved $0.0002</span>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+  )
+}
+
+// ── SocialProof ───────────────────────────────────────────
+const TESTIMONIALS = [
+  { quote: 'Using Tokko cut our monthly Claude bill by almost 60%. Same outputs, way less tokens. Paid for itself in the first hour.', name: 'Arjun Kapoor', role: 'Full-stack dev · Bangalore', initials: 'AK', color: '#7b61ff' },
+  { quote: "I use Claude Code every day and was burning through tokens insanely fast. Smart mode is genuinely impressive — it knows what to keep.", name: 'Sara Reeves', role: 'AI engineer · London', initials: 'SR', color: '#00e5a0' },
+  { quote: 'The multi-model dashboard is the killer feature. One place to see everything across Claude and GPT is huge.', name: 'Marcus Johansson', role: 'Product designer · Stockholm', initials: 'MJ', color: '#ff9f43' },
+]
+
+const STATS = [
+  { value: '2.4B+', label: 'Tokens saved to date', green: true },
+  { value: '$48k+', label: 'Saved for our users' },
+  { value: '62%',   label: 'Avg token reduction', green: true },
+  { value: '12k+',  label: 'Active users' },
+]
+
+export function SocialProof() {
+  return (
+    <section id="proof" className="py-30 border-t border-border">
+      <div className="max-w-content mx-auto px-[48px]">
+        <div className="text-center mb-14">
+          <div className="flex items-center justify-center gap-2.5 font-mono text-[0.68rem] font-bold tracking-[0.14em] uppercase text-accent mb-4">
+            Loved by builders
+          </div>
+          <h2 className="font-grotesk font-bold text-[clamp(2rem,4vw,3rem)] tracking-tight leading-none">
+            Real people. Real savings.
+          </h2>
+        </div>
+
+        <div className="grid grid-cols-3 gap-4 mb-15">
+          {TESTIMONIALS.map((t) => (
+            <div key={t.name} className="bg-bg-card border border-border rounded-2xl p-6 flex flex-col hover:border-accent/20 transition-colors">
+              <p className="font-sans text-[0.88rem] text-text-muted leading-relaxed mb-5 flex-1">
+                "{t.quote}"
+              </p>
+              <div className="flex items-center gap-2.5">
+                <div className="w-[34px] h-[34px] rounded-full flex items-center justify-center font-grotesk text-[0.72rem] font-bold text-black flex-shrink-0"
+                  style={{ background: t.color }}>
+                  {t.initials}
+                </div>
+                <div>
+                  <div className="font-grotesk font-bold text-[0.82rem]">{t.name}</div>
+                  <div className="font-mono text-[0.62rem] text-text-muted">{t.role}</div>
+                </div>
+              </div>
+            </div>
+          ))}
+        </div>
+
+        <div className="grid grid-cols-4 border border-border rounded-2xl overflow-hidden">
+          {STATS.map((s, i) => (
+            <div key={s.label} className={`bg-bg-card py-7 px-6 text-center ${i < 3 ? 'border-r border-border' : ''}`}>
+              <div className={`font-grotesk font-bold text-[2rem] tracking-tight mb-1.5 ${s.green ? 'text-accent' : ''}`}>
+                {s.value}
+              </div>
+              <div className="font-mono text-[0.65rem] text-text-muted tracking-[0.06em]">{s.label}</div>
+            </div>
+          ))}
+        </div>
+      </div>
+    </section>
+  )
+}
+
+// ── FAQ ───────────────────────────────────────────────────
+const FAQS = [
+  {
+    q: 'How does Tokko compress prompts?',
+    a: 'Tokko removes filler words, redundant phrasing, and unnecessary politeness while preserving the core intent and technical details of your prompt. Smart mode uses AI to understand context before compressing.',
+  },
+  {
+    q: 'Will the compressed prompt give the same AI output?',
+    a: 'In most cases yes — AI models are very good at understanding compressed, direct instructions. Balanced mode is the safest (around 50% reduction). Aggressive mode gives bigger savings but works best for simple prompts.',
+  },
+  {
+    q: 'Which AI models does Tokko support?',
+    a: 'Currently Claude (Anthropic), GPT-4o (OpenAI), and Gemini Pro (Google). Mistral and Llama support is coming soon.',
+  },
+  {
+    q: 'Is the free plan really free?',
+    a: 'Yes — 50 compressions per day, forever. No credit card required to sign up.',
+  },
+  {
+    q: 'What is Smart mode?',
+    a: 'Smart mode uses Claude to understand your prompt before compressing it — preserving technical terms, constraints, and key instructions while removing everything else. It gives the best quality compression but uses slightly more processing time.',
+  },
+  {
+    q: 'Is my data safe?',
+    a: 'Your prompts are processed to perform compression and are not used to train any models. We do store your compression history so you can review it in your dashboard — you can delete this at any time.',
+  },
+  {
+    q: 'When is the Chrome extension coming?',
+    a: 'The Chrome extension is planned for weeks 3–4. It will add a one-click compress button directly inside Claude.ai, ChatGPT, and Gemini so you never have to leave the tab.',
+  },
+  {
+    q: 'Do you have an API?',
+    a: 'A REST API and SDKs (JavaScript and Python) are on our roadmap for Month 2. Sign up free to get notified when it launches.',
+  },
+]
+
+export function FAQ() {
+  const [open, setOpen] = useState<number | null>(0)
+
+  return (
+    <section id="faq" className="py-30 border-t border-border">
+      <div className="max-w-content mx-auto px-[48px]">
+        <div className="text-center mb-16">
+          <div className="flex items-center justify-center gap-2.5 font-mono text-[0.68rem] font-bold tracking-[0.14em] uppercase text-accent mb-4">
+            FAQ
+          </div>
+          <h2 className="font-grotesk font-bold text-[clamp(2rem,4vw,3rem)] tracking-tight leading-none mb-4">
+            Questions? We got you.
+          </h2>
+          <p className="font-sans text-[1rem] text-text-muted max-w-[480px] mx-auto">
+            Everything you need to know about Tokko. Can't find your answer?{' '}
+            <a href="mailto:hello@tokko.app" className="text-accent hover:underline">Email us.</a>
+          </p>
+        </div>
+
+        <div className="max-w-[720px] mx-auto space-y-2">
+          {FAQS.map((faq, i) => (
+            <div key={i} className="bg-bg-card border border-border rounded-2xl overflow-hidden transition-all">
+              <button
+                onClick={() => setOpen(open === i ? null : i)}
+                className="w-full flex items-center justify-between px-6 py-5 text-left hover:bg-bg-surface/50 transition-colors"
+              >
+                <span className="font-grotesk font-bold text-[0.94rem] pr-4">{faq.q}</span>
+                <span className={`text-accent font-mono text-lg flex-shrink-0 transition-transform duration-200 ${open === i ? 'rotate-45' : ''}`}>
+                  +
+                </span>
+              </button>
+              {open === i && (
+                <div className="px-6 pb-5">
+                  <p className="font-sans text-[0.88rem] text-text-muted leading-relaxed border-t border-border pt-4">
+                    {faq.a}
+                  </p>
+                </div>
+              )}
+            </div>
+          ))}
+        </div>
+      </div>
+    </section>
+  )
+}
+
+// ── CTABanner ─────────────────────────────────────────────
+export function CTABanner() {
+  return (
+    <section className="py-24 border-y border-border bg-gradient-to-br from-accent/6 to-accent-purple/6 relative overflow-hidden text-center">
+      <div className="absolute inset-0 bg-[radial-gradient(ellipse_60%_80%_at_50%_100%,rgba(0,229,160,0.08),transparent)]" />
+      <div className="relative max-w-content mx-auto px-[48px]">
+        <h2 className="font-grotesk font-bold text-[clamp(2rem,4vw,3.2rem)] tracking-tight leading-none mb-4">
+          Ready to stop wasting tokens?
+        </h2>
+        <p className="font-sans text-[1rem] text-text-muted mb-9">
+          Start for free. No credit card. 50 compressions a day, forever.
+        </p>
+        <div className="flex gap-3.5 justify-center">
+          <Link href="/auth/signup">
+            <Button size="lg">Get started free →</Button>
+          </Link>
+          <Link href="/#pricing">
+            <Button variant="outline" size="lg">View pricing</Button>
+          </Link>
+        </div>
+        <p className="font-mono text-[0.68rem] text-text-muted mt-4">
+          Free forever · No credit card · Upgrade anytime
+        </p>
+      </div>
+    </section>
+  )
+}
