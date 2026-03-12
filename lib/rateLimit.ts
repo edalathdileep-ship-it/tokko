@@ -133,7 +133,7 @@ export async function saveCompression(
   const supabase = getSupabaseAdmin()
 
   // Save compression record
-  await supabase.from('compressions').insert({
+  const { error: insertError } = await supabase.from('compressions').insert({
     user_id: userId,
     original_text: data.original,
     compressed_text: data.compressed,
@@ -144,6 +144,11 @@ export async function saveCompression(
     model: data.model,
     cost_saved: data.costSaved,
   })
+
+  if (insertError) {
+    console.error('[Supabase compressions insert error]', insertError)
+    return
+  }
 
   // Fetch current profile to get existing totals
   const { data: profile } = await supabase
