@@ -25,7 +25,7 @@ export function Optimizer() {
   const atLimit = plan === 'free' && dailyUsage >= dailyLimit
 
   const handleCompress = useCallback(async () => {
-    if (!input.trim() || isLoading || atLimit) return
+    if (!input?.trim() || isLoading || atLimit) return
     setLoading(true)
     setError(null)
 
@@ -33,7 +33,7 @@ export function Optimizer() {
       const res = await fetch('/api/compress', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ prompt: input, mode, model, apiKey }),
+        body: JSON.stringify({ prompt: input ?? '', mode, model, apiKey }),
       })
       const json = await res.json()
 

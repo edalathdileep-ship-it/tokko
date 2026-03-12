@@ -26,7 +26,7 @@ interface OptimizerStore {
 }
 
 export const useOptimizerStore = create<OptimizerStore>((set) => ({
-  input: '',
+  input: '' as string,
   result: null,
   mode: 'balanced',
   model: 'claude',
