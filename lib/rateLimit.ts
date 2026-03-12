@@ -79,6 +79,42 @@ export async function checkAndIncrementUsage(userId: string): Promise<{
   return { allowed: true, used: compressionsToday + 1, limit, plan }
 }
 
+export async function getUserStats(userId: string): Promise<{
+  totalTokensSaved: number
+  totalCompressions: number
+  avgReduction: number
+  totalCostSaved: number
+}> {
+  const supabase = getSupabaseAdmin()
+
+  const { data: profile } = await supabase
+    .from('user_profiles')
+    .select('total_tokens_saved, total_compressions, total_cost_saved')
+    .eq('user_id', userId)
+    .single()
+
+  if (!profile) {
+    return { totalTokensSaved: 0, totalCompressions: 0, avgReduction: 0, totalCostSaved: 0 }
+  }
+
+  // Calculate avg reduction from compressions table
+  const { data: compressions } = await supabase
+    .from('compressions')
+    .select('saved_pct')
+    .eq('user_id', userId)
+
+  const avgReduction = compressions && compressions.length > 0
+    ? compressions.reduce((sum, c) => sum + (c.saved_pct || 0), 0) / compressions.length
+    : 0
+
+  return {
+    totalTokensSaved: profile.total_tokens_saved || 0,
+    totalCompressions: profile.total_compressions || 0,
+    avgReduction: Math.round(avgReduction),
+    totalCostSaved: profile.total_cost_saved || 0,
+  }
+}
+
 export async function saveCompression(
   userId: string,
   data: {

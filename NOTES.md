@@ -73,10 +73,27 @@ ANTHROPIC_API_KEY=✅ set (server-side only, never exposed to browser)
 - Mode selector: Balanced / Aggressive / Smart
 - Model selector: Claude / GPT-4 / Gemini
 - Compress button with arrow icon
-- ✅ Real Claude compression wired up via server-side ANTHROPIC_API_KEY
+- ✅ Real Claude compression via server-side ANTHROPIC_API_KEY
+- ✅ useEffect properly imported (was recurring build issue — fixed)
+- ✅ Error clears when user types
+- ✅ Reset button shows when input or result exists
 - Falls back to mock if no API key set
-- Error clears when user types
-- Reset button shows when input or result exists
+
+### Security & Rate Limiting
+- lib/security.ts — sanitizePrompt, isPromptTooLarge, safeErrorMessage (never leaks keys/paths)
+- lib/rateLimit.ts — checkAndIncrementUsage (server-side 50/day enforcement), saveCompression
+- Both wired into app/api/compress/route.ts
+- ✅ Stats now increment correctly (fixed replace → increment bug)
+
+### API Route (app/api/compress/route.ts)
+1. Auth check — must be logged in (Clerk)
+2. Request size guard — blocks payloads over 1MB
+3. Input validation — Zod schema
+4. Sanitization — strips null bytes, control chars
+5. Server-side rate limiting — checks Supabase, enforces 50/day for free plan
+6. Compression — real Claude AI
+7. Save to Supabase — compressions table + user_profiles stats
+8. Safe error messages — never leaks API keys or internal paths
 
 ### Database (Supabase)
 - Table: user_profiles (id, user_id, plan, compressions_today, total_compressions, total_tokens_saved, total_cost_saved, last_reset_date, created_at)
@@ -214,9 +231,10 @@ All icons use: `style={{ filter: 'brightness(0) invert(1)' }}` to appear white.
 - Supabase RLS is disabled — filtering by Clerk user_id in application code instead
 - `Zap` icon was removed from Optimizer.tsx (was causing ReferenceError)
 - API key is server-side only (process.env.ANTHROPIC_API_KEY) — never sent from browser
-- useEffect must be imported in Optimizer.tsx — recurring build issue, always check imports
+- useEffect MUST be imported in Optimizer.tsx — if removed it breaks build
 - Testimonials and stats on landing page are all placeholder/fake
-- Dashboard stats still showing "—" (needs Supabase integration)
+- Dashboard stats still showing "—" (Supabase saving works, just need to read it back)
+- Dead `apiKey` removed from Zustand store (was never used after moving to server-side)
 
 ---
 
@@ -226,11 +244,13 @@ All icons use: `style={{ filter: 'brightness(0) invert(1)' }}` to appear white.
 3. ~~Privacy Policy + Terms pages~~ ✅
 4. ~~Settings page~~ ✅
 5. ~~Profile dropdown in Nav~~ ✅
-6. ~~Wire up real Claude compression~~ ✅ (pending build fix)
-7. Fix useEffect import build error ← CURRENT
-8. Save compressions to Supabase
-9. Show real stats on dashboard
-10. Stripe payments
+6. ~~Wire up real Claude compression~~ ✅
+7. ~~Security cleanup (sanitize, rate limit, safe errors)~~ ✅
+8. ~~Remove dead code (apiKey from store)~~ ✅
+9. ~~Fix stats increment bug~~ ✅
+10. Show real stats on dashboard ← NEXT
+11. Save compressions history page
+12. Stripe payments
 
 ---
 
@@ -242,4 +262,4 @@ npm run dev
 ```
 
 ---
-*Last updated: Session 8 — Real Claude compression wired up, dashboard spacing fixed, useEffect import bug (fix: add useEffect to imports in Optimizer.tsx)*
+*Last updated: Session 9 — Security cleanup, rate limiting wired up, stats increment fixed, dead code removed*
