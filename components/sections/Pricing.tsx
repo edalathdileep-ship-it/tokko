@@ -69,18 +69,18 @@ export function Pricing() {
   const [annual, setAnnual] = useState(true)
 
   return (
-    <section id="pricing" className="py-30 border-t border-border">
-      <div className="max-w-content mx-auto px-[48px]">
+    <section id="pricing" className="py-20 md:py-30 border-t border-border">
+      <div className="max-w-content mx-auto px-4 sm:px-8 md:px-[48px]">
 
-        <div className="text-center mb-16">
+        <div className="text-center mb-12 md:mb-16">
           <div className="flex items-center justify-center gap-2.5 font-mono text-[0.68rem] font-bold tracking-[0.14em] uppercase text-accent mb-4">
             Pricing
           </div>
-          <h2 className="font-grotesk font-bold text-[clamp(2rem,4vw,3rem)] tracking-tight leading-none mb-3">
+          <h2 className="font-grotesk font-bold text-[clamp(1.8rem,4vw,3rem)] tracking-tight leading-none mb-3">
             Start free. Scale when ready.
           </h2>
           <p className="font-sans text-text-muted mb-7">
-            No hidden fees. Cancel anytime. Your tokens, your savings.
+            No hidden fees. Cancel anytime.
           </p>
 
           {/* Billing toggle */}
@@ -99,10 +99,10 @@ export function Pricing() {
           </div>
         </div>
 
-        {/* Cards */}
-        <div className="grid grid-cols-3 gap-5 mb-15">
+        {/* Cards — stack on mobile, 3 cols on desktop */}
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-4 md:gap-5 mb-10 md:mb-15">
           {PLANS.map((plan) => (
-            <div key={plan.id} className={`relative rounded-4xl p-8 transition-transform hover:-translate-y-1 ${
+            <div key={plan.id} className={`relative rounded-3xl md:rounded-4xl p-6 md:p-8 transition-transform hover:-translate-y-1 ${
               plan.featured
                 ? 'border border-accent bg-accent/3'
                 : 'border border-border bg-bg-card'
@@ -116,9 +116,9 @@ export function Pricing() {
               <div className="font-mono text-[0.65rem] font-bold tracking-[0.14em] uppercase text-text-muted mb-3.5">
                 {plan.name}
               </div>
-              <div className="font-grotesk font-bold text-[3.2rem] tracking-[-0.05em] leading-none mb-1">
+              <div className="font-grotesk font-bold text-[2.8rem] md:text-[3.2rem] tracking-[-0.05em] leading-none mb-1">
                 ${annual ? plan.annual : plan.monthly}
-                <span className="text-[1rem] font-normal font-sans text-text-muted"> / month</span>
+                <span className="text-[0.9rem] font-normal font-sans text-text-muted"> / month</span>
               </div>
               <p className="font-sans text-[0.8rem] text-text-muted mt-2.5 mb-6 leading-snug">{plan.desc}</p>
               <div className="h-px bg-border mb-6" />
@@ -139,10 +139,7 @@ export function Pricing() {
               </div>
 
               <Link href={plan.id === 'teams' ? '/contact' : '/auth/signup'}>
-                <Button
-                  variant={plan.ctaVariant}
-                  className={`w-full justify-center ${plan.featured ? '' : ''}`}
-                >
+                <Button variant={plan.ctaVariant} className="w-full justify-center">
                   {plan.cta}
                 </Button>
               </Link>
