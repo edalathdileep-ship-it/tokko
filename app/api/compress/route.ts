@@ -2,16 +2,18 @@ import { NextRequest, NextResponse } from 'next/server'
 import { auth } from '@clerk/nextjs/server'
 import { z } from 'zod'
 import { compressWithClaude, mockCompress } from '@/lib/compression'
+import { sanitizePrompt, isPromptTooLarge, safeErrorMessage } from '@/lib/security'
+import { checkAndIncrementUsage, saveCompression } from '@/lib/rateLimit'
 
 const schema = z.object({
-  prompt: z.string().min(1, 'Prompt is required').max(50000, 'Prompt too long'),
+  prompt: z.string().min(1, 'Prompt is required').max(200_000, 'Prompt too long'),
   mode:   z.enum(['balanced', 'aggressive', 'smart']),
   model:  z.enum(['claude', 'gpt4', 'gemini']),
 })
 
 export async function POST(req: NextRequest) {
   try {
-    // Must be logged in
+    // ── 1. Auth check ─────────────────────────────────────
     const { userId } = await auth()
     if (!userId) {
       return NextResponse.json(
@@ -20,9 +22,18 @@ export async function POST(req: NextRequest) {
       )
     }
 
+    // ── 2. Request size guard (block huge payloads) ────────
+    const contentLength = req.headers.get('content-length')
+    if (contentLength && parseInt(contentLength) > 1_000_000) {
+      return NextResponse.json(
+        { success: false, error: 'Request too large' },
+        { status: 413 }
+      )
+    }
+
+    // ── 3. Parse body ──────────────────────────────────────
     const body = await req.json()
 
-    // Guard against null/undefined prompt
     if (!body?.prompt || typeof body.prompt !== 'string' || !body.prompt.trim()) {
       return NextResponse.json(
         { success: false, error: 'Please enter a prompt first' },
@@ -30,6 +41,7 @@ export async function POST(req: NextRequest) {
       )
     }
 
+    // ── 4. Validate schema ─────────────────────────────────
     const parsed = schema.safeParse(body)
     if (!parsed.success) {
       return NextResponse.json(
@@ -38,29 +50,61 @@ export async function POST(req: NextRequest) {
       )
     }
 
-    const { prompt, mode, model } = parsed.data
+    const { prompt: rawPrompt, mode, model } = parsed.data
 
-    // Use server-side API key — never expose to browser
+    // ── 5. Sanitize input ──────────────────────────────────
+    const prompt = sanitizePrompt(rawPrompt)
+
+    if (isPromptTooLarge(prompt)) {
+      return NextResponse.json(
+        { success: false, error: 'Prompt is too large. Maximum 200,000 characters.' },
+        { status: 400 }
+      )
+    }
+
+    // ── 6. Server-side rate limit check ───────────────────
+    const usage = await checkAndIncrementUsage(userId)
+    if (!usage.allowed) {
+      return NextResponse.json(
+        {
+          success: false,
+          error: `Daily limit reached (${usage.limit} compressions/day on free plan). Upgrade to Pro for unlimited.`,
+          limitReached: true,
+        },
+        { status: 429 }
+      )
+    }
+
+    // ── 7. Compress ────────────────────────────────────────
     const apiKey = process.env.ANTHROPIC_API_KEY
 
     const result = apiKey
       ? await compressWithClaude(prompt, mode, model, apiKey)
       : mockCompress(prompt, mode, model)
 
+    // ── 8. Save to Supabase ────────────────────────────────
+    await saveCompression(userId, {
+      original:        result.original,
+      compressed:      result.compressed,
+      originalTokens:  result.originalTokens,
+      compressedTokens: result.compressedTokens,
+      savedPct:        result.savedPct,
+      savedTokens:     result.savedTokens,
+      mode:            result.mode,
+      model:           result.model,
+      costSaved:       result.costSaved,
+    }).catch((err) => {
+      console.error('[Supabase save error]', err)
+    })
+
     return NextResponse.json({ success: true, data: result })
 
   } catch (err: unknown) {
-    const message = err instanceof Error ? err.message : 'Compression failed'
-
-    if (message.includes('auth') || message.includes('401') || message.includes('API key')) {
-      return NextResponse.json(
-        { success: false, error: 'API configuration error. Please contact support.' },
-        { status: 401 }
-      )
-    }
+    // Never leak internal error details to client
+    const safe = safeErrorMessage(err)
 
     return NextResponse.json(
-      { success: false, error: message },
+      { success: false, error: safe },
       { status: 500 }
     )
   }

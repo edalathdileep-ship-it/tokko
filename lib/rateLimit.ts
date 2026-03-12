@@ -44,6 +44,7 @@ export async function checkAndIncrementUsage(userId: string): Promise<{
 
   if (!profile) {
     // If DB fails, allow but log — don't block users due to DB issues
+    console.error('[rateLimit] Failed to get/create user profile for', userId)
     return { allowed: true, used: 0, limit: 50, plan: 'free' }
   }
 
