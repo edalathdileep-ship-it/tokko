@@ -15,7 +15,7 @@ export default async function DashboardPage() {
       <main className="max-w-content mx-auto px-4 sm:px-8 md:px-[48px] pt-28 pb-20">
 
         {/* Header */}
-        <div className="max-w-3xl mx-auto mb-8">
+        <div className="mb-8">
           <h1 className="font-grotesk font-bold text-[2rem] tracking-tight mb-1">
             Hey, {firstName} 👋
           </h1>
@@ -24,8 +24,8 @@ export default async function DashboardPage() {
           </p>
         </div>
 
-        {/* Stats row — same max-width as optimizer */}
-        <div className="max-w-3xl mx-auto grid grid-cols-2 md:grid-cols-4 gap-4 mb-8">
+        {/* Stats row — full width matching nav */}
+        <div className="grid grid-cols-2 md:grid-cols-4 gap-4 mb-8">
           {[
             { label: 'Tokens saved', value: '—', accent: true },
             { label: 'Compressions',  value: '—' },
@@ -44,7 +44,7 @@ export default async function DashboardPage() {
         </div>
 
         {/* Divider */}
-        <div className="max-w-3xl mx-auto border-t border-border mb-8" />
+        <div className="border-t border-border mb-8" />
 
         {/* Optimizer */}
         <Optimizer />

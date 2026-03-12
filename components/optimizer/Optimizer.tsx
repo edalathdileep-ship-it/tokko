@@ -57,7 +57,7 @@ export function Optimizer() {
   }, [result])
 
   return (
-    <div className="w-full max-w-3xl mx-auto">
+    <div className="w-full">
 
       {/* Mode selector */}
       <div className="flex gap-2 mb-5">
