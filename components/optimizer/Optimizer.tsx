@@ -1,5 +1,5 @@
 'use client'
-import { useState, useCallback, useEffect } from 'react'
+import { useState, useCallback } from 'react'
 import { Copy, Check, RotateCcw, ArrowRight } from 'lucide-react'
 import { Button } from '@/components/ui/Button'
 import { Chip } from '@/components/ui/Chips'
@@ -16,7 +16,7 @@ export function Optimizer() {
   } = useOptimizerStore()
 
   const { addEntry } = useHistoryStore()
-  const { apiKey, dailyUsage, plan, incrementUsage } = useUserStore()
+  const { dailyUsage, plan, incrementUsage } = useUserStore()
 
   const [copied, setCopied] = useState(false)
 
@@ -36,7 +36,7 @@ export function Optimizer() {
       const res = await fetch('/api/compress', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ prompt: input ?? '', mode, model, apiKey }),
+        body: JSON.stringify({ prompt: input ?? '', mode, model }),
       })
       const json = await res.json()
 
@@ -50,7 +50,7 @@ export function Optimizer() {
     } finally {
       setLoading(false)
     }
-  }, [input, mode, model, apiKey, isLoading, atLimit, setLoading, setError, setResult, addEntry, incrementUsage])
+  }, [input, mode, model, isLoading, atLimit, setLoading, setError, setResult, addEntry, incrementUsage])
 
   const handleCopy = useCallback(() => {
     if (!result) return
@@ -247,10 +247,6 @@ export function Optimizer() {
 
       <p className="mt-3 text-center font-mono text-[0.62rem] text-text-muted">
         ⌘ + Enter to compress
-        {!apiKey && ' · Running in demo mode — '}
-        {!apiKey && (
-          <a href="/dashboard" className="text-accent hover:underline">add API key for real compression</a>
-        )}
       </p>
     </div>
   )
