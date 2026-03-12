@@ -3,15 +3,24 @@ import { z } from 'zod'
 import { compressWithClaude, mockCompress } from '@/lib/compression'
 
 const schema = z.object({
-  prompt: z.string().min(1, 'Prompt is required').max(50000, 'Prompt too long'),
+  prompt: z.string({ invalid_type_error: 'Prompt is required' }).min(1, 'Prompt is required').max(50000, 'Prompt too long'),
   mode:   z.enum(['balanced', 'aggressive', 'smart']),
   model:  z.enum(['claude', 'gpt4', 'gemini']),
-  apiKey: z.string().optional(),
+  apiKey: z.string().nullable().optional(),
 })
 
 export async function POST(req: NextRequest) {
   try {
     const body = await req.json()
+
+    // Guard against null/undefined prompt before validation
+    if (!body?.prompt || typeof body.prompt !== 'string' || !body.prompt.trim()) {
+      return NextResponse.json(
+        { success: false, error: 'Please enter a prompt first' },
+        { status: 400 }
+      )
+    }
+
     const parsed = schema.safeParse(body)
 
     if (!parsed.success) {

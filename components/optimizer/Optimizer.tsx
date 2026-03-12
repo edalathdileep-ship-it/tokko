@@ -20,6 +20,9 @@ export function Optimizer() {
 
   const [copied, setCopied] = useState(false)
 
+  // Clear any stale errors on mount
+  useEffect(() => { setError(null) }, [])
+
   const inputTokens = estimateTokens(input)
   const dailyLimit = plan === 'free' ? 50 : Infinity
   const atLimit = plan === 'free' && dailyUsage >= dailyLimit
@@ -144,7 +147,7 @@ export function Optimizer() {
               if ((e.metaKey || e.ctrlKey) && e.key === 'Enter') handleCompress()
             }}
           />
-          {error && input.trim() && (
+          {error && input?.trim() && (
             <p className="mt-2 font-mono text-[0.7rem] text-accent-red">{error}</p>
           )}
         </div>
