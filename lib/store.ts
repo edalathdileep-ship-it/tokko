@@ -69,11 +69,9 @@ export const useHistoryStore = create<HistoryStore>()(
 
 // ── User / Settings Store (persisted) ─────────────────────
 interface UserStore {
-  apiKey: string | null
   model: ModelType
   dailyUsage: number
   plan: 'free' | 'pro' | 'teams'
-  setApiKey: (key: string | null) => void
   setModel: (model: ModelType) => void
   incrementUsage: () => void
   resetUsage: () => void
@@ -82,11 +80,9 @@ interface UserStore {
 export const useUserStore = create<UserStore>()(
   persist(
     (set) => ({
-      apiKey: null,
       model: 'claude',
       dailyUsage: 0,
       plan: 'free',
-      setApiKey: (apiKey) => set({ apiKey }),
       setModel:  (model)  => set({ model }),
       incrementUsage: () => set((s) => ({ dailyUsage: s.dailyUsage + 1 })),
       resetUsage: () => set({ dailyUsage: 0 }),
