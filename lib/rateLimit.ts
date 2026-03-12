@@ -139,7 +139,7 @@ export async function saveCompression(
     compressed_text: data.compressed,
     original_tokens: data.originalTokens,
     compressed_tokens: data.compressedTokens,
-    saved_pct: data.savedPct,
+    saved_pct: Math.round(data.savedPct),
     mode: data.mode,
     model: data.model,
     cost_saved: data.costSaved,
