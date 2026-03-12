@@ -4,10 +4,10 @@ const cols = [
   {
     title: 'Product',
     links: [
-      { label: 'Features',    href: '/#features' },
-      { label: 'How it works',href: '/#howitworks' },
-      { label: 'Pricing',     href: '/#pricing' },
-      { label: 'FAQ',         href: '/#faq' },
+      { label: 'Features',     href: '/#features' },
+      { label: 'How it works', href: '/#howitworks' },
+      { label: 'Pricing',      href: '/#pricing' },
+      { label: 'FAQ',          href: '/#faq' },
     ],
   },
   {
@@ -31,10 +31,10 @@ const cols = [
 export function Footer() {
   return (
     <footer className="bg-bg-surface border-t border-border">
-      <div className="max-w-content mx-auto px-[48px] pt-16 pb-8">
+      <div className="max-w-content mx-auto px-4 sm:px-8 md:px-[48px] pt-14 pb-8">
 
-        {/* Main grid */}
-        <div className="grid grid-cols-5 gap-12 mb-14">
+        {/* Main grid — stacks on mobile */}
+        <div className="grid grid-cols-2 md:grid-cols-5 gap-10 md:gap-12 mb-12">
 
           {/* Brand col */}
           <div className="col-span-2">
@@ -74,7 +74,7 @@ export function Footer() {
         </div>
 
         {/* Bottom bar */}
-        <div className="pt-7 border-t border-border flex items-center justify-between flex-wrap gap-4">
+        <div className="pt-7 border-t border-border flex flex-col sm:flex-row items-center justify-between gap-3">
           <p className="font-mono text-[0.68rem] text-text-muted">
             Built with ❤️ for AI power users
           </p>

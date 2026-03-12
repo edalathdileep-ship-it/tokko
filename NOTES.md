@@ -22,7 +22,7 @@ A token compression SaaS. Users paste AI prompts, Tokko compresses them by up to
 | Database | Supabase (PostgreSQL) |
 | AI | Anthropic SDK (not wired up yet) |
 | Payments | Stripe (not set up yet) |
-| Hosting | Not deployed yet |
+| Hosting | Vercel — https://tokko-seven.vercel.app |
 
 ---
 
@@ -225,7 +225,7 @@ All icons use: `style={{ filter: 'brightness(0) invert(1)' }}` to appear white.
 7. Show real stats on dashboard
 8. Stripe payments
 9. Mobile responsive
-10. Deploy (Vercel)
+10. ~~Deploy (Vercel)~~ ✅ → https://tokko-seven.vercel.app
 
 ---
 
@@ -237,4 +237,4 @@ npm run dev
 ```
 
 ---
-*Last updated: Session 5 — Footer fixed, FAQ added, Privacy/Terms pages created, icon filenames documented*
+*Last updated: Session 6 — Deployed to Vercel at https://tokko-seven.vercel.app*
