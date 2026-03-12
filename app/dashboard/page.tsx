@@ -5,8 +5,6 @@ import { Optimizer } from '@/components/optimizer/Optimizer'
 
 export default async function DashboardPage() {
   const user = await currentUser()
-
-  // Should never reach here due to middleware, but just in case
   if (!user) redirect('/auth/signin')
 
   const firstName = user.firstName || user.emailAddresses[0]?.emailAddress?.split('@')[0] || 'there'
@@ -14,10 +12,10 @@ export default async function DashboardPage() {
   return (
     <div className="min-h-screen bg-bg-base">
       <Nav />
-      <main className="max-w-content mx-auto px-[48px] py-12 pt-28">
+      <main className="max-w-content mx-auto px-4 sm:px-8 md:px-[48px] pt-28 pb-20">
 
         {/* Header */}
-        <div className="mb-10">
+        <div className="max-w-3xl mx-auto mb-8">
           <h1 className="font-grotesk font-bold text-[2rem] tracking-tight mb-1">
             Hey, {firstName} 👋
           </h1>
@@ -26,24 +24,27 @@ export default async function DashboardPage() {
           </p>
         </div>
 
-        {/* Stats row */}
-        <div className="grid grid-cols-4 gap-4 mb-10">
+        {/* Stats row — same max-width as optimizer */}
+        <div className="max-w-3xl mx-auto grid grid-cols-2 md:grid-cols-4 gap-4 mb-8">
           {[
             { label: 'Tokens saved', value: '—', accent: true },
-            { label: 'Compressions', value: '—' },
+            { label: 'Compressions',  value: '—' },
             { label: 'Avg reduction', value: '—' },
-            { label: 'Cost saved', value: '—' },
+            { label: 'Cost saved',    value: '—' },
           ].map((s) => (
             <div key={s.label} className="bg-bg-card border border-border rounded-2xl p-5">
-              <div className={`font-grotesk font-bold text-[1.8rem] tracking-tight mb-1 ${s.accent ? 'text-accent' : ''}`}>
+              <div className={`font-grotesk font-bold text-[1.6rem] tracking-tight mb-1.5 ${s.accent ? 'text-accent' : ''}`}>
                 {s.value}
               </div>
-              <div className="font-mono text-[0.65rem] text-text-muted tracking-[0.06em] uppercase">
+              <div className="font-mono text-[0.62rem] text-text-muted tracking-[0.08em] uppercase">
                 {s.label}
               </div>
             </div>
           ))}
         </div>
+
+        {/* Divider */}
+        <div className="max-w-3xl mx-auto border-t border-border mb-8" />
 
         {/* Optimizer */}
         <Optimizer />

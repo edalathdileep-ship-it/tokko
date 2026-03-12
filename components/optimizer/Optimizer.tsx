@@ -132,19 +132,19 @@ export function Optimizer() {
           </div>
           <textarea
             value={input}
-            onChange={(e) => setInput(e.target.value)}
+            onChange={(e) => { setInput(e.target.value); setError(null) }}
             placeholder="Paste your prompt here..."
             className={cn(
               'flex-1 min-h-[200px] p-4 rounded-2xl bg-bg-surface border font-mono text-[0.8rem] text-text',
               'placeholder:text-text-muted resize-none outline-none transition-colors',
               'focus:border-accent',
-              error ? 'border-accent-red' : 'border-border'
+              (error && input.trim()) ? 'border-accent-red' : 'border-border'
             )}
             onKeyDown={(e) => {
               if ((e.metaKey || e.ctrlKey) && e.key === 'Enter') handleCompress()
             }}
           />
-          {error && (
+          {error && input.trim() && (
             <p className="mt-2 font-mono text-[0.7rem] text-accent-red">{error}</p>
           )}
         </div>
@@ -214,7 +214,6 @@ export function Optimizer() {
           size="lg"
           className="flex-1 shadow-compress"
         >
-        
           {isLoading ? 'Compressing...' : (
             <>Compress prompt <ArrowRight size={16} /></>
           )}

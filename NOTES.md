@@ -220,7 +220,9 @@ All icons use: `style={{ filter: 'brightness(0) invert(1)' }}` to appear white.
 2. ~~Add FAQ section to landing page~~ ✅
 3. ~~Label "coming soon" features honestly~~ ✅
 4. ~~Privacy Policy + Terms pages~~ ✅
-5. Add Anthropic API key → wire up real compression
+5. ~~Settings page~~ ✅
+6. ~~Profile dropdown in Nav~~ ✅
+7. Add Anthropic API key → wire up real compression
 6. Save compressions to Supabase
 7. Show real stats on dashboard
 8. Stripe payments
@@ -237,4 +239,4 @@ npm run dev
 ```
 
 ---
-*Last updated: Session 6 — Deployed to Vercel at https://tokko-seven.vercel.app*
+*Last updated: Session 7 — Profile dropdown in Nav, Settings page built, error message fixed, mobile responsive complete*
