@@ -20,7 +20,7 @@ A token compression SaaS. Users paste AI prompts, Tokko compresses them by up to
 | State | Zustand |
 | Auth | Clerk |
 | Database | Supabase (PostgreSQL) |
-| AI | Anthropic SDK (not wired up yet) |
+| AI | Anthropic SDK ✅ wired up with server-side key |
 | Payments | Stripe (not set up yet) |
 | Hosting | Vercel — https://tokko-seven.vercel.app |
 
@@ -37,7 +37,7 @@ NEXT_PUBLIC_CLERK_PUBLISHABLE_KEY=✅ set
 CLERK_SECRET_KEY=✅ set
 NEXT_PUBLIC_SUPABASE_URL=https://suwsxluxiaylphybyvkk.supabase.co
 NEXT_PUBLIC_SUPABASE_ANON_KEY=✅ set
-ANTHROPIC_API_KEY=❌ not set yet (needs purchase)
+ANTHROPIC_API_KEY=✅ set (server-side only, never exposed to browser)
 ```
 
 ---
@@ -70,10 +70,13 @@ ANTHROPIC_API_KEY=❌ not set yet (needs purchase)
 
 ### Optimizer (components/optimizer/Optimizer.tsx)
 - Input textarea with live token counter
-- Mode selector: Balanced / Aggressive / Smart (text only, no icons)
+- Mode selector: Balanced / Aggressive / Smart
 - Model selector: Claude / GPT-4 / Gemini
-- Compress button with arrow icon (no emoji)
-- Mock compression working (fake results, no real AI)
+- Compress button with arrow icon
+- ✅ Real Claude compression wired up via server-side ANTHROPIC_API_KEY
+- Falls back to mock if no API key set
+- Error clears when user types
+- Reset button shows when input or result exists
 
 ### Database (Supabase)
 - Table: user_profiles (id, user_id, plan, compressions_today, total_compressions, total_tokens_saved, total_cost_saved, last_reset_date, created_at)
@@ -210,24 +213,24 @@ All icons use: `style={{ filter: 'brightness(0) invert(1)' }}` to appear white.
 - Clerk routing uses `routing="hash"` on SignIn/SignUp components to avoid catch-all route errors
 - Supabase RLS is disabled — filtering by Clerk user_id in application code instead
 - `Zap` icon was removed from Optimizer.tsx (was causing ReferenceError)
-- Footer logo still says "PS" — needs to be changed to "T"
+- API key is server-side only (process.env.ANTHROPIC_API_KEY) — never sent from browser
+- useEffect must be imported in Optimizer.tsx — recurring build issue, always check imports
 - Testimonials and stats on landing page are all placeholder/fake
+- Dashboard stats still showing "—" (needs Supabase integration)
 
 ---
 
 ## 📋 Immediate Next Tasks (in order)
-1. ~~Fix footer (remove dead links, fix PS logo, clean up)~~ ✅
-2. ~~Add FAQ section to landing page~~ ✅
-3. ~~Label "coming soon" features honestly~~ ✅
-4. ~~Privacy Policy + Terms pages~~ ✅
-5. ~~Settings page~~ ✅
-6. ~~Profile dropdown in Nav~~ ✅
-7. Add Anthropic API key → wire up real compression
-6. Save compressions to Supabase
-7. Show real stats on dashboard
-8. Stripe payments
-9. Mobile responsive
-10. ~~Deploy (Vercel)~~ ✅ → https://tokko-seven.vercel.app
+1. ~~Fix footer~~ ✅
+2. ~~Add FAQ section~~ ✅
+3. ~~Privacy Policy + Terms pages~~ ✅
+4. ~~Settings page~~ ✅
+5. ~~Profile dropdown in Nav~~ ✅
+6. ~~Wire up real Claude compression~~ ✅ (pending build fix)
+7. Fix useEffect import build error ← CURRENT
+8. Save compressions to Supabase
+9. Show real stats on dashboard
+10. Stripe payments
 
 ---
 
@@ -239,4 +242,4 @@ npm run dev
 ```
 
 ---
-*Last updated: Session 7 — Profile dropdown in Nav, Settings page built, error message fixed, mobile responsive complete*
+*Last updated: Session 8 — Real Claude compression wired up, dashboard spacing fixed, useEffect import bug (fix: add useEffect to imports in Optimizer.tsx)*
