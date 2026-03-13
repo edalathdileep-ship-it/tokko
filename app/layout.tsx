@@ -6,6 +6,7 @@ export const metadata: Metadata = {
   title: 'Tokko — Stop Wasting Tokens',
   description: 'Compress your AI prompts by up to 75%. Same output, fraction of the cost. Works with Claude, GPT-4, and Gemini.',
   keywords: ['AI', 'prompt compression', 'token optimization', 'Claude', 'GPT-4', 'Gemini'],
+  icons: { icon: '/favicon.svg' },
   openGraph: {
     title: 'Tokko — Stop Wasting Tokens',
     description: 'Compress your AI prompts by up to 75%. Same output, fraction of the cost.',

@@ -178,6 +178,7 @@ export function Nav() {
                 </div>
               </div>
               <Link href="/dashboard" className="block font-grotesk font-medium text-text-muted hover:text-text py-1" onClick={() => setMobileOpen(false)}>Dashboard</Link>
+              <Link href="/dashboard/history" className="block font-grotesk font-medium text-text-muted hover:text-text py-1" onClick={() => setMobileOpen(false)}>History</Link>
               <Link href="/#pricing" className="block font-grotesk font-medium text-accent py-1" onClick={() => setMobileOpen(false)}>Upgrade to Pro</Link>
               <SignOutButton>
                 <button className="font-grotesk font-medium text-text-muted py-1">Sign out</button>

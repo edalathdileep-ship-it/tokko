@@ -1,5 +1,6 @@
 'use client'
 import { useState, useCallback, useEffect } from 'react'
+import { useRouter } from 'next/navigation'
 import { Copy, Check, RotateCcw, ArrowRight } from 'lucide-react'
 import { Button } from '@/components/ui/Button'
 import { Chip } from '@/components/ui/Chips'
@@ -17,8 +18,10 @@ export function Optimizer() {
 
   const { addEntry } = useHistoryStore()
   const { dailyUsage, plan, incrementUsage } = useUserStore()
+  const router = useRouter()
 
   const [copied, setCopied] = useState(false)
+  const [showUpgrade, setShowUpgrade] = useState(false)
 
   // Clear any stale errors on mount
   useEffect(() => { setError(null) }, [])
@@ -45,12 +48,14 @@ export function Optimizer() {
       setResult(json.data)
       addEntry(json.data)
       incrementUsage()
+      // Refresh server component to update dashboard stats
+      router.refresh()
     } catch (err) {
       setError(err instanceof Error ? err.message : 'Compression failed')
     } finally {
       setLoading(false)
     }
-  }, [input, mode, model, isLoading, atLimit, setLoading, setError, setResult, addEntry, incrementUsage])
+  }, [input, mode, model, isLoading, atLimit, setLoading, setError, setResult, addEntry, incrementUsage, router])
 
   const handleCopy = useCallback(() => {
     if (!result) return
@@ -211,13 +216,13 @@ export function Optimizer() {
       {/* Compress button */}
       <div className="flex items-center gap-4">
         <Button
-          onClick={handleCompress}
-          disabled={!input.trim() || isLoading || atLimit}
+          onClick={atLimit ? () => setShowUpgrade(true) : handleCompress}
+          disabled={!input?.trim() || isLoading}
           loading={isLoading}
           size="lg"
           className="flex-1 shadow-compress"
         >
-          {isLoading ? 'Compressing...' : (
+          {isLoading ? 'Compressing...' : atLimit ? '✦ Upgrade to compress more' : (
             <>Compress prompt <ArrowRight size={16} /></>
           )}
         </Button>
@@ -235,11 +240,17 @@ export function Optimizer() {
         <div className="mt-4 flex items-center justify-between">
           <div className="flex-1 h-1 bg-bg-s2 rounded-full overflow-hidden mr-3">
             <div
-              className="h-full bg-accent rounded-full transition-all"
+              className={cn(
+                'h-full rounded-full transition-all',
+                dailyUsage >= dailyLimit ? 'bg-accent-red' : 'bg-accent'
+              )}
               style={{ width: `${Math.min(100, (dailyUsage / dailyLimit) * 100)}%` }}
             />
           </div>
-          <span className="font-mono text-[0.65rem] text-text-muted whitespace-nowrap">
+          <span className={cn(
+            'font-mono text-[0.65rem] whitespace-nowrap',
+            dailyUsage >= dailyLimit ? 'text-accent-red' : 'text-text-muted'
+          )}>
             {dailyUsage} / {dailyLimit} today
           </span>
         </div>
@@ -248,6 +259,70 @@ export function Optimizer() {
       <p className="mt-3 text-center font-mono text-[0.62rem] text-text-muted">
         ⌘ + Enter to compress
       </p>
+
+      {/* Upgrade modal */}
+      {showUpgrade && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center p-4">
+          {/* Backdrop */}
+          <div
+            className="absolute inset-0 bg-black/60 backdrop-blur-sm"
+            onClick={() => setShowUpgrade(false)}
+          />
+          {/* Modal */}
+          <div className="relative bg-bg-card border border-border rounded-3xl p-8 max-w-md w-full shadow-2xl">
+            {/* Close */}
+            <button
+              onClick={() => setShowUpgrade(false)}
+              className="absolute top-4 right-4 text-text-muted hover:text-text transition-colors font-mono text-lg"
+            >
+              ×
+            </button>
+
+            {/* Icon */}
+            <div className="w-12 h-12 rounded-2xl bg-accent/10 border border-accent/20 flex items-center justify-center mb-5 text-xl">
+              ⚡
+            </div>
+
+            <h2 className="font-grotesk font-bold text-[1.4rem] tracking-tight mb-2">
+              You've hit your daily limit
+            </h2>
+            <p className="font-sans text-[0.88rem] text-text-muted mb-6">
+              You've used all <span className="text-text font-medium">50 free compressions</span> for today.
+              Upgrade to Pro for unlimited compressions, all modes, and all models.
+            </p>
+
+            {/* Plan comparison */}
+            <div className="grid grid-cols-2 gap-3 mb-6">
+              <div className="bg-bg-surface border border-border rounded-xl p-4">
+                <div className="font-grotesk font-bold text-[0.88rem] mb-1">Free</div>
+                <div className="font-grotesk font-bold text-[1.4rem] mb-2">$0</div>
+                <ul className="space-y-1">
+                  {['50/day limit', 'Balanced only', 'Claude only'].map(f => (
+                    <li key={f} className="font-mono text-[0.65rem] text-text-muted">· {f}</li>
+                  ))}
+                </ul>
+              </div>
+              <div className="bg-accent/5 border border-accent/30 rounded-xl p-4">
+                <div className="font-grotesk font-bold text-[0.88rem] text-accent mb-1">Pro</div>
+                <div className="font-grotesk font-bold text-[1.4rem] mb-2">$9<span className="text-text-muted font-normal text-[0.78rem]">/mo</span></div>
+                <ul className="space-y-1">
+                  {['Unlimited', 'All modes', 'All models'].map(f => (
+                    <li key={f} className="font-mono text-[0.65rem] text-accent/80">✓ {f}</li>
+                  ))}
+                </ul>
+              </div>
+            </div>
+
+            <Button size="lg" className="w-full" onClick={() => { setShowUpgrade(false); window.location.href = '/#pricing' }}>
+              Upgrade to Pro →
+            </Button>
+
+            <p className="text-center font-mono text-[0.62rem] text-text-muted mt-3">
+              Or wait until tomorrow for your free limit to reset
+            </p>
+          </div>
+        </div>
+      )}
     </div>
   )
 }

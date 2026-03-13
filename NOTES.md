@@ -105,8 +105,16 @@ ANTHROPIC_API_KEY=✅ set (server-side only, never exposed to browser)
 - RLS disabled (intentional — we filter by Clerk user_id in code)
 - Schema file: lib/schema.sql
 
-### Other Files
-- lib/supabase.ts — Supabase client
+### Compression History (app/dashboard/history/page.tsx)
+- Protected by Clerk middleware (covered by /dashboard/.*)
+- Fetches last 100 compressions from Supabase
+- HistoryClient component (components/history/HistoryClient.tsx)
+  - Expandable rows — click to see full original + compressed text
+  - Copy button on compressed text
+  - Mode badge (balanced/aggressive/smart) with color coding
+  - Token counts, cost saved, date
+  - Empty state when no compressions yet
+- Linked from Nav profile dropdown
 - lib/compression.ts — mock compression logic
 - lib/utils.ts — helpers
 - lib/store.ts — Zustand store
@@ -247,9 +255,9 @@ All icons use: `style={{ filter: 'brightness(0) invert(1)' }}` to appear white.
 ## 📋 Next Steps (in priority order)
 
 ### Phase 2 — Growth & Monetization
-1. **Stripe payments** — wire up Pro ($9/mo) and Teams ($29/mo) plans
-2. **Compression history page** — /dashboard/history, show past compressions
-3. **Upgrade flow** — when free user hits 50/day limit, show upgrade modal
+1. ~~Compression history page~~ ✅
+2. **Upgrade modal** — when free user hits 50/day limit, show upgrade modal
+3. **Stripe payments** — wire up Pro ($9/mo) and Teams ($29/mo) plans
 4. **Chrome Extension** — compress button on Claude.ai, ChatGPT, Gemini
 
 ### Phase 3 — Developer Platform
@@ -274,4 +282,4 @@ npm run dev
 ```
 
 ---
-*Last updated: Session 9 — All dashboard stats live, compressions saving to Supabase, security hardened, dead code removed. Web app phase complete. Next: Stripe payments.*
+*Last updated: Session 10 — Compression history page built. Expandable rows, copy button, mode badges, full stats. Linked from Nav dropdown. Next: Upgrade modal.*
