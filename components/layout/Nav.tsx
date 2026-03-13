@@ -106,6 +106,11 @@ export function Nav() {
                       className="flex items-center gap-2.5 px-4 py-2.5 font-sans text-[0.84rem] hover:bg-bg-surface transition-colors">
                       <span className="text-text-muted">⚡</span> Dashboard
                     </Link>
+                    <Link href="/dashboard/history"
+                      onClick={() => setProfileOpen(false)}
+                      className="flex items-center gap-2.5 px-4 py-2.5 font-sans text-[0.84rem] hover:bg-bg-surface transition-colors text-text-muted">
+                      <span>📋</span> History
+                    </Link>
                     <Link href="/dashboard/settings"
                       onClick={() => setProfileOpen(false)}
                       className="flex items-center gap-2.5 px-4 py-2.5 font-sans text-[0.84rem] hover:bg-bg-surface transition-colors text-text-muted">

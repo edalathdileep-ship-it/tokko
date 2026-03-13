@@ -65,7 +65,11 @@ ANTHROPIC_API_KEY=✅ set (server-side only, never exposed to browser)
 ### Dashboard (app/dashboard/page.tsx)
 - Protected by Clerk middleware
 - Shows user's first name greeting
-- 4 stat cards (all showing "—" placeholder, not real data yet)
+- 4 stat cards — ALL SHOWING REAL DATA from Supabase ✅
+  - Tokens saved (formatted: 1.2k, 3.4M etc)
+  - Compressions (total count)
+  - Avg reduction (% from compressions table)
+  - Cost saved (formatted as $0.00)
 - Optimizer component embedded
 
 ### Optimizer (components/optimizer/Optimizer.tsx)
@@ -163,16 +167,18 @@ ANTHROPIC_API_KEY=✅ set (server-side only, never exposed to browser)
 
 ## 🗺️ Product Roadmap (decided by user)
 
-### Week 1–2: Standalone Web App ← WE ARE HERE
+### Week 1–2: Standalone Web App ✅ DONE
 - [x] Landing page
 - [x] Auth (Clerk)
 - [x] Supabase database
-- [ ] Real AI compression (Anthropic API) ← NEXT
-- [ ] Save to database
-- [ ] Real dashboard stats
-- [ ] Fix footer / fake links
-- [ ] FAQ section
-- [ ] Mobile responsive
+- [x] Real AI compression (Anthropic API)
+- [x] Save to database
+- [x] Real dashboard stats
+- [x] Security (sanitize, rate limit, safe errors)
+- [x] Mobile responsive
+- [x] Profile dropdown nav
+- [x] Settings page
+- [x] FAQ, Privacy, Terms pages
 
 ### Week 3–4: Chrome Extension
 - [ ] Browser extension that adds compress button to Claude.ai, ChatGPT, Gemini
@@ -227,30 +233,36 @@ All icons use: `style={{ filter: 'brightness(0) invert(1)' }}` to appear white.
 ---
 
 ## 🐛 Known Issues / Decisions Made
-- Clerk routing uses `routing="hash"` on SignIn/SignUp components to avoid catch-all route errors
-- Supabase RLS is disabled — filtering by Clerk user_id in application code instead
-- `Zap` icon was removed from Optimizer.tsx (was causing ReferenceError)
-- API key is server-side only (process.env.ANTHROPIC_API_KEY) — never sent from browser
-- useEffect MUST be imported in Optimizer.tsx — if removed it breaks build
-- Testimonials and stats on landing page are all placeholder/fake
-- Dashboard stats still showing "—" (Supabase saving works, just need to read it back)
-- Dead `apiKey` removed from Zustand store (was never used after moving to server-side)
+- Clerk routing uses `routing="hash"` on SignIn/SignUp components
+- Supabase RLS disabled — filtering by Clerk user_id in app code
+- `Zap` icon removed from Optimizer.tsx — do NOT re-add (causes ReferenceError)
+- API key is server-side only — never sent from browser
+- useEffect MUST be imported in Optimizer.tsx — removing it breaks build
+- `saved_pct` column in Supabase is integer — always use Math.round() before saving
+- Testimonials and stats on landing page are placeholder/fake
+- `url.parse()` deprecation warning in Vercel logs — harmless, comes from Supabase SDK
 
 ---
 
-## 📋 Immediate Next Tasks (in order)
-1. ~~Fix footer~~ ✅
-2. ~~Add FAQ section~~ ✅
-3. ~~Privacy Policy + Terms pages~~ ✅
-4. ~~Settings page~~ ✅
-5. ~~Profile dropdown in Nav~~ ✅
-6. ~~Wire up real Claude compression~~ ✅
-7. ~~Security cleanup (sanitize, rate limit, safe errors)~~ ✅
-8. ~~Remove dead code (apiKey from store)~~ ✅
-9. ~~Fix stats increment bug~~ ✅
-10. Show real stats on dashboard ← NEXT
-11. Save compressions history page
-12. Stripe payments
+## 📋 Next Steps (in priority order)
+
+### Phase 2 — Growth & Monetization
+1. **Stripe payments** — wire up Pro ($9/mo) and Teams ($29/mo) plans
+2. **Compression history page** — /dashboard/history, show past compressions
+3. **Upgrade flow** — when free user hits 50/day limit, show upgrade modal
+4. **Chrome Extension** — compress button on Claude.ai, ChatGPT, Gemini
+
+### Phase 3 — Developer Platform
+5. **REST API** — let developers call Tokko programmatically
+6. **API keys per user** — generate/revoke keys in settings
+7. **JS SDK** — npm install tokko
+8. **Python SDK** — pip install tokko
+9. **Docs site** — proper documentation
+
+### Phase 4 — Enterprise
+10. **Claude Code MCP** — auto-compress inside Claude Code
+11. **Team analytics** — usage across team members
+12. **Slack bot** — compress prompts from Slack
 
 ---
 
@@ -262,4 +274,4 @@ npm run dev
 ```
 
 ---
-*Last updated: Session 9 — Security cleanup, rate limiting wired up, stats increment fixed, dead code removed*
+*Last updated: Session 9 — All dashboard stats live, compressions saving to Supabase, security hardened, dead code removed. Web app phase complete. Next: Stripe payments.*

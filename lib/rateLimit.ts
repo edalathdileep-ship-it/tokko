@@ -80,6 +80,24 @@ export async function checkAndIncrementUsage(userId: string): Promise<{
   return { allowed: true, used: compressionsToday + 1, limit, plan }
 }
 
+export async function getCompressionHistory(userId: string) {
+  const supabase = getSupabaseAdmin()
+
+  const { data, error } = await supabase
+    .from('compressions')
+    .select('*')
+    .eq('user_id', userId)
+    .order('created_at', { ascending: false })
+    .limit(100)
+
+  if (error) {
+    console.error('[getCompressionHistory error]', error)
+    return []
+  }
+
+  return data ?? []
+}
+
 export async function getUserStats(userId: string): Promise<{
   totalTokensSaved: number
   totalCompressions: number
