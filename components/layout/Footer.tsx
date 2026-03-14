@@ -38,9 +38,8 @@ export function Footer() {
 
           {/* Brand col */}
           <div className="col-span-2">
-            <Link href="/" className="flex items-center gap-2.5 mb-3.5">
-              <img src="/tokko_icon.svg" alt="Tokko" width={28} height={28} />
-              <img src="/tokko_logo.svg" alt="Tokko" width={56} height={14} style={{ filter: 'brightness(0) invert(1)' }} />
+            <Link href="/" className="flex items-center mb-3.5">
+              <img src="/tokko_logo.svg" alt="Tokko" width={72} height={18} />
             </Link>
             <p className="font-sans text-[0.82rem] text-text-muted leading-relaxed max-w-[240px] mb-5">
               The token optimizer for developers and teams who use AI every day.

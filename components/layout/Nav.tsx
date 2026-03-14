@@ -38,10 +38,9 @@ export function Nav() {
     <header className={`fixed top-0 left-0 right-0 z-50 transition-all duration-300 ${scrolled ? 'bg-bg-base/90 backdrop-blur-xl border-b border-border' : ''}`}>
       <nav className="max-w-content mx-auto px-4 sm:px-8 md:px-[48px] h-16 flex items-center justify-between">
 
-        {/* Logo */}
-        <Link href="/" className="flex items-center gap-2.5 group">
-          <img src="/tokko_icon.svg" alt="Tokko" width={32} height={32} className="transition-transform group-hover:scale-105" />
-          <img src="/tokko_logo.svg" alt="Tokko" width={64} height={16} style={{ filter: 'brightness(0) invert(1)' }} />
+        {/* Logo — wordmark only */}
+        <Link href="/" className="flex items-center group">
+          <img src="/tokko_logo.svg" alt="Tokko" width={80} height={20} className="transition-opacity group-hover:opacity-80" />
         </Link>
 
         {/* Nav links — only show when NOT signed in */}
