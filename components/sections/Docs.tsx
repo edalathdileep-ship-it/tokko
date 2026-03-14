@@ -1,99 +1,94 @@
 import { Eyebrow } from '@/components/ui/Chips'
-
-const DOC_LINKS = [
-  { icon: 'quick-start.svg', title: 'Quick Start Guide',       sub: 'Get compressing in under 5 minutes', color: 'accent',  tag: null },
-  { icon: 'api.svg',         title: 'REST API Reference',      sub: 'Full endpoint documentation',        color: 'purple',  tag: 'soon' },
-  { icon: 'code.svg',        title: 'JavaScript SDK',          sub: 'npm install tokko',                  color: 'orange',  tag: 'soon' },
-  { icon: 'sdk.svg',         title: 'Python SDK',              sub: 'pip install tokko',                  color: 'teal',    tag: 'soon' },
-  { icon: 'team.svg',        title: 'Claude Code Integration', sub: 'MCP server setup guide',             color: 'red',     tag: 'soon' },
-]
-
-const iconBg: Record<string, string> = {
-  accent: 'bg-accent/10 border-accent/20',
-  purple: 'bg-accent-purple/10 border-accent-purple/20',
-  orange: 'bg-accent-orange/10 border-accent-orange/20',
-  teal:   'bg-accent-teal/10 border-accent-teal/20',
-  red:    'bg-accent-red/10 border-accent-red/20',
-}
+import Link from 'next/link'
+import { Button } from '@/components/ui/Button'
 
 export function Docs() {
   return (
-    <section id="docs" className="py-20 md:py-30 border-t border-border bg-bg-surface/30">
+    <section id="extension" className="py-20 md:py-30 border-t border-border bg-bg-surface/30">
       <div className="max-w-content mx-auto px-4 sm:px-8 md:px-[48px]">
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-10 md:gap-20 items-start">
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-10 md:gap-20 items-center">
 
           {/* Left */}
           <div>
-            <Eyebrow className="mb-4">Documentation</Eyebrow>
+            <Eyebrow className="mb-4">Chrome Extension</Eyebrow>
             <h2 className="font-grotesk font-bold text-[clamp(1.8rem,3.5vw,2.8rem)] tracking-tight leading-none mb-4">
-              Built for developers<br />who move fast.
+              Compress without<br />leaving Claude.ai
             </h2>
-            <p className="font-sans text-text-muted leading-relaxed mb-8 md:mb-10">
-              REST API, SDKs, and guides for every major framework. Most are coming soon — sign up to get notified.
+            <p className="font-sans text-text-muted leading-relaxed mb-8">
+              Install the Tokko extension and a subtle compress button appears every time you click the chat input. One click — your prompt is compressed in place. No switching tabs, no copy-pasting.
             </p>
 
-            <div className="flex flex-col gap-2">
-              {DOC_LINKS.map((d) => (
-                <div key={d.title}
-                  className="flex items-center gap-4 bg-bg-card border border-border rounded-xl px-4 md:px-5 py-4">
-                  <div className={`w-10 h-10 rounded-xl border flex items-center justify-center flex-shrink-0 ${iconBg[d.color]}`}>
-                    <img src={`/${d.icon}`} alt={d.title} width={22} height={22} style={{ filter: 'brightness(0) invert(1)' }} />
+            <div className="space-y-4 mb-8">
+              {[
+                { step: '1', text: 'Install from Chrome Web Store' },
+                { step: '2', text: 'Generate your API token in Settings' },
+                { step: '3', text: 'Click inside Claude.ai input — Tokko appears' },
+                { step: '4', text: 'Click Compress — done in 2 seconds' },
+              ].map((s) => (
+                <div key={s.step} className="flex items-center gap-4">
+                  <div className="w-8 h-8 rounded-lg bg-accent/10 border border-accent/20 flex items-center justify-center font-mono font-bold text-[0.78rem] text-accent flex-shrink-0">
+                    {s.step}
                   </div>
-                  <div className="flex-1 min-w-0">
-                    <div className="font-grotesk font-bold text-[0.9rem]">{d.title}</div>
-                    <div className="font-mono text-[0.68rem] text-text-muted mt-0.5">{d.sub}</div>
-                  </div>
-                  {d.tag && (
-                    <span className="font-mono text-[0.6rem] font-bold px-2 py-0.5 rounded border bg-bg-s2 text-text-muted border-border flex-shrink-0">
-                      {d.tag}
-                    </span>
-                  )}
+                  <span className="font-sans text-[0.88rem] text-text-muted">{s.text}</span>
                 </div>
               ))}
             </div>
+
+            <div className="flex gap-3 flex-wrap">
+              <Link href="/auth/signup">
+                <Button size="sm">Get started free →</Button>
+              </Link>
+              <a href="/#pricing">
+                <Button variant="outline" size="sm">View pricing</Button>
+              </a>
+            </div>
           </div>
 
-          {/* Right — Code block, hidden on small mobile, shown md+ */}
-          <div className="hidden sm:block space-y-4">
-            <div className="bg-bg-surface border border-border rounded-2xl overflow-hidden font-mono text-[0.75rem] md:text-[0.78rem]">
-              <div className="bg-bg-s2 px-4 py-3 border-b border-border flex items-center justify-between">
-                <div className="flex gap-1">
-                  {['JavaScript', 'Python', 'cURL'].map((t, i) => (
-                    <div key={t} className={`px-2.5 py-1.5 rounded text-[0.7rem] font-semibold ${i === 0 ? 'bg-border text-text' : 'text-text-muted'}`}>
-                      {t}
-                    </div>
-                  ))}
+          {/* Right — Extension preview */}
+          <div className="space-y-4">
+            {/* Claude.ai mockup with button */}
+            <div className="bg-bg-card border border-border rounded-2xl overflow-hidden">
+              <div className="bg-bg-surface border-b border-border px-4 py-3 flex items-center gap-2">
+                <div className="flex gap-1.5">
+                  <div className="w-2 h-2 rounded-full bg-accent-red" />
+                  <div className="w-2 h-2 rounded-full bg-accent-orange" />
+                  <div className="w-2 h-2 rounded-full bg-accent" />
                 </div>
-                <span className="text-[0.65rem] text-text-muted">Copy</span>
+                <div className="font-mono text-[0.65rem] text-text-muted ml-2">claude.ai</div>
               </div>
-              <div className="p-4 md:p-5 leading-[1.75] overflow-x-auto">
-                <pre className="whitespace-pre-wrap"><span className="text-accent-purple">import</span> Tokko <span className="text-accent-purple">from</span> <span className="text-accent">'tokko'</span>{';'}
-
-<span className="text-accent-purple">const</span> ps = <span className="text-accent-purple">new</span> <span className="text-accent-orange">Tokko</span>{'({'}
-  apiKey: <span className="text-accent">'your_api_key'</span>,
-  model: <span className="text-accent">'claude'</span>
-{'});'}
-
-<span className="text-accent-purple">const</span> result = <span className="text-accent-purple">await</span> ps.<span className="text-accent-orange">compress</span>{'({'}
-  prompt: userPrompt,
-  mode: <span className="text-accent">'balanced'</span>
-{'});'}
-
-<span className="text-text-muted">// result.savedPct → </span><span className="text-accent-teal">72</span>
-<span className="text-text-muted">// result.costSaved → </span><span className="text-accent-teal">0.000138</span></pre>
+              <div className="p-4 relative">
+                {/* Tokko button floating */}
+                <div className="absolute top-2 right-6 flex items-center gap-1.5 px-3 py-1.5 bg-[rgba(10,10,10,0.92)] border border-white/10 rounded-lg text-[0.72rem] font-semibold text-white/80 shadow-lg">
+                  <div className="w-4 h-4 bg-accent rounded-[3px] flex items-center justify-center text-[9px] font-black text-black">T</div>
+                  Compress
+                </div>
+                <div className="bg-bg-surface border border-border rounded-xl p-3 font-mono text-[0.72rem] text-text-muted leading-relaxed min-h-[80px]">
+                  Could you please help me understand how I might go about writing a Python function that filters even numbers...
+                </div>
+                <div className="flex items-center justify-between mt-3">
+                  <div className="font-mono text-[0.62rem] text-text-muted">Sonnet 4.5</div>
+                  <div className="w-7 h-7 rounded-full bg-accent flex items-center justify-center">
+                    <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="black" strokeWidth="3">
+                      <path d="M5 12h14M12 5l7 7-7 7"/>
+                    </svg>
+                  </div>
+                </div>
               </div>
             </div>
 
-            <div className="bg-bg-card border border-border rounded-xl p-4 md:p-5">
-              <div className="font-mono text-[0.62rem] font-bold tracking-[0.1em] uppercase text-text-muted mb-3">Response</div>
-              <pre className="font-mono text-[0.72rem] md:text-[0.75rem] leading-[1.7] text-text-muted whitespace-pre-wrap overflow-x-auto"><span className="text-border">{'{'}</span>
-  <span className="text-text">"compressed"</span>: <span className="text-accent">"Python fn: filter even nums..."</span>,
-  <span className="text-text">"originalTokens"</span>: <span className="text-accent-teal">64</span>,
-  <span className="text-text">"compressedTokens"</span>: <span className="text-accent-teal">18</span>,
-  <span className="text-text">"savedPct"</span>: <span className="text-accent-teal">72</span>
-<span className="text-border">{'}'}</span></pre>
+            {/* After compression */}
+            <div className="bg-bg-card border border-accent/20 rounded-2xl p-4">
+              <div className="font-mono text-[0.6rem] text-accent font-bold tracking-wider uppercase mb-2">After compression</div>
+              <div className="font-mono text-[0.78rem] text-accent leading-relaxed mb-3">
+                Python function: filter even numbers from list. Include explanation + examples.
+              </div>
+              <div className="flex items-center gap-3">
+                <span className="font-mono text-[0.65rem] bg-accent/10 text-accent border border-accent/20 px-2 py-0.5 rounded">−72% tokens</span>
+                <span className="font-mono text-[0.65rem] text-text-muted">saved $0.00043 this call</span>
+              </div>
             </div>
           </div>
+
         </div>
       </div>
     </section>
