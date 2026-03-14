@@ -118,13 +118,18 @@ ANTHROPIC_API_KEY=✅ set (server-side only, never exposed to browser)
 ### Chrome Extension (tokko-extension/)
 - Separate folder — NOT part of the Next.js app
 - Location: Desktop/tokko-extension (extracted from zip)
-- Files: manifest.json, content.js, content.css, popup.html, popup.js, icons/
-- ✅ Floating green Compress button appears above Claude.ai input on focus
-- ✅ Token-based auth — user pastes API token from Settings page
+- Files: manifest.json, content.js, content.css, popup.html, popup.js, background.js, icons/
+- ✅ Floating dark frosted glass button — subtle, professional
+- ✅ Green T badge branding
+- ✅ Button stays visible + pulses during compression
+- ✅ Token-based auth via background service worker
 - ✅ Compression works via /api/compress-ext endpoint
 - ✅ Mode selector in popup (Balanced/Aggressive/Smart)
-- ✅ Toast notifications (success/error)
-- To update extension: edit files → go to chrome://extensions → click reload
+- ✅ Toast notifications (dark with colored text)
+- ✅ Handles extension context invalidated gracefully
+- Current version: v7
+- IMPORTANT: After reloading extension, always refresh claude.ai tab
+- To update: extract new zip → chrome://extensions → reload → refresh claude.ai
 
 ### API Routes
 - app/api/compress/route.ts — main web app compression (Clerk auth)
@@ -177,14 +182,16 @@ ANTHROPIC_API_KEY=✅ set (server-side only, never exposed to browser)
 - [x] Settings page
 - [x] FAQ, Privacy, Terms pages
 
-### Week 3–4: Chrome Extension ← IN PROGRESS
+### Week 3–4: Chrome Extension ✅ DONE
 - [x] Floating compress button on Claude.ai
 - [x] Token-based auth system
 - [x] Mode selector in popup
 - [x] compress-ext API route
 - [x] Generate token in Settings
-- [ ] Test full flow end-to-end with real token ← NEXT SESSION START HERE
-- [ ] Submit to Chrome Web Store
+- [x] Background service worker for storage
+- [x] CORS fixed
+- [x] Text replacement working
+- [ ] Submit to Chrome Web Store ← NEXT
 - [ ] Add ChatGPT + Gemini support
 
 ### Month 2: API Wrapper
@@ -250,15 +257,15 @@ All icons use: `style={{ filter: 'brightness(0) invert(1)' }}` to appear white.
 
 ## 📋 Next Steps (in priority order)
 
-### Immediate (next session)
-1. Test Chrome Extension end-to-end — generate token → paste in popup → compress on claude.ai
-2. Fix any bugs found in testing
-3. Submit to Chrome Web Store
+### Immediate
+1. **Submit to Chrome Web Store** — make it available to everyone
+2. **BYOK pricing** — restructure to Free / BYOK $3 / Pro $9
+3. **Landing page messaging** — show real dollar savings
+4. **Add ChatGPT + Gemini** to extension
 
 ### Then
-4. Stripe payments — Pro ($9/mo) and Teams ($29/mo)
-5. Add ChatGPT + Gemini to extension
-6. Landing page cleanup — remove dead links
+5. Stripe payments
+6. REST API + SDK for developers
 
 ---
 
@@ -275,4 +282,4 @@ npm run dev
 - To test: claude.ai → click input → green Compress button appears
 
 ---
-*Last updated: Session 12 — Chrome Extension built (floating button, token auth, popup), API token in Settings, compress-ext route. Next: test full flow, fix bugs, submit to Chrome Web Store.*
+*Last updated: Session 14 — Extension v7 complete. Dark frosted button, pulsing loader, graceful error handling. Next: Chrome Web Store submission + BYOK pricing.*

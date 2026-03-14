@@ -10,18 +10,39 @@ const PLANS = [
     name: 'Free',
     monthly: 0,
     annual: 0,
-    desc: 'Try before you commit. No credit card required.',
+    desc: 'Try it out. No credit card required.',
     cta: 'Get started free',
     ctaVariant: 'outline' as const,
+    badge: null,
     features: [
-      { label: '50 compressions per day',      yes: true },
-      { label: 'Balanced mode',                yes: true },
-      { label: 'Claude support',               yes: true },
-      { label: 'Live token counter',           yes: true },
-      { label: 'Multi-model support',          yes: false },
-      { label: 'Analytics dashboard',          yes: false },
-      { label: 'Compression history',          yes: false },
-      { label: 'API access',                   yes: false },
+      { label: '20 compressions per day',        yes: true },
+      { label: 'Balanced mode only',             yes: true },
+      { label: 'Claude support',                 yes: true },
+      { label: 'Live token counter',             yes: true },
+      { label: 'Compression history',            yes: false },
+      { label: 'All compression modes',          yes: false },
+      { label: 'Multi-model support',            yes: false },
+      { label: 'API access',                     yes: false },
+    ],
+  },
+  {
+    id: 'byok',
+    name: 'BYOK',
+    monthly: 3,
+    annual: 2,
+    desc: 'Bring your own Anthropic key. Pay only for the Tokko service.',
+    cta: 'Start free trial →',
+    ctaVariant: 'outline' as const,
+    badge: 'BEST VALUE',
+    features: [
+      { label: 'Unlimited compressions',         yes: true },
+      { label: 'All 3 compression modes',        yes: true },
+      { label: 'Your own Anthropic API key',     yes: true },
+      { label: 'Compression history & export',   yes: true },
+      { label: 'Chrome Extension access',        yes: true },
+      { label: 'Multi-model support',            yes: false },
+      { label: 'Analytics dashboard',            yes: false },
+      { label: 'API access',                     yes: false },
     ],
   },
   {
@@ -29,38 +50,20 @@ const PLANS = [
     name: 'Pro',
     monthly: 9,
     annual: 7,
-    desc: 'For power users, developers, and solo builders.',
+    desc: 'We handle everything. Just compress and save.',
     cta: 'Start 7-day free trial →',
     ctaVariant: 'primary' as const,
+    badge: 'MOST POPULAR',
     featured: true,
     features: [
-      { label: 'Unlimited compressions',       yes: true },
-      { label: 'All 3 compression modes',      yes: true },
-      { label: 'Claude + GPT-4 + Gemini',      yes: true },
-      { label: 'Full analytics dashboard',     yes: true },
-      { label: 'Compression history & export', yes: true },
-      { label: 'API access',                   yes: true },
-      { label: 'Conversation summarizer',      yes: true },
-      { label: 'Team seats',                   yes: false },
-    ],
-  },
-  {
-    id: 'teams',
-    name: 'Teams',
-    monthly: 29,
-    annual: 23,
-    desc: 'For teams using AI at scale across projects.',
-    cta: 'Contact sales →',
-    ctaVariant: 'outline' as const,
-    features: [
-      { label: 'Everything in Pro',            yes: true },
-      { label: 'Up to 10 team seats',          yes: true },
-      { label: 'Team analytics & reporting',   yes: true },
-      { label: 'Per-user breakdown',           yes: true },
-      { label: 'Claude Code integration',      yes: true },
-      { label: 'Custom compression rules',     yes: true },
-      { label: 'Slack bot',                    yes: true },
-      { label: 'Priority support',             yes: true },
+      { label: 'Unlimited compressions',         yes: true },
+      { label: 'All 3 compression modes',        yes: true },
+      { label: 'Claude + GPT-4 + Gemini',        yes: true },
+      { label: 'Full analytics dashboard',       yes: true },
+      { label: 'Compression history & export',   yes: true },
+      { label: 'Chrome Extension access',        yes: true },
+      { label: 'API access',                     yes: true },
+      { label: 'Priority support',               yes: true },
     ],
   },
 ]
@@ -83,6 +86,14 @@ export function Pricing() {
             No hidden fees. Cancel anytime.
           </p>
 
+          {/* BYOK callout */}
+          <div className="inline-flex items-center gap-2 bg-accent/5 border border-accent/20 rounded-xl px-4 py-2.5 mb-7">
+            <span className="text-accent text-[0.8rem]">💡</span>
+            <span className="font-sans text-[0.82rem] text-text-muted">
+              Already have an Anthropic API key? Use <span className="text-accent font-medium">BYOK</span> and pay just <span className="text-text font-medium">$3/mo</span> for Tokko
+            </span>
+          </div>
+
           {/* Billing toggle */}
           <div className="flex items-center justify-center gap-3.5">
             <span className="font-mono text-[0.78rem] text-text-muted">Monthly</span>
@@ -99,7 +110,7 @@ export function Pricing() {
           </div>
         </div>
 
-        {/* Cards — stack on mobile, 3 cols on desktop */}
+        {/* Cards */}
         <div className="grid grid-cols-1 md:grid-cols-3 gap-4 md:gap-5 mb-10 md:mb-15">
           {PLANS.map((plan) => (
             <div key={plan.id} className={`relative rounded-3xl md:rounded-4xl p-6 md:p-8 transition-transform hover:-translate-y-1 ${
@@ -107,9 +118,13 @@ export function Pricing() {
                 ? 'border border-accent bg-accent/3'
                 : 'border border-border bg-bg-card'
             }`}>
-              {plan.featured && (
-                <div className="absolute -top-3.5 left-1/2 -translate-x-1/2 bg-accent text-black font-mono font-bold text-[0.6rem] tracking-[0.12em] px-3.5 py-1 rounded-full whitespace-nowrap">
-                  MOST POPULAR
+              {plan.badge && (
+                <div className={`absolute -top-3.5 left-1/2 -translate-x-1/2 font-mono font-bold text-[0.6rem] tracking-[0.12em] px-3.5 py-1 rounded-full whitespace-nowrap ${
+                  plan.featured
+                    ? 'bg-accent text-black'
+                    : 'bg-bg-s2 border border-border text-text-muted'
+                }`}>
+                  {plan.badge}
                 </div>
               )}
 
@@ -120,6 +135,11 @@ export function Pricing() {
                 ${annual ? plan.annual : plan.monthly}
                 <span className="text-[0.9rem] font-normal font-sans text-text-muted"> / month</span>
               </div>
+              {plan.id === 'byok' && (
+                <div className="font-mono text-[0.65rem] text-accent mt-1">
+                  + your Anthropic API costs
+                </div>
+              )}
               <p className="font-sans text-[0.8rem] text-text-muted mt-2.5 mb-6 leading-snug">{plan.desc}</p>
               <div className="h-px bg-border mb-6" />
 
@@ -146,6 +166,18 @@ export function Pricing() {
             </div>
           ))}
         </div>
+
+        {/* BYOK explanation */}
+        <div className="bg-bg-card border border-border rounded-2xl p-6 max-w-2xl mx-auto text-center">
+          <div className="font-grotesk font-bold text-[0.94rem] mb-2">What is BYOK?</div>
+          <p className="font-sans text-[0.82rem] text-text-muted leading-relaxed">
+            <span className="text-text">Bring Your Own Key</span> means you connect your existing Anthropic API key to Tokko.
+            We use your key for compressions — so you pay Anthropic directly at their rates.
+            You pay Tokko just <span className="text-accent font-medium">$3/mo</span> for the compression software.
+            If compression saves you 50% on tokens, your Anthropic bill drops — Tokko pays for itself instantly.
+          </p>
+        </div>
+
       </div>
     </section>
   )
