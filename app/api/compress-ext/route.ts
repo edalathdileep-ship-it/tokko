@@ -21,9 +21,15 @@ function getSupabaseAdmin() {
 export async function POST(req: NextRequest) {
   try {
     // ── 1. CORS headers for extension ─────────────────────
+    const origin = req.headers.get('origin') || ''
+    const allowedOrigins = ['https://claude.ai', 'https://chatgpt.com', 'https://gemini.google.com']
+    const corsOrigin = allowedOrigins.includes(origin) || origin.startsWith('chrome-extension://')
+      ? origin
+      : 'https://claude.ai'
+
     const headers = {
-      'Access-Control-Allow-Origin': 'https://claude.ai',
-      'Access-Control-Allow-Methods': 'POST',
+      'Access-Control-Allow-Origin': corsOrigin,
+      'Access-Control-Allow-Methods': 'POST, OPTIONS',
       'Access-Control-Allow-Headers': 'Content-Type, x-tokko-token',
     }
 
@@ -38,15 +44,17 @@ export async function POST(req: NextRequest) {
 
     // Look up token in Supabase
     const supabase = getSupabaseAdmin()
-    const { data: profile } = await supabase
+    const { data: profile, error: profileError } = await supabase
       .from('user_profiles')
       .select('user_id, plan')
       .eq('api_token', token)
       .single()
 
+    if (profileError) console.error('[compress-ext] Token lookup error:', profileError)
+
     if (!profile) {
       return NextResponse.json(
-        { success: false, error: 'Invalid API token' },
+        { success: false, error: 'Invalid API token — regenerate from Settings' },
         { status: 401, headers }
       )
     }
@@ -119,11 +127,12 @@ export async function POST(req: NextRequest) {
 }
 
 // Handle preflight
-export async function OPTIONS() {
+export async function OPTIONS(req: NextRequest) {
+  const origin = req.headers.get('origin') || ''
   return new NextResponse(null, {
     headers: {
-      'Access-Control-Allow-Origin': 'https://claude.ai',
-      'Access-Control-Allow-Methods': 'POST',
+      'Access-Control-Allow-Origin': origin.startsWith('chrome-extension://') ? origin : 'https://claude.ai',
+      'Access-Control-Allow-Methods': 'POST, OPTIONS',
       'Access-Control-Allow-Headers': 'Content-Type, x-tokko-token',
     }
   })
