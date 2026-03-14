@@ -242,11 +242,11 @@ const FAQS = [
   { q: 'How does Tokko compress prompts?', a: 'Tokko removes filler words, redundant phrasing, and unnecessary politeness while preserving the core intent and technical details of your prompt. Smart mode uses AI to understand context before compressing.' },
   { q: 'Will the compressed prompt give the same AI output?', a: 'In most cases yes — AI models are very good at understanding compressed, direct instructions. Balanced mode is the safest (around 50% reduction). Aggressive mode gives bigger savings but works best for simple prompts.' },
   { q: 'Which AI models does Tokko support?', a: 'Currently Claude (Anthropic), GPT-4o (OpenAI), and Gemini Pro (Google). Mistral and Llama support is coming soon.' },
-  { q: 'Is the free plan really free?', a: 'Yes — 50 compressions per day, forever. No credit card required to sign up.' },
+  { q: 'Is the free plan really free?', a: 'Yes — 20 compressions per day, forever. No credit card required to sign up.' },
+  { q: 'What is BYOK?', a: 'BYOK means Bring Your Own Key. You connect your existing Anthropic API key to Tokko. We use your key for compressions so you pay Anthropic directly. You pay Tokko just $3/mo for the compression software — and since Tokko cuts your token usage by up to 75%, it pays for itself instantly.' },
   { q: 'What is Smart mode?', a: 'Smart mode uses Claude to understand your prompt before compressing it — preserving technical terms, constraints, and key instructions while removing everything else.' },
   { q: 'Is my data safe?', a: 'Your prompts are not used to train any models. We store your compression history in your dashboard — you can delete it at any time.' },
-  { q: 'When is the Chrome extension coming?', a: 'The Chrome extension is planned for weeks 3–4. It will add a one-click compress button directly inside Claude.ai, ChatGPT, and Gemini.' },
-  { q: 'Do you have an API?', a: 'A REST API and SDKs (JavaScript and Python) are on our roadmap for Month 2. Sign up free to get notified when it launches.' },
+  { q: 'Is there a Chrome Extension?', a: 'Yes! The Tokko Chrome Extension adds a subtle compress button directly inside Claude.ai. One click compresses your prompt in place — no switching tabs. Generate your API token from the Settings page to connect it.' },
 ]
 
 export function FAQ() {
@@ -305,7 +305,7 @@ export function CTABanner() {
           Ready to stop wasting tokens?
         </h2>
         <p className="font-sans text-[0.94rem] md:text-[1rem] text-text-muted mb-8 md:mb-9">
-          Start for free. No credit card. 50 compressions a day, forever.
+          Start for free. No credit card. 20 compressions a day, forever.
         </p>
         <div className="flex gap-3 justify-center flex-wrap">
           <Link href="/auth/signup">
