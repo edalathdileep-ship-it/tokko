@@ -106,7 +106,6 @@ export function SettingsClient({ userId, firstName, lastName, email, imageUrl, c
 
       {/* ── Profile ── */}
       <Section title="Profile" desc="Your personal information from your account.">
-        {/* Avatar */}
         <div className="flex items-center gap-4 mb-6 pb-6 border-b border-border">
           <div className="w-14 h-14 rounded-2xl bg-accent flex items-center justify-center font-grotesk font-bold text-black text-[1.1rem] overflow-hidden flex-shrink-0">
             {imageUrl ? (
@@ -119,18 +118,12 @@ export function SettingsClient({ userId, firstName, lastName, email, imageUrl, c
             <div className="font-mono text-[0.62rem] text-text-muted mt-1">Member since {memberSince}</div>
           </div>
         </div>
-
         <Field label="Full name" value={fullName} />
         <Field label="Email address" value={email} />
         <Field label="User ID" value={userId.slice(0, 20) + '...'} hint="Your unique Tokko ID" />
-
         <div className="mt-5">
-          <a
-            href="https://accounts.clerk.dev/user"
-            target="_blank"
-            rel="noopener noreferrer"
-            className="font-grotesk font-medium text-[0.84rem] text-accent hover:underline"
-          >
+          <a href="https://accounts.clerk.dev/user" target="_blank" rel="noopener noreferrer"
+            className="font-grotesk font-medium text-[0.84rem] text-accent hover:underline">
             Edit profile →
           </a>
         </div>
@@ -157,7 +150,6 @@ export function SettingsClient({ userId, firstName, lastName, email, imageUrl, c
           </div>
           <div className="font-grotesk font-bold text-[1.4rem]">$0</div>
         </div>
-
         <div className="bg-accent/5 border border-accent/20 rounded-xl p-4 flex items-center justify-between">
           <div>
             <div className="font-grotesk font-bold text-[0.88rem] text-accent">Upgrade to Pro</div>
@@ -190,9 +182,7 @@ export function SettingsClient({ userId, firstName, lastName, email, imageUrl, c
       <div className="border border-accent-red/30 rounded-2xl overflow-hidden">
         <div className="px-6 py-5 border-b border-accent-red/20 bg-accent-red/5">
           <div className="font-grotesk font-bold text-[0.94rem] text-accent-red">Danger Zone</div>
-          <div className="font-sans text-[0.8rem] text-text-muted mt-0.5">
-            Permanent actions that cannot be undone.
-          </div>
+          <div className="font-sans text-[0.8rem] text-text-muted mt-0.5">Permanent actions that cannot be undone.</div>
         </div>
         <div className="px-6 py-6 bg-bg-card">
           {!showDeleteConfirm ? (
@@ -203,36 +193,26 @@ export function SettingsClient({ userId, firstName, lastName, email, imageUrl, c
                   Permanently delete your account and all compression history.
                 </div>
               </div>
-              <button
-                onClick={() => setShowDeleteConfirm(true)}
-                className="font-grotesk font-medium text-[0.84rem] text-accent-red border border-accent-red/30 px-4 py-2 rounded-lg hover:bg-accent-red/10 transition-colors"
-              >
+              <button onClick={() => setShowDeleteConfirm(true)}
+                className="font-grotesk font-medium text-[0.84rem] text-accent-red border border-accent-red/30 px-4 py-2 rounded-lg hover:bg-accent-red/10 transition-colors">
                 Delete account
               </button>
             </div>
           ) : (
             <div className="space-y-4">
               <p className="font-sans text-[0.84rem] text-text-muted">
-                This will permanently delete your account and all your data. Type <span className="font-mono text-accent-red font-bold">delete my account</span> to confirm.
+                Type <span className="font-mono text-accent-red font-bold">delete my account</span> to confirm.
               </p>
-              <input
-                type="text"
-                value={deleteText}
-                onChange={(e) => setDeleteText(e.target.value)}
+              <input type="text" value={deleteText} onChange={(e) => setDeleteText(e.target.value)}
                 placeholder="delete my account"
-                className="w-full px-4 py-2.5 bg-bg-surface border border-border rounded-lg font-mono text-[0.84rem] outline-none focus:border-accent-red transition-colors"
-              />
+                className="w-full px-4 py-2.5 bg-bg-surface border border-border rounded-lg font-mono text-[0.84rem] outline-none focus:border-accent-red transition-colors" />
               <div className="flex gap-3">
-                <button
-                  onClick={() => { setShowDeleteConfirm(false); setDeleteText('') }}
-                  className="font-grotesk font-medium text-[0.84rem] text-text-muted border border-border px-4 py-2 rounded-lg hover:bg-bg-surface transition-colors"
-                >
+                <button onClick={() => { setShowDeleteConfirm(false); setDeleteText('') }}
+                  className="font-grotesk font-medium text-[0.84rem] text-text-muted border border-border px-4 py-2 rounded-lg hover:bg-bg-surface transition-colors">
                   Cancel
                 </button>
-                <button
-                  disabled={deleteText !== 'delete my account'}
-                  className="font-grotesk font-medium text-[0.84rem] text-white bg-accent-red px-4 py-2 rounded-lg disabled:opacity-40 disabled:cursor-not-allowed hover:opacity-90 transition-opacity"
-                >
+                <button disabled={deleteText !== 'delete my account'}
+                  className="font-grotesk font-medium text-[0.84rem] text-white bg-accent-red px-4 py-2 rounded-lg disabled:opacity-40 disabled:cursor-not-allowed hover:opacity-90 transition-opacity">
                   Permanently delete
                 </button>
               </div>
