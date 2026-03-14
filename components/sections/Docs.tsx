@@ -14,9 +14,25 @@ export function Docs() {
             <h2 className="font-grotesk font-bold text-[clamp(1.8rem,3.5vw,2.8rem)] tracking-tight leading-none mb-4">
               Compress without<br />leaving Claude.ai
             </h2>
-            <p className="font-sans text-text-muted leading-relaxed mb-8">
+            <p className="font-sans text-text-muted leading-relaxed mb-6">
               Install the Tokko extension and a subtle compress button appears every time you click the chat input. One click — your prompt is compressed in place. No switching tabs, no copy-pasting.
             </p>
+
+            {/* Supported sites */}
+            <div className="flex items-center gap-3 mb-8 flex-wrap">
+              <div className="flex items-center gap-2 px-3 py-1.5 bg-accent/10 border border-accent/20 rounded-lg">
+                <div className="w-2 h-2 rounded-full bg-accent" />
+                <span className="font-mono text-[0.7rem] text-accent font-bold">Claude.ai — Live</span>
+              </div>
+              <div className="flex items-center gap-2 px-3 py-1.5 bg-bg-card border border-border rounded-lg opacity-60">
+                <div className="w-2 h-2 rounded-full bg-text-muted" />
+                <span className="font-mono text-[0.7rem] text-text-muted">ChatGPT — Soon</span>
+              </div>
+              <div className="flex items-center gap-2 px-3 py-1.5 bg-bg-card border border-border rounded-lg opacity-60">
+                <div className="w-2 h-2 rounded-full bg-text-muted" />
+                <span className="font-mono text-[0.7rem] text-text-muted">Gemini — Soon</span>
+              </div>
+            </div>
 
             <div className="space-y-4 mb-8">
               {[
