@@ -1,20 +1,14 @@
 import { clerkMiddleware, createRouteMatcher } from '@clerk/nextjs/server'
-import { NextResponse } from 'next/server'
 
-// Only protect dashboard and API routes
+// Routes that require login
 const isProtectedRoute = createRouteMatcher([
   '/dashboard(.*)',
-  '/api/compress(.*)',
+  '/api/compress',  // exact match only — not compress-ext
 ])
 
 export default clerkMiddleware(async (auth, req) => {
   if (isProtectedRoute(req)) {
-    const { userId } = await auth()
-    if (!userId) {
-      const signInUrl = new URL('/auth/signin', req.url)
-      signInUrl.searchParams.set('redirect_url', req.url)
-      return NextResponse.redirect(signInUrl)
-    }
+    await auth.protect()
   }
 })
 
