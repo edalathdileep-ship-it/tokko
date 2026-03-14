@@ -2,10 +2,6 @@
 import { useState } from 'react'
 import { Button } from '@/components/ui/Button'
 
-'use client'
-import { useState } from 'react'
-import { Button } from '@/components/ui/Button'
-
 function ApiTokenSection({ userId }: { userId: string }) {
   const [token, setToken] = useState<string | null>(null)
   const [loading, setLoading] = useState(false)
