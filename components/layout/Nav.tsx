@@ -40,10 +40,8 @@ export function Nav() {
 
         {/* Logo */}
         <Link href="/" className="flex items-center gap-2.5 group">
-          <div className="w-8 h-8 rounded-lg bg-accent flex items-center justify-center font-grotesk font-bold text-black text-sm transition-transform group-hover:scale-105">
-            T
-          </div>
-          <span className="font-grotesk font-bold text-[1.05rem]">Tokko</span>
+          <img src="/tokko_icon.svg" alt="Tokko" width={32} height={32} className="transition-transform group-hover:scale-105" />
+          <img src="/tokko_logo.svg" alt="Tokko" width={64} height={16} style={{ filter: 'brightness(0) invert(1)' }} />
         </Link>
 
         {/* Nav links — only show when NOT signed in */}
