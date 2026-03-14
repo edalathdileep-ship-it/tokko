@@ -78,9 +78,12 @@ ANTHROPIC_API_KEY=✅ set (server-side only, never exposed to browser)
 - Model selector: Claude / GPT-4 / Gemini
 - Compress button with arrow icon
 - ✅ Real Claude compression via server-side ANTHROPIC_API_KEY
-- ✅ useEffect properly imported (was recurring build issue — fixed)
+- ✅ useEffect and useRouter properly imported
 - ✅ Error clears when user types
 - ✅ Reset button shows when input or result exists
+- ✅ router.refresh() after compression — dashboard stats update live
+- ✅ Upgrade modal when free user hits 50/day limit
+- ✅ Progress bar turns red when limit reached
 - Falls back to mock if no API key set
 
 ### Security & Rate Limiting
@@ -105,58 +108,44 @@ ANTHROPIC_API_KEY=✅ set (server-side only, never exposed to browser)
 - RLS disabled (intentional — we filter by Clerk user_id in code)
 - Schema file: lib/schema.sql
 
-### Compression History (app/dashboard/history/page.tsx)
-- Protected by Clerk middleware (covered by /dashboard/.*)
-- Fetches last 100 compressions from Supabase
-- HistoryClient component (components/history/HistoryClient.tsx)
-  - Expandable rows — click to see full original + compressed text
-  - Copy button on compressed text
-  - Mode badge (balanced/aggressive/smart) with color coding
-  - Token counts, cost saved, date
-  - Empty state when no compressions yet
-- Linked from Nav profile dropdown
-- lib/compression.ts — mock compression logic
-- lib/utils.ts — helpers
-- lib/store.ts — Zustand store
-- types/index.ts — all TypeScript types
-- components/ui/Button.tsx
-- components/ui/Chips.tsx
-- components/ui/Icons.tsx — inline SVG icons
+### Settings Page (app/dashboard/settings/page.tsx)
+- Profile section — shows name, email, avatar, member since
+- ✅ API Token section — Generate Token button, copy token, warns it won't show again
+- Plan & Billing section — shows current plan, upgrade CTA
+- Preferences section — UI only, not functional yet
+- Danger Zone — delete account UI only, not functional yet
+
+### Chrome Extension (tokko-extension/)
+- Separate folder — NOT part of the Next.js app
+- Location: Desktop/tokko-extension (extracted from zip)
+- Files: manifest.json, content.js, content.css, popup.html, popup.js, icons/
+- ✅ Floating green Compress button appears above Claude.ai input on focus
+- ✅ Token-based auth — user pastes API token from Settings page
+- ✅ Compression works via /api/compress-ext endpoint
+- ✅ Mode selector in popup (Balanced/Aggressive/Smart)
+- ✅ Toast notifications (success/error)
+- To update extension: edit files → go to chrome://extensions → click reload
+
+### API Routes
+- app/api/compress/route.ts — main web app compression (Clerk auth)
+- app/api/compress-ext/route.ts — extension compression (API token auth)
+- app/api/generate-token/route.ts — generates API token for extension
+- app/api/status/route.ts — health check for extension popup
+
+### Database (Supabase) — UPDATED
+- user_profiles now has `api_token` column (TEXT UNIQUE)
+- Run this SQL if not done: `ALTER TABLE user_profiles ADD COLUMN IF NOT EXISTS api_token TEXT UNIQUE;`
 
 ---
 
 ## ❌ What's NOT Built Yet (honest list)
-
-### Fake on landing page (needs to be labeled "coming soon" or removed):
-- API Reference page (/docs/api) — doesn't exist
-- JavaScript SDK — doesn't exist
-- Python SDK — doesn't exist
-- Claude Code MCP integration — doesn't exist
-- Changelog page (/changelog) — doesn't exist
-- Roadmap page (/roadmap) — doesn't exist
-- Status page (/status) — doesn't exist
-- Blog (/blog) — doesn't exist
-- Careers (/careers) — doesn't exist
-- About (/about) — doesn't exist
-- Contact (/contact) — doesn't exist
-- Privacy Policy (/privacy) — doesn't exist
-- Terms of Service (/terms) — doesn't exist
-
-### Features not built:
-- Real AI compression (needs ANTHROPIC_API_KEY)
-- Save compression to Supabase (code not written)
-- Dashboard real stats (all showing "—")
-- Compression history page
 - Analytics page
 - Stripe payments
-- Free plan daily limit enforcement (50/day)
-- Mobile responsive layout
-- FAQ section (not built yet)
-
-### Footer issues:
-- Logo shows "PS" instead of "T"
-- All social media links go to "#"
-- Most footer links go to pages that don't exist
+- Settings preferences actually saving
+- Settings delete account actually working
+- Landing page dead links (/blog, /about, /contact etc)
+- Chrome Extension not on Chrome Web Store yet (dev mode only)
+- Extension needs testing end-to-end with real token flow
 
 ---
 
@@ -188,10 +177,15 @@ ANTHROPIC_API_KEY=✅ set (server-side only, never exposed to browser)
 - [x] Settings page
 - [x] FAQ, Privacy, Terms pages
 
-### Week 3–4: Chrome Extension
-- [ ] Browser extension that adds compress button to Claude.ai, ChatGPT, Gemini
-- [ ] One-click compression from any AI chat interface
-- [ ] Freemium model to grow users
+### Week 3–4: Chrome Extension ← IN PROGRESS
+- [x] Floating compress button on Claude.ai
+- [x] Token-based auth system
+- [x] Mode selector in popup
+- [x] compress-ext API route
+- [x] Generate token in Settings
+- [ ] Test full flow end-to-end with real token ← NEXT SESSION START HERE
+- [ ] Submit to Chrome Web Store
+- [ ] Add ChatGPT + Gemini support
 
 ### Month 2: API Wrapper
 - [ ] REST API for developers
@@ -245,32 +239,26 @@ All icons use: `style={{ filter: 'brightness(0) invert(1)' }}` to appear white.
 - Supabase RLS disabled — filtering by Clerk user_id in app code
 - `Zap` icon removed from Optimizer.tsx — do NOT re-add (causes ReferenceError)
 - API key is server-side only — never sent from browser
-- useEffect MUST be imported in Optimizer.tsx — removing it breaks build
+- useEffect and useRouter MUST be imported in Optimizer.tsx
 - `saved_pct` column in Supabase is integer — always use Math.round() before saving
 - Testimonials and stats on landing page are placeholder/fake
 - `url.parse()` deprecation warning in Vercel logs — harmless, comes from Supabase SDK
+- Settings page preferences/delete are UI only — not functional yet
+- Landing page has dead links (/blog, /about, /contact etc) — not built yet
 
 ---
 
 ## 📋 Next Steps (in priority order)
 
-### Phase 2 — Growth & Monetization
-1. ~~Compression history page~~ ✅
-2. **Upgrade modal** — when free user hits 50/day limit, show upgrade modal
-3. **Stripe payments** — wire up Pro ($9/mo) and Teams ($29/mo) plans
-4. **Chrome Extension** — compress button on Claude.ai, ChatGPT, Gemini
+### Immediate (next session)
+1. Test Chrome Extension end-to-end — generate token → paste in popup → compress on claude.ai
+2. Fix any bugs found in testing
+3. Submit to Chrome Web Store
 
-### Phase 3 — Developer Platform
-5. **REST API** — let developers call Tokko programmatically
-6. **API keys per user** — generate/revoke keys in settings
-7. **JS SDK** — npm install tokko
-8. **Python SDK** — pip install tokko
-9. **Docs site** — proper documentation
-
-### Phase 4 — Enterprise
-10. **Claude Code MCP** — auto-compress inside Claude Code
-11. **Team analytics** — usage across team members
-12. **Slack bot** — compress prompts from Slack
+### Then
+4. Stripe payments — Pro ($9/mo) and Teams ($29/mo)
+5. Add ChatGPT + Gemini to extension
+6. Landing page cleanup — remove dead links
 
 ---
 
@@ -281,5 +269,10 @@ npm run dev
 # Opens at http://localhost:3000
 ```
 
+## 🧩 Chrome Extension
+- Location: Desktop/tokko-extension/
+- To reload after changes: chrome://extensions → click reload on Tokko
+- To test: claude.ai → click input → green Compress button appears
+
 ---
-*Last updated: Session 10 — Compression history page built. Expandable rows, copy button, mode badges, full stats. Linked from Nav dropdown. Next: Upgrade modal.*
+*Last updated: Session 12 — Chrome Extension built (floating button, token auth, popup), API token in Settings, compress-ext route. Next: test full flow, fix bugs, submit to Chrome Web Store.*

@@ -2,6 +2,64 @@
 import { useState } from 'react'
 import { Button } from '@/components/ui/Button'
 
+'use client'
+import { useState } from 'react'
+import { Button } from '@/components/ui/Button'
+
+function ApiTokenSection({ userId }: { userId: string }) {
+  const [token, setToken] = useState<string | null>(null)
+  const [loading, setLoading] = useState(false)
+  const [copied, setCopied] = useState(false)
+
+  async function generateToken() {
+    setLoading(true)
+    try {
+      const res = await fetch('/api/generate-token', { method: 'POST' })
+      const json = await res.json()
+      if (json.success) setToken(json.token)
+    } finally {
+      setLoading(false)
+    }
+  }
+
+  function copyToken() {
+    if (!token) return
+    navigator.clipboard.writeText(token)
+    setCopied(true)
+    setTimeout(() => setCopied(false), 2000)
+  }
+
+  return (
+    <div>
+      <p className="font-sans text-[0.82rem] text-text-muted mb-4">
+        Generate a token to connect the Tokko Chrome Extension. Paste it in the extension popup.
+      </p>
+      {token ? (
+        <div className="space-y-3">
+          <div className="flex items-center gap-2">
+            <code className="flex-1 font-mono text-[0.75rem] bg-bg-surface border border-border rounded-lg px-3 py-2.5 text-accent truncate">
+              {token}
+            </code>
+            <button
+              onClick={copyToken}
+              className="font-grotesk font-medium text-[0.82rem] text-accent border border-accent/30 px-3 py-2 rounded-lg hover:bg-accent/10 transition-colors shrink-0"
+            >
+              {copied ? '✓ Copied' : 'Copy'}
+            </button>
+          </div>
+          <p className="font-mono text-[0.65rem] text-accent-red">
+            Save this token now — it won't be shown again. Generate a new one if you lose it.
+          </p>
+        </div>
+      ) : (
+        <Button onClick={generateToken} loading={loading} size="sm">
+          Generate API Token
+        </Button>
+      )}
+    </div>
+  )
+}
+
 interface Props {
   userId: string
   firstName: string
@@ -80,6 +138,11 @@ export function SettingsClient({ userId, firstName, lastName, email, imageUrl, c
             Edit profile →
           </a>
         </div>
+      </Section>
+
+      {/* ── API Token ── */}
+      <Section title="Extension API Token" desc="Use this token to connect the Tokko Chrome Extension.">
+        <ApiTokenSection userId={userId} />
       </Section>
 
       {/* ── Plan ── */}
