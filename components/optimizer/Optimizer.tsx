@@ -27,7 +27,7 @@ export function Optimizer() {
   useEffect(() => { setError(null) }, [])
 
   const inputTokens = estimateTokens(input)
-  const dailyLimit = plan === 'free' ? 50 : Infinity
+  const dailyLimit = plan === 'free' ? 20 : Infinity
   const atLimit = plan === 'free' && dailyUsage >= dailyLimit
 
   const handleCompress = useCallback(async () => {
@@ -287,7 +287,7 @@ export function Optimizer() {
               You've hit your daily limit
             </h2>
             <p className="font-sans text-[0.88rem] text-text-muted mb-6">
-              You've used all <span className="text-text font-medium">50 free compressions</span> for today.
+              You've used all <span className="text-text font-medium">20 free compressions</span> for today.
               Upgrade to Pro for unlimited compressions, all modes, and all models.
             </p>
 
@@ -297,7 +297,7 @@ export function Optimizer() {
                 <div className="font-grotesk font-bold text-[0.88rem] mb-1">Free</div>
                 <div className="font-grotesk font-bold text-[1.4rem] mb-2">$0</div>
                 <ul className="space-y-1">
-                  {['50/day limit', 'Balanced only', 'Claude only'].map(f => (
+                  {['20/day limit', 'Balanced only', 'Claude only'].map(f => (
                     <li key={f} className="font-mono text-[0.65rem] text-text-muted">· {f}</li>
                   ))}
                 </ul>

@@ -55,6 +55,6 @@ export function isWithinRateLimit(
   compressionsToday: number,
   plan: 'free' | 'pro' | 'teams'
 ): boolean {
-  const limits = { free: 50, pro: Infinity, teams: Infinity }
+  const limits = { free: 20, pro: Infinity, teams: Infinity }
   return compressionsToday < limits[plan]
 }

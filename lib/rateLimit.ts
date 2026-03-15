@@ -45,11 +45,11 @@ export async function checkAndIncrementUsage(userId: string): Promise<{
   if (!profile) {
     // If DB fails, allow but log — don't block users due to DB issues
     console.error('[rateLimit] Failed to get/create user profile for', userId)
-    return { allowed: true, used: 0, limit: 50, plan: 'free' }
+    return { allowed: true, used: 0, limit: 20, plan: 'free' }
   }
 
   const plan = profile.plan as 'free' | 'pro' | 'teams'
-  const limits = { free: 50, pro: Infinity, teams: Infinity }
+  const limits = { free: 20, pro: Infinity, teams: Infinity }
   const limit = limits[plan]
 
   // Reset daily count if it's a new day

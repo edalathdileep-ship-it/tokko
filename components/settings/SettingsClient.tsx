@@ -254,7 +254,7 @@ export function SettingsClient({ userId, firstName, lastName, email, imageUrl, c
               </span>
             </div>
             <div className="font-sans text-[0.82rem] text-text-muted mt-1">
-              50 compressions per day · Balanced mode · Claude only
+              20 compressions per day · Balanced mode · Claude only
             </div>
           </div>
           <div className="font-grotesk font-bold text-[1.4rem]">$0</div>
