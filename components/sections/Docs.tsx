@@ -75,7 +75,7 @@ export function Docs() {
               <div className="p-4 relative">
                 {/* Tokko button floating */}
                 <div className="absolute top-2 right-6 flex items-center gap-1.5 px-3 py-1.5 bg-[rgba(10,10,10,0.92)] border border-white/10 rounded-lg text-[0.72rem] font-semibold text-white/80 shadow-lg">
-                  <div className="w-4 h-4 bg-accent rounded-[3px] flex items-center justify-center text-[9px] font-black text-black">T</div>
+                  <img src="/tokko_icon.svg" alt="T" width={16} height={16} style={{ borderRadius: '3px', flexShrink: 0 }} />
                   Compress
                 </div>
                 <div className="bg-bg-surface border border-border rounded-xl p-3 font-mono text-[0.72rem] text-text-muted leading-relaxed min-h-[80px]">
