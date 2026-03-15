@@ -33,7 +33,7 @@ export function Hero() {
                 ))}
               </div>
               <span className="font-sans text-[0.82rem] text-text-muted">
-                Join developers saving on their AI bills
+                Join people saving on their AI bills
               </span>
             </div>
 
