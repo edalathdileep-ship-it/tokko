@@ -101,17 +101,20 @@ export function Nav() {
                     <Link href="/dashboard"
                       onClick={() => setProfileOpen(false)}
                       className="flex items-center gap-2.5 px-4 py-2.5 font-sans text-[0.84rem] hover:bg-bg-surface transition-colors">
-                      <span className="text-text-muted">⚡</span> Dashboard
+                      <img src="/icon-dashboard.svg" width={16} height={16} alt="" />
+                      Dashboard
                     </Link>
                     <Link href="/dashboard/history"
                       onClick={() => setProfileOpen(false)}
                       className="flex items-center gap-2.5 px-4 py-2.5 font-sans text-[0.84rem] hover:bg-bg-surface transition-colors text-text-muted">
-                      <span>📋</span> History
+                      <img src="/icon-history.svg" width={16} height={16} alt="" />
+                      History
                     </Link>
                     <Link href="/dashboard/settings"
                       onClick={() => setProfileOpen(false)}
                       className="flex items-center gap-2.5 px-4 py-2.5 font-sans text-[0.84rem] hover:bg-bg-surface transition-colors text-text-muted">
-                      <span>⚙️</span> Settings
+                      <img src="/icon-settings.svg" width={16} height={16} alt="" />
+                      Settings
                     </Link>
                     <Link href="/#pricing"
                       onClick={() => setProfileOpen(false)}
@@ -125,7 +128,8 @@ export function Nav() {
                   <div className="border-t border-border py-1.5">
                     <SignOutButton>
                       <button className="w-full flex items-center gap-2.5 px-4 py-2.5 font-sans text-[0.84rem] text-text-muted hover:bg-bg-surface hover:text-text transition-colors">
-                        <span>→</span> Sign out
+                        <img src="/icon-signout.svg" width={16} height={16} alt="" />
+                        Sign out
                       </button>
                     </SignOutButton>
                   </div>
