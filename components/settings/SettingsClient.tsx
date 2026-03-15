@@ -1,5 +1,7 @@
 'use client'
-import { useState, useEffect } from 'react'
+import { useState } from 'react'
+import { UserButton } from '@clerk/nextjs'
+import { useRouter } from 'next/navigation'
 import { Button } from '@/components/ui/Button'
 
 function BYOKSection() {
@@ -198,12 +200,29 @@ function Field({ label, value, hint }: { label: string; value: string; hint?: st
 export function SettingsClient({ userId, firstName, lastName, email, imageUrl, createdAt }: Props) {
   const [showDeleteConfirm, setShowDeleteConfirm] = useState(false)
   const [deleteText, setDeleteText] = useState('')
+  const [deleting, setDeleting] = useState(false)
+  const router = useRouter()
 
   const fullName = [firstName, lastName].filter(Boolean).join(' ') || 'Not set'
   const memberSince = new Date(createdAt).toLocaleDateString('en-US', { month: 'long', year: 'numeric' })
   const initials = firstName && lastName
     ? `${firstName[0]}${lastName[0]}`
     : firstName ? firstName[0] : email[0]?.toUpperCase() ?? '?'
+
+  async function handleDeleteAccount() {
+    setDeleting(true)
+    try {
+      const res = await fetch('/api/delete-account', { method: 'DELETE' })
+      const json = await res.json()
+      if (json.success) {
+        router.push('/')
+      } else {
+        alert('Failed to delete account. Please try again.')
+      }
+    } finally {
+      setDeleting(false)
+    }
+  }
 
   return (
     <div>
@@ -225,11 +244,14 @@ export function SettingsClient({ userId, firstName, lastName, email, imageUrl, c
         <Field label="Full name" value={fullName} />
         <Field label="Email address" value={email} />
         <Field label="User ID" value={userId.slice(0, 20) + '...'} hint="Your unique Tokko ID" />
-        <div className="mt-5">
-          <a href="https://accounts.clerk.dev/user" target="_blank" rel="noopener noreferrer"
-            className="font-grotesk font-medium text-[0.84rem] text-accent hover:underline">
-            Edit profile →
-          </a>
+        <div className="mt-5 flex items-center gap-3">
+          <span className="font-sans text-[0.84rem] text-text-muted">Edit name, email or profile photo:</span>
+          <UserButton afterSignOutUrl="/" appearance={{
+            elements: {
+              avatarBox: 'w-8 h-8',
+            }
+          }} />
+          <span className="font-mono text-[0.65rem] text-text-muted">← click your avatar</span>
         </div>
       </Section>
 
@@ -320,9 +342,11 @@ export function SettingsClient({ userId, firstName, lastName, email, imageUrl, c
                   className="font-grotesk font-medium text-[0.84rem] text-text-muted border border-border px-4 py-2 rounded-lg hover:bg-bg-surface transition-colors">
                   Cancel
                 </button>
-                <button disabled={deleteText !== 'delete my account'}
+                <button
+                  disabled={deleteText !== 'delete my account' || deleting}
+                  onClick={handleDeleteAccount}
                   className="font-grotesk font-medium text-[0.84rem] text-white bg-accent-red px-4 py-2 rounded-lg disabled:opacity-40 disabled:cursor-not-allowed hover:opacity-90 transition-opacity">
-                  Permanently delete
+                  {deleting ? 'Deleting...' : 'Permanently delete'}
                 </button>
               </div>
             </div>
