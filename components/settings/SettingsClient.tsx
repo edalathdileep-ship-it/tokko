@@ -1,6 +1,110 @@
 'use client'
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import { Button } from '@/components/ui/Button'
+
+function BYOKSection() {
+  const [key, setKey] = useState('')
+  const [masked, setMasked] = useState<string | null>(null)
+  const [hasKey, setHasKey] = useState(false)
+  const [loading, setLoading] = useState(false)
+  const [removing, setRemoving] = useState(false)
+  const [status, setStatus] = useState<'idle' | 'success' | 'error'>('idle')
+  const [error, setError] = useState('')
+
+  useEffect(() => {
+    fetch('/api/byok').then(r => r.json()).then(d => {
+      setHasKey(d.hasKey)
+      setMasked(d.masked)
+    })
+  }, [])
+
+  async function saveKey() {
+    if (!key.trim()) return
+    setLoading(true)
+    setStatus('idle')
+    setError('')
+    try {
+      const res = await fetch('/api/byok', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ key: key.trim() }),
+      })
+      const json = await res.json()
+      if (!json.success) {
+        setStatus('error')
+        setError(json.error || 'Failed to save key')
+      } else {
+        setStatus('success')
+        setHasKey(true)
+        setMasked(`sk-ant-...${key.trim().slice(-6)}`)
+        setKey('')
+      }
+    } finally {
+      setLoading(false)
+    }
+  }
+
+  async function removeKey() {
+    setRemoving(true)
+    await fetch('/api/byok', { method: 'DELETE' })
+    setHasKey(false)
+    setMasked(null)
+    setStatus('idle')
+    setRemoving(false)
+  }
+
+  return (
+    <div>
+      <p className="font-sans text-[0.82rem] text-text-muted mb-4 leading-relaxed">
+        Connect your own Anthropic API key. Compressions use your key directly —
+        your Anthropic bill goes down, you pay Tokko just <span className="text-text font-medium">$3/mo</span> for the service.
+      </p>
+
+      {hasKey ? (
+        <div className="space-y-3">
+          <div className="flex items-center gap-3 bg-accent/5 border border-accent/20 rounded-xl px-4 py-3">
+            <div className="w-2 h-2 rounded-full bg-accent flex-shrink-0" />
+            <div className="flex-1">
+              <div className="font-mono text-[0.78rem] text-accent">{masked}</div>
+              <div className="font-mono text-[0.62rem] text-text-muted mt-0.5">Connected — using your key for compressions</div>
+            </div>
+            <button
+              onClick={removeKey}
+              disabled={removing}
+              className="font-mono text-[0.7rem] text-accent-red hover:underline flex-shrink-0"
+            >
+              {removing ? 'Removing...' : 'Remove'}
+            </button>
+          </div>
+        </div>
+      ) : (
+        <div className="space-y-3">
+          <div className="flex gap-2">
+            <input
+              type="password"
+              value={key}
+              onChange={(e) => { setKey(e.target.value); setStatus('idle') }}
+              placeholder="sk-ant-api03-..."
+              className="flex-1 px-3 py-2.5 bg-bg-surface border border-border rounded-lg font-mono text-[0.8rem] text-text outline-none focus:border-accent transition-colors placeholder:text-text-muted"
+            />
+            <Button onClick={saveKey} loading={loading} size="sm">
+              Save
+            </Button>
+          </div>
+          {status === 'error' && (
+            <p className="font-mono text-[0.68rem] text-accent-red">{error}</p>
+          )}
+          {status === 'success' && (
+            <p className="font-mono text-[0.68rem] text-accent">✓ Key saved successfully</p>
+          )}
+          <p className="font-mono text-[0.65rem] text-text-muted">
+            Get your key at <a href="https://console.anthropic.com" target="_blank" rel="noopener noreferrer" className="text-accent hover:underline">console.anthropic.com</a>
+          </p>
+        </div>
+      )}
+    </div>
+  )
+}
 
 function ApiTokenSection({ userId }: { userId: string }) {
   const [token, setToken] = useState<string | null>(null)
@@ -127,6 +231,11 @@ export function SettingsClient({ userId, firstName, lastName, email, imageUrl, c
             Edit profile →
           </a>
         </div>
+      </Section>
+
+      {/* ── BYOK ── */}
+      <Section title="Bring Your Own Key (BYOK)" desc="Use your own Anthropic API key for unlimited compressions at $3/mo.">
+        <BYOKSection />
       </Section>
 
       {/* ── API Token ── */}
