@@ -2,6 +2,7 @@
 import Link from 'next/link'
 import { useState, useEffect, useRef } from 'react'
 import { useUser, SignOutButton } from '@clerk/nextjs'
+import { usePathname } from 'next/navigation'
 import { Button } from '@/components/ui/Button'
 
 export function Nav() {
@@ -9,6 +10,7 @@ export function Nav() {
   const [mobileOpen, setMobileOpen] = useState(false)
   const [profileOpen, setProfileOpen] = useState(false)
   const { isSignedIn, user } = useUser()
+  const pathname = usePathname()
   const dropdownRef = useRef<HTMLDivElement>(null)
 
   useEffect(() => {
@@ -98,24 +100,23 @@ export function Nav() {
 
                   {/* Menu items */}
                   <div className="py-1.5">
-                    <Link href="/dashboard"
-                      onClick={() => setProfileOpen(false)}
-                      className="flex items-center gap-2.5 px-4 py-2.5 font-sans text-[0.84rem] hover:bg-bg-surface transition-colors">
-                      <img src="/icon-dashboard.svg" width={16} height={16} alt="" />
-                      Dashboard
-                    </Link>
-                    <Link href="/dashboard/history"
-                      onClick={() => setProfileOpen(false)}
-                      className="flex items-center gap-2.5 px-4 py-2.5 font-sans text-[0.84rem] hover:bg-bg-surface transition-colors text-text-muted">
-                      <img src="/icon-history.svg" width={16} height={16} alt="" />
-                      History
-                    </Link>
-                    <Link href="/dashboard/settings"
-                      onClick={() => setProfileOpen(false)}
-                      className="flex items-center gap-2.5 px-4 py-2.5 font-sans text-[0.84rem] hover:bg-bg-surface transition-colors text-text-muted">
-                      <img src="/icon-settings.svg" width={16} height={16} alt="" />
-                      Settings
-                    </Link>
+                    {[
+                      { href: '/dashboard', label: 'Dashboard', icon: '/icon-dashboard.svg', exact: true },
+                      { href: '/dashboard/history', label: 'History', icon: '/icon-history.svg', exact: false },
+                      { href: '/dashboard/settings', label: 'Settings', icon: '/icon-settings.svg', exact: false },
+                    ].map((item) => {
+                      const isActive = item.exact ? pathname === item.href : pathname.startsWith(item.href)
+                      return (
+                        <Link key={item.href} href={item.href}
+                          onClick={() => setProfileOpen(false)}
+                          className={`flex items-center gap-2.5 px-4 py-2.5 font-sans text-[0.84rem] transition-colors hover:bg-bg-surface ${
+                            isActive ? 'text-text bg-bg-surface' : 'text-text-muted hover:text-text'
+                          }`}>
+                          <img src={item.icon} width={16} height={16} alt="" />
+                          {item.label}
+                        </Link>
+                      )
+                    })}
                     <Link href="/#pricing"
                       onClick={() => setProfileOpen(false)}
                       className="flex items-center gap-2.5 px-4 py-2.5 font-sans text-[0.84rem] hover:bg-bg-surface transition-colors">
@@ -127,7 +128,7 @@ export function Nav() {
                   {/* Sign out */}
                   <div className="border-t border-border py-1.5">
                     <SignOutButton>
-                      <button className="w-full flex items-center gap-2.5 px-4 py-2.5 font-sans text-[0.84rem] text-text-muted hover:bg-bg-surface hover:text-text transition-colors">
+                      <button className="w-full flex items-center gap-2.5 px-4 py-2.5 font-sans text-[0.84rem] text-text hover:bg-bg-surface transition-colors">
                         <img src="/icon-signout.svg" width={16} height={16} alt="" />
                         Sign out
                       </button>

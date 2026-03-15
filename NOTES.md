@@ -45,15 +45,22 @@ ANTHROPIC_API_KEY=✅ set (server-side only, never exposed to browser)
 ## ✅ What's Built & Working
 
 ### Landing Page (app/page.tsx)
-- Hero section with demo card
-- Models strip (Claude, GPT-4, Gemini, Claude Code, Mistral soon, Llama soon)
-- Features section (6 features with icons from /public folder)
-- How It Works (4 steps)
-- Social Proof (testimonials + stats) — NOTE: all fake/placeholder
-- Pricing section (Free / Pro / Teams with monthly/annual toggle)
-- Docs section (Quick Start, API, JS SDK, Python SDK, Claude Code)
+- Hero: "Stop wasting tokens. Ship faster." tagline
+- Hero shows real dollar savings — cost per call before/after, $142/mo savings at scale
+- ModelsStrip — Claude, GPT-4, Gemini, Claude Code, Mistral/Llama soon
+- Features section — 6 real features
+- How It Works — 4 steps
+- Social Proof — placeholder testimonials + stats
+- Chrome Extension section — Claude.ai LIVE, ChatGPT/Gemini SOON badges
+- Pricing — Free / BYOK $3 / Pro $9 (see pricing section)
+- FAQ — updated, no fake API/SDK mentions
 - CTA Banner
 - Footer
+
+### Pricing (updated)
+- Free: 20 compressions/day, Balanced mode only, Claude only
+- BYOK: $3/mo ($2 annual) — bring your own Anthropic key, unlimited, all modes
+- Pro: $9/mo ($7 annual) — we handle everything, all models, analytics, API
 
 ### Auth (Clerk)
 - Signup page: app/auth/signup/page.tsx — uses routing="hash"
@@ -115,6 +122,19 @@ ANTHROPIC_API_KEY=✅ set (server-side only, never exposed to browser)
 - Preferences section — UI only, not functional yet
 - Danger Zone — delete account UI only, not functional yet
 
+### Logo & Branding
+- public/tokko_logo.svg — wordmark "TOKKO" in white, used in Nav + Footer only
+- public/tokko_icon.svg — green rounded square with T, used for favicon + extension
+- Nav: wordmark only, no icon next to it
+- Footer: wordmark only
+- Favicon: tokko_icon.svg
+- Extension icons: PNG versions at 16x48x128px
+- Nav dropdown icons (all in /public):
+  - icon-dashboard.svg — Dashboard menu item
+  - icon-history.svg — History menu item
+  - icon-settings.svg — Settings menu item
+  - icon-signout.svg — Sign out button
+
 ### Chrome Extension (tokko-extension/)
 - Separate folder — NOT part of the Next.js app
 - Location: Desktop/tokko-extension (extracted from zip)
@@ -127,7 +147,7 @@ ANTHROPIC_API_KEY=✅ set (server-side only, never exposed to browser)
 - ✅ Mode selector in popup (Balanced/Aggressive/Smart)
 - ✅ Toast notifications (dark with colored text)
 - ✅ Handles extension context invalidated gracefully
-- Current version: v7
+- Current version: v8
 - IMPORTANT: After reloading extension, always refresh claude.ai tab
 - To update: extract new zip → chrome://extensions → reload → refresh claude.ai
 
@@ -143,103 +163,56 @@ ANTHROPIC_API_KEY=✅ set (server-side only, never exposed to browser)
 
 ---
 
-## ❌ What's NOT Built Yet (honest list)
-- Analytics page
-- Stripe payments
+## ❌ What's NOT Built Yet
+- Stripe payments (BYOK $3 + Pro $9)
+- BYOK key storage in settings (user pastes their Anthropic key)
 - Settings preferences actually saving
 - Settings delete account actually working
-- Landing page dead links (/blog, /about, /contact etc)
 - Chrome Extension not on Chrome Web Store yet (dev mode only)
-- Extension needs testing end-to-end with real token flow
+- ChatGPT + Gemini extension support
+- Real testimonials (all placeholder)
+- Analytics page in dashboard
 
 ---
 
-## 💰 Pricing
-| Plan | Monthly | Annual |
-|---|---|---|
-| Free | $0 | $0 |
-| Pro | $9/mo | $7/mo |
-| Teams | $29/mo | $23/mo |
-
-**Free limits:** 50 compressions/day
-**Pro:** Unlimited compressions, all modes, all models, analytics, history, API
-**Teams:** Everything in Pro + 10 seats, team analytics, Slack bot, priority support
+### Pricing (current)
+- Free: 20 compressions/day, Balanced mode only, Claude only
+- BYOK: $3/mo ($2 annual) — bring your own Anthropic key, unlimited, all modes
+- Pro: $9/mo ($7 annual) — we handle everything, all models, analytics, API
 
 ---
 
-## 🗺️ Product Roadmap (decided by user)
+## 🗺️ Product Roadmap
 
-### Week 1–2: Standalone Web App ✅ DONE
-- [x] Landing page
-- [x] Auth (Clerk)
-- [x] Supabase database
-- [x] Real AI compression (Anthropic API)
-- [x] Save to database
-- [x] Real dashboard stats
-- [x] Security (sanitize, rate limit, safe errors)
-- [x] Mobile responsive
-- [x] Profile dropdown nav
-- [x] Settings page
-- [x] FAQ, Privacy, Terms pages
+### Phase 1: Web App ✅ DONE
+### Phase 2: Chrome Extension ✅ DONE (Claude.ai)
+### Phase 3: Monetisation ← CURRENT
+- [ ] Chrome Web Store submission
+- [ ] Stripe payments — BYOK ($3) + Pro ($9)
+- [ ] BYOK key in Settings
+- [ ] ChatGPT + Gemini extension
 
-### Week 3–4: Chrome Extension ✅ DONE
-- [x] Floating compress button on Claude.ai
-- [x] Token-based auth system
-- [x] Mode selector in popup
-- [x] compress-ext API route
-- [x] Generate token in Settings
-- [x] Background service worker for storage
-- [x] CORS fixed
-- [x] Text replacement working
-- [ ] Submit to Chrome Web Store ← NEXT
-- [ ] Add ChatGPT + Gemini support
-
-### Month 2: API Wrapper
+### Phase 4: Growth
+- [ ] Real testimonials from early users
+- [ ] Analytics dashboard page
 - [ ] REST API for developers
-- [ ] API keys per user
-- [ ] Usage tracking and rate limiting
-- [ ] JS SDK (npm install tokko)
-- [ ] Python SDK (pip install tokko)
-- [ ] Docs site
-
-### Month 3+: Claude Code MCP Integration
-- [ ] MCP server for Claude Code
-- [ ] Auto-compress prompts inside Claude Code
-- [ ] Premium tier feature
-- [ ] Setup guide in docs
 
 ---
 
-## 🖼️ Icon Files (in /public folder)
-**Features section:**
-- compress.svg → Prompt Compressor
-- modals.svg → Multi-Model Support
-- live-tokens.svg → Live Token Counter
-- analytic-graph.svg → Analytics Dashboard
-- smart.svg → Smart Mode
-- history.svg → Compression History
-
-**Docs section:**
-- quick-start.svg → Quick Start Guide
-- api.svg → REST API Reference
-- code.svg → JavaScript SDK
-- sdk.svg → Python SDK
-- team.svg → Claude Code Integration
-
-All icons use: `style={{ filter: 'brightness(0) invert(1)' }}` to appear white.
-
----
+## 📋 Next Steps (in priority order)
+1. **Chrome Web Store submission**
+2. **Stripe payments** — BYOK $3 + Pro $9
+3. **BYOK key in settings** — store user's Anthropic key encrypted
+4. **ChatGPT + Gemini** extension support
 
 ## 🎨 Design Decisions
 - Dark theme only
 - Accent color: green (#00e5a0)
 - Font: Space Grotesk (headings) + Space Mono (labels/code)
 - Border radius: rounded-2xl / rounded-3xl / rounded-4xl
-- Icons: SVG files in /public folder, rendered with white color filter
-- No emojis in buttons
-- No bullet points in mode selector
-
----
+- No emojis in buttons or nav — use SVG icons
+- Wordmark only in Nav and Footer (no icon next to it)
+- Target audience: everyone who uses AI, NOT just developers
 
 ## 🐛 Known Issues / Decisions Made
 - Clerk routing uses `routing="hash"` on SignIn/SignUp components
@@ -249,23 +222,11 @@ All icons use: `style={{ filter: 'brightness(0) invert(1)' }}` to appear white.
 - useEffect and useRouter MUST be imported in Optimizer.tsx
 - `saved_pct` column in Supabase is integer — always use Math.round() before saving
 - Testimonials and stats on landing page are placeholder/fake
-- `url.parse()` deprecation warning in Vercel logs — harmless, comes from Supabase SDK
+- `url.parse()` deprecation warning in Vercel logs — harmless, from Supabase SDK
 - Settings page preferences/delete are UI only — not functional yet
-- Landing page has dead links (/blog, /about, /contact etc) — not built yet
-
----
-
-## 📋 Next Steps (in priority order)
-
-### Immediate
-1. **Submit to Chrome Web Store** — make it available to everyone
-2. **BYOK pricing** — restructure to Free / BYOK $3 / Pro $9
-3. **Landing page messaging** — show real dollar savings
-4. **Add ChatGPT + Gemini** to extension
-
-### Then
-5. Stripe payments
-6. REST API + SDK for developers
+- After reloading Chrome extension, always refresh claude.ai tab
+- Compression prompts updated — Claude never completes tasks, only compresses text
+- Retry logic added — if output longer than input, retries with stricter prompt
 
 ---
 
@@ -278,8 +239,9 @@ npm run dev
 
 ## 🧩 Chrome Extension
 - Location: Desktop/tokko-extension/
-- To reload after changes: chrome://extensions → click reload on Tokko
-- To test: claude.ai → click input → green Compress button appears
+- Current version: v9
+- To reload: chrome://extensions → reload → refresh claude.ai
+- To test: claude.ai → click input → Compress button appears
 
 ---
-*Last updated: Session 14 — Extension v7 complete. Dark frosted button, pulsing loader, graceful error handling. Next: Chrome Web Store submission + BYOK pricing.*
+*Last updated: Session 17 — Custom nav icons (dashboard/history/settings/signout), wordmark logo, removed developer language, compression retry logic, extension v9 with real T icon.*
