@@ -17,7 +17,7 @@ export default function TermsPage() {
 
           <section>
             <h2 className="font-grotesk font-bold text-[1.1rem] text-text mb-3">Your account</h2>
-            <p>You are responsible for keeping your account credentials secure. Free accounts are limited to 50 compressions per day. We reserve the right to suspend accounts that abuse the service.</p>
+            <p>You are responsible for keeping your account credentials secure. Free accounts are limited to 20 compressions per day. We reserve the right to suspend accounts that abuse the service.</p>
           </section>
 
           <section>

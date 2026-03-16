@@ -152,22 +152,28 @@ ANTHROPIC_API_KEY=✅ set (server-side only, never exposed to browser)
 - To update: extract new zip → chrome://extensions → reload → refresh claude.ai
 
 ### API Routes
-- app/api/compress/route.ts — main web app compression (Clerk auth)
+- app/api/compress/route.ts — main web app compression (Clerk auth, BYOK key priority)
 - app/api/compress-ext/route.ts — extension compression (API token auth)
 - app/api/generate-token/route.ts — generates API token for extension
 - app/api/status/route.ts — health check for extension popup
+- app/api/byok/route.ts — GET/POST/DELETE user's Anthropic key
+- app/api/delete-account/route.ts — deletes from Supabase + Clerk
 
-### Database (Supabase) — UPDATED
-- user_profiles now has `api_token` column (TEXT UNIQUE)
-- Run this SQL if not done: `ALTER TABLE user_profiles ADD COLUMN IF NOT EXISTS api_token TEXT UNIQUE;`
+### Database (Supabase)
+- user_profiles columns: id, user_id, plan, compressions_today, total_compressions, total_tokens_saved, total_cost_saved, last_reset_date, api_token, byok_key, created_at
+- compressions columns: id, user_id, original_text, compressed_text, original_tokens, compressed_tokens, saved_pct, mode, model, cost_saved, created_at
+- RLS disabled — filtering by Clerk user_id in app code
+- Run if not done:
+  ```sql
+  ALTER TABLE user_profiles ADD COLUMN IF NOT EXISTS api_token TEXT UNIQUE;
+  ALTER TABLE user_profiles ADD COLUMN IF NOT EXISTS byok_key TEXT;
+  ```
 
 ---
 
 ## ❌ What's NOT Built Yet
 - Stripe payments (BYOK $3 + Pro $9)
-- BYOK key storage in settings (user pastes their Anthropic key)
 - Settings preferences actually saving
-- Settings delete account actually working
 - Chrome Extension not on Chrome Web Store yet (dev mode only)
 - ChatGPT + Gemini extension support
 - Real testimonials (all placeholder)
@@ -189,21 +195,18 @@ ANTHROPIC_API_KEY=✅ set (server-side only, never exposed to browser)
 ### Phase 3: Monetisation ← CURRENT
 - [ ] Chrome Web Store submission
 - [ ] Stripe payments — BYOK ($3) + Pro ($9)
-- [ ] BYOK key in Settings
 - [ ] ChatGPT + Gemini extension
 
 ### Phase 4: Growth
 - [ ] Real testimonials from early users
 - [ ] Analytics dashboard page
-- [ ] REST API for developers
 
 ---
 
 ## 📋 Next Steps (in priority order)
 1. **Chrome Web Store submission**
 2. **Stripe payments** — BYOK $3 + Pro $9
-3. **BYOK key in settings** — store user's Anthropic key encrypted
-4. **ChatGPT + Gemini** extension support
+3. **ChatGPT + Gemini** extension support
 
 ## 🎨 Design Decisions
 - Dark theme only
@@ -212,21 +215,25 @@ ANTHROPIC_API_KEY=✅ set (server-side only, never exposed to browser)
 - Border radius: rounded-2xl / rounded-3xl / rounded-4xl
 - No emojis in buttons or nav — use SVG icons
 - Wordmark only in Nav and Footer (no icon next to it)
-- Target audience: everyone who uses AI, NOT just developers
+- Target audience: everyone who uses AI — NOT just developers
+- No "developer" language anywhere in copy
 
 ## 🐛 Known Issues / Decisions Made
 - Clerk routing uses `routing="hash"` on SignIn/SignUp components
 - Supabase RLS disabled — filtering by Clerk user_id in app code
 - `Zap` icon removed from Optimizer.tsx — do NOT re-add (causes ReferenceError)
 - API key is server-side only — never sent from browser
-- useEffect and useRouter MUST be imported in Optimizer.tsx
+- useEffect MUST be imported in SettingsClient.tsx and Optimizer.tsx
+- useRouter MUST be imported in Optimizer.tsx and SettingsClient.tsx
 - `saved_pct` column in Supabase is integer — always use Math.round() before saving
 - Testimonials and stats on landing page are placeholder/fake
 - `url.parse()` deprecation warning in Vercel logs — harmless, from Supabase SDK
-- Settings page preferences/delete are UI only — not functional yet
 - After reloading Chrome extension, always refresh claude.ai tab
 - Compression prompts updated — Claude never completes tasks, only compresses text
-- Retry logic added — if output longer than input, retries with stricter prompt
+- Retry logic — if output longer than input, retries with stricter prompt
+- Free plan limit is 20/day everywhere (was 50, now fixed)
+- Edit profile uses Clerk's UserButton modal — not a custom form
+- Delete account calls /api/delete-account → deletes Supabase + Clerk
 
 ---
 
@@ -244,4 +251,4 @@ npm run dev
 - To test: claude.ai → click input → Compress button appears
 
 ---
-*Last updated: Session 17 — Custom nav icons (dashboard/history/settings/signout), wordmark logo, removed developer language, compression retry logic, extension v9 with real T icon.*
+*Last updated: Session 18 — BYOK key in settings, delete account working, free plan 20/day fixed everywhere, nav active states, edit profile via Clerk modal, removed all developer language.*

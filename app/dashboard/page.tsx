@@ -53,7 +53,7 @@ export default async function DashboardPage() {
         {/* Header */}
         <div className="mb-8">
           <h1 className="font-grotesk font-bold text-[2rem] tracking-tight mb-1">
-            Hey, {firstName} 👋
+            Hey, {firstName}
           </h1>
           <p className="text-text-muted font-sans text-[0.95rem]">
             Ready to compress some prompts?

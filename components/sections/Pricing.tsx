@@ -88,7 +88,6 @@ export function Pricing() {
 
           {/* BYOK callout */}
           <div className="inline-flex items-center gap-2 bg-accent/5 border border-accent/20 rounded-xl px-4 py-2.5 mb-7">
-            <span className="text-accent text-[0.8rem]">💡</span>
             <span className="font-sans text-[0.82rem] text-text-muted">
               Already have an Anthropic API key? Use <span className="text-accent font-medium">BYOK</span> and pay just <span className="text-text font-medium">$3/mo</span> for Tokko
             </span>
