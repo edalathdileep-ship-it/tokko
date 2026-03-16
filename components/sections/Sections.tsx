@@ -1,5 +1,5 @@
 'use client'
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import Link from 'next/link'
 import { Button } from '@/components/ui/Button'
 
@@ -72,7 +72,7 @@ export function Features() {
             Everything you need to<br />spend less on tokens.
           </h2>
           <p className="font-sans text-[0.94rem] md:text-[1rem] text-text-muted leading-relaxed max-w-[520px] mx-auto">
-            Built for developers, power users and teams who use AI every day.
+            Built for everyone who uses AI every day.
           </p>
         </div>
 
@@ -176,62 +176,66 @@ export function HowItWorks() {
 }
 
 // ── SocialProof ───────────────────────────────────────────
-const TESTIMONIALS = [
-  { quote: 'Using Tokko cut our monthly Claude bill by almost 60%. Same outputs, way less tokens. Paid for itself in the first hour.', name: 'Arjun Kapoor', role: 'Full-stack dev · Bangalore', initials: 'AK', color: '#7b61ff' },
-  { quote: "I use Claude Code every day and was burning through tokens insanely fast. Smart mode is genuinely impressive — it knows what to keep.", name: 'Sara Reeves', role: 'AI engineer · London', initials: 'SR', color: '#00e5a0' },
-  { quote: 'The multi-model dashboard is the killer feature. One place to see everything across Claude and GPT is huge.', name: 'Marcus Johansson', role: 'Product designer · Stockholm', initials: 'MJ', color: '#ff9f43' },
-]
-
-const STATS = [
-  { value: '2.4B+', label: 'Tokens saved to date', green: true },
-  { value: '$48k+', label: 'Saved for our users' },
-  { value: '62%',   label: 'Avg token reduction', green: true },
-  { value: '12k+',  label: 'Active users' },
-]
+function formatNumber(n: number): string {
+  if (n >= 1_000_000) return `${(n / 1_000_000).toFixed(1)}M`
+  if (n >= 1_000) return `${(n / 1_000).toFixed(1)}k`
+  return n.toString()
+}
 
 export function SocialProof() {
+  const [stats, setStats] = useState<{ totalUsers: number; totalCompressions: number; totalTokensSaved: number } | null>(null)
+
+  useEffect(() => {
+    fetch('/api/stats').then(r => r.json()).then(setStats).catch(() => {})
+  }, [])
+
+  const statCards = [
+    {
+      value: stats ? `${stats.totalUsers}` : '—',
+      label: 'Users signed up',
+      green: false,
+    },
+    {
+      value: stats ? `${stats.totalCompressions}` : '—',
+      label: 'Prompts compressed',
+      green: true,
+    },
+    {
+      value: stats ? formatNumber(stats.totalTokensSaved) : '—',
+      label: 'Tokens saved',
+      green: false,
+    },
+  ]
+
   return (
     <section id="proof" className="py-20 md:py-30 border-t border-border">
       <div className="max-w-content mx-auto px-4 sm:px-8 md:px-[48px]">
-        <div className="text-center mb-12 md:mb-14">
+        <div className="text-center mb-12">
           <div className="flex items-center justify-center gap-2.5 font-mono text-[0.68rem] font-bold tracking-[0.14em] uppercase text-accent mb-4">
-            Loved by builders
+            Live stats
           </div>
-          <h2 className="font-grotesk font-bold text-[clamp(1.8rem,4vw,3rem)] tracking-tight leading-none">
-            Real people. Real savings.
+          <h2 className="font-grotesk font-bold text-[clamp(1.8rem,4vw,3rem)] tracking-tight leading-none mb-4">
+            Real numbers. Updated live.
           </h2>
+          <p className="font-sans text-[0.94rem] text-text-muted max-w-[480px] mx-auto leading-relaxed">
+            We're just getting started. Every number here is real — no fake stats, no inflated counts.
+          </p>
         </div>
 
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mb-10 md:mb-15">
-          {TESTIMONIALS.map((t) => (
-            <div key={t.name} className="bg-bg-card border border-border rounded-2xl p-6 flex flex-col hover:border-accent/20 transition-colors">
-              <p className="font-sans text-[0.88rem] text-text-muted leading-relaxed mb-5 flex-1">
-                "{t.quote}"
-              </p>
-              <div className="flex items-center gap-2.5">
-                <div className="w-[34px] h-[34px] rounded-full flex items-center justify-center font-grotesk text-[0.72rem] font-bold text-black flex-shrink-0"
-                  style={{ background: t.color }}>
-                  {t.initials}
-                </div>
-                <div>
-                  <div className="font-grotesk font-bold text-[0.82rem]">{t.name}</div>
-                  <div className="font-mono text-[0.62rem] text-text-muted">{t.role}</div>
-                </div>
-              </div>
-            </div>
-          ))}
-        </div>
-
-        <div className="grid grid-cols-2 md:grid-cols-4 border border-border rounded-2xl overflow-hidden">
-          {STATS.map((s, i) => (
-            <div key={s.label} className={`bg-bg-card py-6 md:py-7 px-4 md:px-6 text-center ${i % 2 === 0 ? 'border-r border-border' : ''} ${i < 2 ? 'border-b md:border-b-0 border-border' : ''} md:border-r md:last:border-r-0`}>
-              <div className={`font-grotesk font-bold text-[1.6rem] md:text-[2rem] tracking-tight mb-1.5 ${s.green ? 'text-accent' : ''}`}>
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-4 max-w-2xl mx-auto">
+          {statCards.map((s, i) => (
+            <div key={i} className="bg-bg-card border border-border rounded-2xl py-8 px-4 text-center">
+              <div className={`font-grotesk font-bold text-[2.4rem] tracking-tight mb-1.5 ${s.green ? 'text-accent' : ''}`}>
                 {s.value}
               </div>
-              <div className="font-mono text-[0.62rem] md:text-[0.65rem] text-text-muted tracking-[0.06em]">{s.label}</div>
+              <div className="font-mono text-[0.62rem] text-text-muted tracking-[0.06em] uppercase">{s.label}</div>
             </div>
           ))}
         </div>
+
+        <p className="text-center font-mono text-[0.62rem] text-text-muted mt-6">
+          Updated every 5 minutes · No fake numbers
+        </p>
       </div>
     </section>
   )
@@ -246,7 +250,7 @@ const FAQS = [
   { q: 'What is BYOK?', a: 'BYOK means Bring Your Own Key. You connect your existing Anthropic API key to Tokko. We use your key for compressions so you pay Anthropic directly. You pay Tokko just $3/mo for the compression software — and since Tokko cuts your token usage by up to 75%, it pays for itself instantly.' },
   { q: 'What is Smart mode?', a: 'Smart mode uses Claude to understand your prompt before compressing it — preserving technical terms, constraints, and key instructions while removing everything else.' },
   { q: 'Is my data safe?', a: 'Your prompts are not used to train any models. We store your compression history in your dashboard — you can delete it at any time.' },
-  { q: 'Is there a Chrome Extension?', a: 'Yes! The Tokko Chrome Extension adds a subtle compress button directly inside Claude.ai. One click compresses your prompt in place — no switching tabs. Generate your API token from the Settings page to connect it.' },
+  { q: 'Is there a Chrome Extension?', a: 'Yes! The Tokko Chrome Extension currently works on Claude.ai — a subtle compress button appears directly in the chat input. ChatGPT and Gemini support is coming soon. Generate your API token from the Settings page to connect it.' },
 ]
 
 export function FAQ() {
