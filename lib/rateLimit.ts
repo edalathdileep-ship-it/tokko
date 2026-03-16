@@ -48,22 +48,25 @@ export async function checkAndIncrementUsage(userId: string): Promise<{
     return { allowed: true, used: 0, limit: 20, plan: 'free' }
   }
 
-  const plan = profile.plan as 'free' | 'pro' | 'teams'
-  const limits = { free: 20, pro: Infinity, teams: Infinity }
-  const limit = limits[plan]
+  const plan = profile.plan as 'free' | 'pro' | 'teams' | 'byok'
+  const limits = { free: 20, byok: Infinity, pro: Infinity, teams: Infinity }
+  const limit = limits[plan] ?? 20
 
-  // Reset daily count if it's a new day
+  // Reset if 24 hours have passed since last reset
   let compressionsToday = profile.compressions_today
-  if (profile.last_reset_date !== today) {
+  const lastReset = profile.last_reset_date ? new Date(profile.last_reset_date).getTime() : 0
+  const hoursSinceReset = (Date.now() - lastReset) / (1000 * 60 * 60)
+
+  if (hoursSinceReset >= 24) {
     compressionsToday = 0
     await supabase
       .from('user_profiles')
-      .update({ compressions_today: 0, last_reset_date: today })
+      .update({ compressions_today: 0, last_reset_date: new Date().toISOString() })
       .eq('user_id', userId)
   }
 
   // Check limit
-  if (plan === 'free' && compressionsToday >= limit) {
+  if ((plan === 'free') && compressionsToday >= limit) {
     return { allowed: false, used: compressionsToday, limit, plan }
   }
 
@@ -73,7 +76,7 @@ export async function checkAndIncrementUsage(userId: string): Promise<{
     .update({
       compressions_today: compressionsToday + 1,
       total_compressions: profile.total_compressions + 1,
-      last_reset_date: today,
+      last_reset_date: compressionsToday === 0 ? new Date().toISOString() : profile.last_reset_date,
     })
     .eq('user_id', userId)
 

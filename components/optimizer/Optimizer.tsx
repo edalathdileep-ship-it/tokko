@@ -318,7 +318,7 @@ export function Optimizer() {
             </Button>
 
             <p className="text-center font-mono text-[0.62rem] text-text-muted mt-3">
-              Or wait until tomorrow for your free limit to reset
+              Or wait 24 hours from your first compression today for your limit to reset
             </p>
           </div>
         </div>
