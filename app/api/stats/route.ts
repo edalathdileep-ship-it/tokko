@@ -34,7 +34,7 @@ export async function GET() {
       totalCompressions: totalCompressions ?? 0,
       totalTokensSaved,
     }, {
-      headers: { 'Cache-Control': 's-maxage=300' } // cache 5 mins
+      headers: { 'Cache-Control': 's-maxage=60, stale-while-revalidate=30' }
     })
   } catch {
     return NextResponse.json({ totalUsers: 0, totalCompressions: 0, totalTokensSaved: 0 })

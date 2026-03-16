@@ -186,7 +186,10 @@ export function SocialProof() {
   const [stats, setStats] = useState<{ totalUsers: number; totalCompressions: number; totalTokensSaved: number } | null>(null)
 
   useEffect(() => {
-    fetch('/api/stats').then(r => r.json()).then(setStats).catch(() => {})
+    const fetchStats = () => fetch('/api/stats').then(r => r.json()).then(setStats).catch(() => {})
+    fetchStats()
+    const interval = setInterval(fetchStats, 60000)
+    return () => clearInterval(interval)
   }, [])
 
   const statCards = [
