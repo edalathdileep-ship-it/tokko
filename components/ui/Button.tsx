@@ -8,7 +8,13 @@ interface ButtonProps extends ButtonHTMLAttributes<HTMLButtonElement> {
   loading?: boolean
 }
 
+// Black arrow for primary (green) buttons
 export const BtnArrow = () => (
+  <img src="/btn-arrow-dark.svg" alt="" width={8} height={14} style={{ flexShrink: 0 }} />
+)
+
+// White arrow for outline/dark buttons
+export const BtnArrowLight = () => (
   <img src="/btn-arrow.svg" alt="" width={8} height={14} style={{ flexShrink: 0 }} />
 )
 
