@@ -40,27 +40,13 @@ export function ModelsStrip() {
 
 // ── Features ──────────────────────────────────────────────
 const FEATURES = [
-  { icon: 'compress.svg',       color: 'green',  title: 'Prompt Compressor',   desc: 'Paste any prompt and watch it shrink in real time. Three modes — Balanced, Aggressive, Smart — give you full control.', tag: 'Core feature' },
-  { icon: 'modals.svg',         color: 'purple', title: 'Multi-Model Support', desc: 'Switch between Claude, GPT-4, and Gemini from one dashboard. Cost estimates update per model automatically.', tag: 'Differentiator' },
-  { icon: 'live-tokens.svg',    color: 'green',  title: 'Live Token Counter',  desc: 'See exactly how many tokens your prompt costs before you send it. Updates character by character.', tag: 'Free' },
-  { icon: 'analytic-graph.svg', color: 'orange', title: 'Analytics Dashboard', desc: 'Track every compression across every model. Tokens saved, cost saved, compression ratios over time.', tag: 'Pro' },
-  { icon: 'smart.svg',          color: 'purple', title: 'Smart Mode',          desc: 'Powered by Claude itself. Understands context — preserves technical terms and constraints while removing filler.', tag: 'AI-powered' },
-  { icon: 'history.svg',        color: 'teal',   title: 'Compression History', desc: 'Every compression is saved. Go back, restore, compare original vs compressed side by side.', tag: 'Pro' },
+  { icon: 'compress.svg',       title: 'Prompt Compressor',   desc: 'Paste any prompt and watch it shrink in real time. Three modes — Balanced, Aggressive, Smart — give you full control.', tag: 'Core feature' },
+  { icon: 'modals.svg',         title: 'Multi-Model Support', desc: 'Switch between Claude, GPT-4, and Gemini from one dashboard. Cost estimates update per model automatically.', tag: 'Differentiator' },
+  { icon: 'live-tokens.svg',    title: 'Live Token Counter',  desc: 'See exactly how many tokens your prompt costs before you send it. Updates character by character.', tag: 'Free' },
+  { icon: 'analytic-graph.svg', title: 'Analytics Dashboard', desc: 'Track every compression across every model. Tokens saved, cost saved, compression ratios over time.', tag: 'Pro' },
+  { icon: 'smart.svg',          title: 'Smart Mode',          desc: 'Powered by Claude itself. Understands context — preserves technical terms and constraints while removing filler.', tag: 'AI-powered' },
+  { icon: 'history.svg',        title: 'Compression History', desc: 'Every compression is saved. Go back, restore, compare original vs compressed side by side.', tag: 'Pro' },
 ]
-
-const iconBg: Record<string, string> = {
-  green:  'bg-accent/10 border border-accent/20',
-  purple: 'bg-accent-purple/10 border border-accent-purple/20',
-  orange: 'bg-accent-orange/10 border border-accent-orange/20',
-  teal:   'bg-accent-teal/10 border border-accent-teal/20',
-}
-
-const tagStyle: Record<string, string> = {
-  green:  'bg-accent/10 text-accent border border-accent/20',
-  purple: 'bg-accent-purple/10 text-accent-purple border border-accent-purple/20',
-  orange: 'bg-accent-orange/10 text-accent-orange border border-accent-orange/20',
-  teal:   'bg-accent-teal/10 text-accent-teal border border-accent-teal/20',
-}
 
 export function Features() {
   return (
@@ -81,13 +67,13 @@ export function Features() {
         <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4 md:gap-5">
           {FEATURES.map((f) => (
             <div key={f.title}
-              className="bg-bg-card border border-border rounded-3xl p-6 md:p-8 hover:border-accent/25 hover:-translate-y-0.5 transition-all duration-200 relative overflow-hidden card-accent">
-              <div className={`w-11 h-11 rounded-xl flex items-center justify-center mb-5 ${iconBg[f.color]}`}>
-                <img src={`/${f.icon}`} alt={f.title} width={24} height={24} style={{ filter: 'brightness(0) invert(1)' }} />
+              className="bg-bg-card border border-border rounded-3xl p-6 md:p-8 hover:border-border/60 hover:-translate-y-0.5 transition-all duration-200">
+              <div className="w-11 h-11 rounded-xl flex items-center justify-center mb-5 bg-bg-surface border border-border">
+                <img src={`/${f.icon}`} alt={f.title} width={22} height={22} style={{ filter: 'brightness(0) invert(1)' }} />
               </div>
               <h3 className="font-grotesk font-bold text-[0.94rem] tracking-tight mb-2.5">{f.title}</h3>
               <p className="font-sans text-[0.84rem] text-text-muted leading-relaxed">{f.desc}</p>
-              <span className={`inline-block mt-4 font-mono text-[0.62rem] font-bold px-2.5 py-1 rounded tracking-[0.06em] ${tagStyle[f.color]}`}>
+              <span className="inline-block mt-4 font-mono text-[0.62rem] font-bold px-2.5 py-1 rounded tracking-[0.06em] bg-bg-s2 border border-border text-text-muted">
                 {f.tag}
               </span>
             </div>
