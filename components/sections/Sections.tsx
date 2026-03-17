@@ -1,5 +1,5 @@
 'use client'
-import { useState, useEffect } from 'react'
+import { useState, useEffect, useRef } from 'react'
 import Link from 'next/link'
 import { Button } from '@/components/ui/Button'
 
@@ -123,42 +123,174 @@ export function HowItWorks() {
             </div>
           </div>
 
-          {/* Mini demo — hidden on mobile to save space */}
+          {/* Animated Optimizer Demo */}
           <div className="hidden md:block sticky top-24">
-            <div className="bg-bg-card border border-border rounded-2xl overflow-hidden shadow-panel">
-              <div className="bg-bg-surface px-5 py-3 border-b border-border flex items-center justify-between">
-                <span className="font-mono text-[0.68rem] text-text-muted">Tokko · Optimizer</span>
-                <div className="font-mono text-[0.7rem] text-text bg-bg-s2 border border-border rounded px-2 py-1">
-                  Claude
-                </div>
-              </div>
-              <div className="p-5 space-y-3">
-                <div className="flex gap-2">
-                  {['Balanced', 'Aggressive', 'Smart'].map((m, i) => (
-                    <div key={m} className={`px-3 py-1.5 rounded-md font-grotesk font-semibold text-[0.72rem] border ${i === 0 ? 'border-accent bg-accent/8 text-accent' : 'border-border bg-bg-s2 text-text-muted'}`}>
-                      {m}
-                    </div>
-                  ))}
-                </div>
-                <div className="bg-bg-s2 border border-border rounded-lg p-3 font-mono text-[0.72rem] text-text-muted leading-relaxed">
-                  Could you please help me write a Python function that filters even numbers...
-                </div>
-                <div className="w-full py-2.5 bg-accent rounded-lg font-grotesk font-bold text-[0.8rem] text-black text-center flex items-center justify-center gap-2">
-                  Compress prompt <img src="/btn-arrow.svg" alt="" width={7} height={12} />
-                </div>
-                <div className="bg-accent/6 border border-accent/20 rounded-lg p-3 font-mono text-[0.72rem] text-accent leading-relaxed">
-                  Python fn: filter even nums list. With examples.
-                </div>
-                <div className="flex justify-between">
-                  <span className="font-mono text-[0.68rem] bg-accent/10 text-accent border border-accent/20 px-2 py-0.5 rounded">−72% tokens</span>
-                  <span className="font-mono text-[0.65rem] text-text-muted">saved $0.0002</span>
-                </div>
-              </div>
-            </div>
+            <AnimatedOptimizer />
           </div>
         </div>
       </div>
     </section>
+  )
+}
+
+function AnimatedOptimizer() {
+  const inputRef = useRef<HTMLSpanElement>(null)
+  const outputRef = useRef<HTMLSpanElement>(null)
+  const cur2Ref = useRef<HTMLSpanElement>(null)
+  const progressBarRef = useRef<HTMLDivElement>(null)
+  const outputWrapRef = useRef<HTMLDivElement>(null)
+  const badgeRef = useRef<HTMLSpanElement>(null)
+  const costRef = useRef<HTMLSpanElement>(null)
+  const tabRefs = [useRef<HTMLDivElement>(null), useRef<HTMLDivElement>(null), useRef<HTMLDivElement>(null)]
+
+  const MODES = [
+    { output: 'Python fn: filter even nums from list.', tokens: '-52%', cost: 'saved $0.0002' },
+    { output: 'Python: filter evens.', tokens: '-74%', cost: 'saved $0.0004' },
+    { output: 'Python function: filter even numbers. Include type hints + examples.', tokens: '-41%', cost: 'saved $0.0001' },
+  ]
+  const INPUT = "Could you please help me write a Python function that filters even numbers from a list?"
+
+  useEffect(() => {
+    let cancelled = false
+    const sleep = (ms: number) => new Promise<void>(r => setTimeout(r, ms))
+
+    function setTab(i: number) {
+      tabRefs.forEach((ref, j) => {
+        if (!ref.current) return
+        if (j === i) {
+          ref.current.style.borderColor = '#00e5a0'
+          ref.current.style.background = 'rgba(0,229,160,0.1)'
+          ref.current.style.color = '#00e5a0'
+        } else {
+          ref.current.style.borderColor = 'var(--border)'
+          ref.current.style.background = 'transparent'
+          ref.current.style.color = 'var(--text-muted)'
+        }
+      })
+    }
+
+    async function typeText(el: HTMLSpanElement, text: string, speed = 22) {
+      el.textContent = ''
+      for (let i = 0; i < text.length; i++) {
+        if (cancelled) return
+        el.textContent = text.slice(0, i + 1)
+        await sleep(speed + Math.random() * 10)
+      }
+    }
+
+    async function typeOutput(el: HTMLSpanElement, cur: HTMLSpanElement, text: string, speed = 26) {
+      cur.style.display = 'inline-block'
+      el.textContent = ''
+      for (let i = 0; i < text.length; i++) {
+        if (cancelled) return
+        el.textContent = text.slice(0, i + 1)
+        await sleep(speed + Math.random() * 12)
+      }
+      cur.style.display = 'none'
+    }
+
+    async function compress(modeIdx: number) {
+      const progressBar = progressBarRef.current
+      const outputWrap = outputWrapRef.current
+      const outputEl = outputRef.current
+      const cur2 = cur2Ref.current
+      const badge = badgeRef.current
+      const cost = costRef.current
+      if (!progressBar || !outputWrap || !outputEl || !cur2 || !badge || !cost) return
+
+      const m = MODES[modeIdx]
+      outputWrap.style.opacity = '0'
+      outputEl.textContent = ''
+      await sleep(200)
+
+      progressBar.style.transition = 'none'
+      progressBar.style.width = '0%'
+      await sleep(30)
+      progressBar.style.transition = 'width 1.3s ease-in-out'
+      progressBar.style.width = '100%'
+      await sleep(1400)
+      progressBar.style.transition = 'none'
+      progressBar.style.width = '0%'
+      await sleep(100)
+
+      outputWrap.style.opacity = '1'
+      badge.textContent = m.tokens + ' tokens saved'
+      cost.textContent = m.cost
+      await typeOutput(outputEl, cur2, m.output, 24)
+    }
+
+    async function run() {
+      const inputEl = inputRef.current
+      const outputWrap = outputWrapRef.current
+      if (!inputEl || !outputWrap) return
+
+      while (!cancelled) {
+        inputEl.textContent = ''
+        outputWrap.style.opacity = '0'
+        setTab(0)
+        await sleep(600)
+
+        await typeText(inputEl, INPUT, 20)
+        if (cancelled) return
+        await sleep(600)
+
+        for (let i = 0; i < 3; i++) {
+          if (cancelled) return
+          setTab(i)
+          await sleep(400)
+          await compress(i)
+          await sleep(2000)
+        }
+        await sleep(500)
+      }
+    }
+
+    run()
+    return () => { cancelled = true }
+  }, [])
+
+  return (
+    <div className="bg-bg-card border border-border rounded-2xl overflow-hidden shadow-panel">
+      <div className="bg-bg-surface px-5 py-3 border-b border-border flex items-center justify-between">
+        <span className="font-mono text-[0.68rem] text-text-muted">Tokko · Optimizer</span>
+        <div className="font-mono text-[0.7rem] text-text bg-bg-s2 border border-border rounded px-2 py-1">Claude</div>
+      </div>
+      <div className="p-5 space-y-3">
+        {/* Tabs */}
+        <div className="flex gap-2">
+          {['Balanced', 'Aggressive', 'Smart'].map((m, i) => (
+            <div key={m} ref={tabRefs[i]}
+              className="px-3 py-1.5 rounded-md font-grotesk font-semibold text-[0.72rem] border transition-all duration-250"
+              style={{ borderColor: i === 0 ? 'var(--accent)' : 'var(--border)', background: i === 0 ? 'rgba(0,229,160,0.1)' : 'transparent', color: i === 0 ? 'var(--accent)' : 'var(--text-muted)' }}>
+              {m}
+            </div>
+          ))}
+        </div>
+
+        {/* Input */}
+        <div className="bg-bg-s2 border border-border rounded-lg p-3 font-mono text-[0.72rem] text-text-muted leading-relaxed min-h-[56px]">
+          <span ref={inputRef} />
+        </div>
+
+        {/* Compress button */}
+        <div className="w-full py-2.5 bg-accent rounded-lg font-grotesk font-bold text-[0.8rem] text-black text-center relative overflow-hidden">
+          Compress prompt
+          <div ref={progressBarRef} className="absolute left-0 top-0 h-full bg-black/10 pointer-events-none" style={{ width: '0%' }} />
+        </div>
+
+        {/* Output */}
+        <div ref={outputWrapRef} style={{ opacity: 0, transition: 'opacity 0.35s' }}>
+          <div className="bg-accent/6 border border-accent/20 rounded-lg p-3 font-mono text-[0.72rem] text-accent leading-relaxed min-h-[40px]">
+            <span ref={outputRef} />
+            <span ref={cur2Ref} className="inline-block w-[2px] h-[12px] bg-accent align-middle ml-[1px] animate-pulse" style={{ display: 'none' }} />
+          </div>
+          <div className="flex justify-between mt-2">
+            <span ref={badgeRef} className="font-mono text-[0.65rem] bg-accent/10 text-accent border border-accent/20 px-2 py-0.5 rounded" />
+            <span ref={costRef} className="font-mono text-[0.65rem] text-text-muted" />
+          </div>
+        </div>
+      </div>
+    </div>
   )
 }
 
