@@ -15,7 +15,7 @@ export function Docs() {
               Compress without<br />leaving Claude.ai
             </h2>
             <p className="font-sans text-text-muted leading-relaxed mb-6">
-              Install the Tokko extension and a subtle compress button appears every time you click the chat input. One click — your prompt is compressed in place. No switching tabs, no copy-pasting.
+              Install the Tokko extension and a subtle compress button appears every time you click the chat input. One click and your prompt is compressed in place. No switching tabs, no copy-pasting.
             </p>
 
             {/* Supported sites */}
@@ -35,8 +35,8 @@ export function Docs() {
               {[
                 { step: '1', text: 'Install from Chrome Web Store' },
                 { step: '2', text: 'Generate your API token in Settings' },
-                { step: '3', text: 'Click inside Claude.ai input — Tokko appears' },
-                { step: '4', text: 'Click Compress — done in 2 seconds' },
+                { step: '3', text: 'Click inside Claude.ai input and Tokko appears' },
+                { step: '4', text: 'Click Compress, done in 2 seconds' },
               ].map((s) => (
                 <div key={s.step} className="flex items-center gap-4">
                   <div className="w-8 h-8 rounded-lg bg-bg-s2 border border-border flex items-center justify-center font-mono font-bold text-[0.78rem] text-text-muted flex-shrink-0">

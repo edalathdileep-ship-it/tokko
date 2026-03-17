@@ -22,7 +22,7 @@ export function Hero() {
 
             <p className="font-sans text-[1rem] md:text-[1.05rem] text-text-muted leading-[1.68] mb-6 max-w-[460px] mx-auto md:mx-0">
               Every prompt you send has filler words that cost you money but add zero value.
-              Tokko strips them out — same output, up to 75% fewer tokens.
+              Tokko strips them out. Same output, up to 75% fewer tokens.
             </p>
 
             {/* Social proof line */}

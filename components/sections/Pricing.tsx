@@ -171,9 +171,9 @@ export function Pricing() {
           <div className="font-grotesk font-bold text-[0.94rem] mb-2">What is BYOK?</div>
           <p className="font-sans text-[0.82rem] text-text-muted leading-relaxed">
             <span className="text-text">Bring Your Own Key</span> means you connect your existing Anthropic API key to Tokko.
-            We use your key for compressions — so you pay Anthropic directly at their rates.
+            We use your key for compressions. You pay Anthropic directly at their rates.
             You pay Tokko just <span className="text-accent font-medium">$3/mo</span> for the compression software.
-            If compression saves you 50% on tokens, your Anthropic bill drops — Tokko pays for itself instantly.
+            If compression saves you 50% on tokens, your Anthropic bill drops. Tokko pays for itself instantly.
           </p>
         </div>
 
