@@ -8,14 +8,14 @@ interface ButtonProps extends ButtonHTMLAttributes<HTMLButtonElement> {
   loading?: boolean
 }
 
-// Black arrow for primary (green) buttons
 export const BtnArrow = () => (
-  <img src="/btn-arrow-dark.svg" alt="" width={8} height={14} style={{ flexShrink: 0 }} />
-)
-
-// White arrow for outline/dark buttons
-export const BtnArrowLight = () => (
-  <img src="/btn-arrow.svg" alt="" width={8} height={14} style={{ flexShrink: 0 }} />
+  <img
+    src="/btn-arrow-dark.svg"
+    alt=""
+    width={16}
+    height={16}
+    style={{ flexShrink: 0, display: 'block' }}
+  />
 )
 
 export const Button = forwardRef<HTMLButtonElement, ButtonProps>(
@@ -25,7 +25,7 @@ export const Button = forwardRef<HTMLButtonElement, ButtonProps>(
         ref={ref}
         disabled={disabled || loading}
         className={cn(
-          'inline-flex items-center justify-center gap-2 font-grotesk font-bold rounded-[9px] select-none',
+          'inline-flex items-center justify-center gap-1.5 font-grotesk font-bold rounded-[9px] select-none',
           'transition-all duration-[80ms] ease-out cursor-pointer',
           'disabled:opacity-40 disabled:cursor-not-allowed disabled:transform-none',
           size === 'sm' && 'text-[0.76rem] px-[14px] h-[34px]',
