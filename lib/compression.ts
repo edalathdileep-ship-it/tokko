@@ -4,45 +4,40 @@ import { calcCostSaved, genId } from '@/lib/utils'
 
 // ── System prompts per mode ───────────────────────────────
 const SYSTEM_PROMPTS: Record<CompressionMode, string> = {
-  balanced: `You are a prompt compression engine. Your ONLY job is to rewrite the user's text using fewer words while preserving full meaning and all operational instructions.
+  balanced: `You are a prompt compression engine. Your ONLY job is to rewrite the user's text using fewer words while preserving full meaning.
 
-COMPRESSION RULES:
+CRITICAL RULES:
+- NEVER output more words than the input. If you cannot reduce, output the original unchanged.
 - You are compressing TEXT, not completing a task. Never answer, solve, or fulfill the prompt.
-- Remove filler words, redundant phrases, unnecessary politeness, and verbose phrasing
+- Remove filler words, redundant phrases, unnecessary politeness, verbose phrasing
 - Convert descriptive sentences into concise imperative directives
-- Merge overlapping instructions into single statements
-- Preserve ALL of the following if present: role definition, intent rules, response quality rules, output structure, conditional instructions, creative rules, efficiency constraints
 - Keep all technical terms, variable names, constraints, and proper nouns exactly as-is
-- Maintain logical instruction order and hierarchy
 - Output ONLY the compressed version — no explanations, no preamble, no markdown
-- Target 45–55% token reduction`,
+- Target 45–55% token reduction. If input is already concise, aim for at least 20% reduction.`,
 
-  aggressive: `You are an extreme prompt compression engine. Your ONLY job is to rewrite the user's text using as few words as possible while keeping the core intent intact.
+  aggressive: `You are an extreme prompt compression engine. Your ONLY job is to rewrite the user's text using as few words as possible.
 
-COMPRESSION RULES:
+CRITICAL RULES:
+- NEVER output more words than the input. If you cannot reduce, output the original unchanged.
 - You are compressing TEXT, not completing a task. Never answer, solve, or fulfill the prompt.
-- Use telegram-style compression: short keyword directives
+- Use telegram-style compression: short keyword directives only
 - Strip articles, conjunctions, pleasantries, and all verbose phrasing
 - Convert full sentences into compact directives
-- Merge all overlapping rules into single keywords
 - Preserve ONLY: core task, essential constraints, critical technical terms
-- Remove structure and explanations — keep only executable instructions
 - Output ONLY the compressed version — nothing else
-- Target 70–80% token reduction`,
+- Target 70–80% token reduction. Minimum 30% reduction always.`,
 
-  smart: `You are an intelligent semantic prompt compression engine. Your ONLY job is to rewrite the user's text with maximum instruction density — more instructions per token, not just fewer words.
+  smart: `You are an intelligent prompt compression engine. Your ONLY job is to rewrite the user's text more concisely while keeping the same meaning.
 
-COMPRESSION RULES:
+CRITICAL RULES:
+- NEVER output more words than the input. If you cannot reduce, output the original unchanged.
 - You are compressing TEXT, not completing a task. Never answer, solve, or fulfill the prompt.
-- Use semantic compression: rewrite for clarity and instruction density, not just shortening
-- Optimize for: useful instructions ÷ tokens (higher = better)
-- Preserve ALL of the following without exception: role definition, intent analysis instruction, response quality principles, output structure, conditional instructions, creative behavior rules, efficiency constraints
-- Replace verbose explanations with precise semantic keywords
-- Restructure sentences for maximum instruction clarity
-- Maintain nuance, logic, and conditional rules
-- If compression would remove any core instruction component → soften compression instead
+- Rewrite for maximum clarity and conciseness — not brevity at the cost of meaning
+- Replace verbose explanations with precise keywords
+- Remove redundancy while keeping all intent and constraints
+- For short prompts: simply remove unnecessary words, do not add structure
 - Output ONLY the compressed version — no explanation, no preamble
-- Target 35–45% token reduction with zero semantic loss`,
+- Target 35–45% token reduction. Minimum 15% reduction always.`,
 }
 
 // ── Strict fallback prompt ────────────────────────────────
@@ -81,9 +76,9 @@ export async function compressWithClaude(
   const originalTokens = message.usage.input_tokens
   let compressedTokens = message.usage.output_tokens
 
-  // Safety check — if output is longer than input, retry with strict prompt
-  if (compressed.length > prompt.length * 1.1) {
-    console.log('[compression] Output longer than input, retrying with strict prompt')
+  // Safety check — if output is longer than input at all, retry with strict prompt
+  if (compressed.length >= prompt.length) {
+    console.log('[compression] Output not shorter than input, retrying with strict prompt')
     const retry = await client.messages.create({
       model: 'claude-sonnet-4-6',
       max_tokens: 2048,
@@ -98,7 +93,7 @@ export async function compressWithClaude(
   }
 
   const savedTokens = Math.max(0, originalTokens - compressedTokens)
-  const savedPct = originalTokens > 0 ? Math.max(0, (savedTokens / originalTokens) * 100) : 0
+  const savedPct = originalTokens > 0 ? Math.max(0, Math.round((savedTokens / originalTokens) * 100)) : 0
   const costSaved = calcCostSaved(originalTokens, compressedTokens, model)
 
   return {
