@@ -158,6 +158,7 @@ ANTHROPIC_API_KEY=✅ set (server-side only, never exposed to browser)
 - app/api/status/route.ts — health check for extension popup
 - app/api/byok/route.ts — GET/POST/DELETE user's Anthropic key
 - app/api/delete-account/route.ts — deletes from Supabase + Clerk
+- app/api/stats/route.ts — public live stats for landing page (cached 5 mins)
 
 ### Database (Supabase)
 - user_profiles columns: id, user_id, plan, compressions_today, total_compressions, total_tokens_saved, total_cost_saved, last_reset_date, api_token, byok_key, created_at
@@ -172,11 +173,10 @@ ANTHROPIC_API_KEY=✅ set (server-side only, never exposed to browser)
 ---
 
 ## ❌ What's NOT Built Yet
-- Stripe payments (BYOK $3 + Pro $9)
+- Stripe/Razorpay payments (on hold — waiting for Razorpay bank email)
 - Settings preferences actually saving
 - Chrome Extension not on Chrome Web Store yet (dev mode only)
 - ChatGPT + Gemini extension support
-- Real testimonials (all placeholder)
 - Analytics page in dashboard
 
 ---
@@ -251,4 +251,4 @@ npm run dev
 - To test: claude.ai → click input → Compress button appears
 
 ---
-*Last updated: Session 18 — BYOK key in settings, delete account working, free plan 20/day fixed everywhere, nav active states, edit profile via Clerk modal, removed all developer language.*
+*Last updated: Session 20 — Animated hero demo card (types input once, shows token count after typing, progress bar, output types in, loops). Animated How It Works optimizer (types input once, cycles Balanced/Aggressive/Smart tabs with different outputs and savings). Removed all button icons after multiple attempts. Unified feature card styles to single green accent. Removed all em dashes from entire website copy. Real model icons in models strip (Claude, GPT-4o, Gemini, Claude Code). Removed fake testimonials and stats, replaced with live Supabase stats. Linear-style button states (brightness hover, scale press). Free plan 24hr rolling window reset. Avatar colors fixed in hero. Dots removed from all model/site badges. Pricing cards hover border added.*
