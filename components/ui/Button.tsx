@@ -9,9 +9,7 @@ interface ButtonProps extends ButtonHTMLAttributes<HTMLButtonElement> {
 }
 
 export const BtnArrow = () => (
-  <svg width="8" height="16" viewBox="0 0 12 24" fill="none">
-    <path fillRule="evenodd" clipRule="evenodd" d="M10.1571 12.711L4.50006 18.368L3.08606 16.954L8.03606 12.004L3.08606 7.05401L4.50006 5.64001L10.1571 11.297C10.3445 11.4845 10.4498 11.7389 10.4498 12.004C10.4498 12.2692 10.3445 12.5235 10.1571 12.711Z" fill="currentColor"/>
-  </svg>
+  <img src="/btn-arrow.svg" alt="" width={8} height={14} style={{ flexShrink: 0 }} />
 )
 
 export const Button = forwardRef<HTMLButtonElement, ButtonProps>(
@@ -28,11 +26,8 @@ export const Button = forwardRef<HTMLButtonElement, ButtonProps>(
           size === 'md' && 'text-[0.84rem] px-[22px] h-[44px]',
           size === 'lg' && 'text-[0.96rem] px-[32px] h-[50px]',
           variant === 'primary' && [
-            // Active
             'bg-accent text-black',
-            // Hover — brighter, no movement, no glow
             'hover:brightness-110',
-            // Pressed — scale down, darker
             'active:scale-[0.96] active:brightness-90',
           ],
           variant === 'outline' && [
