@@ -21,15 +21,12 @@ export function Docs() {
             {/* Supported sites */}
             <div className="flex items-center gap-3 mb-8 flex-wrap">
               <div className="flex items-center gap-2 px-3 py-1.5 bg-bg-card border border-border rounded-lg">
-                <div className="w-2 h-2 rounded-full bg-accent" />
                 <span className="font-mono text-[0.7rem] text-text font-bold">Claude.ai — Live</span>
               </div>
               <div className="flex items-center gap-2 px-3 py-1.5 bg-bg-card border border-border rounded-lg opacity-60">
-                <div className="w-2 h-2 rounded-full bg-text-muted" />
                 <span className="font-mono text-[0.7rem] text-text-muted">ChatGPT — Soon</span>
               </div>
               <div className="flex items-center gap-2 px-3 py-1.5 bg-bg-card border border-border rounded-lg opacity-60">
-                <div className="w-2 h-2 rounded-full bg-text-muted" />
                 <span className="font-mono text-[0.7rem] text-text-muted">Gemini — Soon</span>
               </div>
             </div>
