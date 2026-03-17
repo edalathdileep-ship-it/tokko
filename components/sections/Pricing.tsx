@@ -112,10 +112,10 @@ export function Pricing() {
         {/* Cards */}
         <div className="grid grid-cols-1 md:grid-cols-3 gap-4 md:gap-5 mb-10 md:mb-15">
           {PLANS.map((plan) => (
-            <div key={plan.id} className={`relative rounded-3xl md:rounded-4xl p-6 md:p-8 transition-transform hover:-translate-y-1 ${
+            <div key={plan.id} className={`relative rounded-3xl md:rounded-4xl p-6 md:p-8 transition-all duration-200 hover:-translate-y-1 ${
               plan.featured
                 ? 'border border-accent bg-accent/3'
-                : 'border border-border bg-bg-card'
+                : 'border border-border bg-bg-card hover:border-accent/30'
             }`}>
               {plan.badge && (
                 <div className={`absolute -top-3.5 left-1/2 -translate-x-1/2 font-mono font-bold text-[0.6rem] tracking-[0.12em] px-3.5 py-1 rounded-full whitespace-nowrap ${
