@@ -6,12 +6,12 @@ import { Button } from '@/components/ui/Button'
 // ── ModelsStrip ───────────────────────────────────────────
 export function ModelsStrip() {
   const models = [
-    { label: 'Claude (Anthropic)', color: '#7b61ff' },
-    { label: 'GPT-4o (OpenAI)',    color: '#00e5a0' },
-    { label: 'Gemini Pro (Google)',color: '#ff6b6b' },
-    { label: 'Claude Code',        color: '#ff9f43' },
-    { label: 'Mistral',            color: '#6b6b85', soon: true },
-    { label: 'Llama 3',            color: '#6b6b85', soon: true },
+    { label: 'Claude', icon: '/model-claude.svg' },
+    { label: 'GPT-4o', icon: '/model-chatgpt.svg' },
+    { label: 'Gemini Pro', icon: '/model-gemini.svg' },
+    { label: 'Claude Code', icon: '/model-claudecode.png' },
+    { label: 'Mistral', icon: null, soon: true },
+    { label: 'Llama 3', icon: null, soon: true },
   ]
   return (
     <div className="border-y border-border bg-bg-surface/60 py-5">
@@ -23,7 +23,9 @@ export function ModelsStrip() {
           {models.map((m) => (
             <div key={m.label}
               className={`flex items-center gap-2 px-3 py-2 rounded-lg border border-border bg-bg-surface font-grotesk font-medium text-[0.78rem] ${m.soon ? 'opacity-50' : ''}`}>
-              <div className="w-[7px] h-[7px] rounded-full flex-shrink-0" style={{ background: m.color }} />
+              {m.icon && (
+                <img src={m.icon} alt={m.label} width={16} height={16} className="flex-shrink-0 rounded-sm" />
+              )}
               {m.label}
               {m.soon && (
                 <span className="font-mono text-[0.55rem] text-text-muted bg-bg-s2 px-1.5 py-px rounded">soon</span>

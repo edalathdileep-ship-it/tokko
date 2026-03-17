@@ -17,7 +17,7 @@ export function Hero() {
             <h1 className="font-grotesk font-bold tracking-[-0.04em] leading-none mt-7 mb-6"
               style={{ fontSize: 'clamp(2.4rem, 5.5vw, 4.6rem)' }}>
               Stop wasting tokens.<br />
-              <span className="text-text-muted">Pay less.</span>
+              <span className="text-text-muted">Ship faster.</span>
             </h1>
 
             <p className="font-sans text-[1rem] md:text-[1.05rem] text-text-muted leading-[1.68] mb-6 max-w-[460px] mx-auto md:mx-0">
@@ -28,7 +28,7 @@ export function Hero() {
             {/* Social proof line */}
             <div className="flex items-center gap-2 justify-center md:justify-start mb-8">
               <div className="flex -space-x-2">
-                {['#7b61ff','#00e5a0','#ff6b6b','#ff9f43'].map((c, i) => (
+                {['#a855f7','#f59e0b','#3b82f6','#ec4899'].map((c, i) => (
                   <div key={i} className="w-7 h-7 rounded-full border-2 border-bg-base" style={{ background: c }} />
                 ))}
               </div>
