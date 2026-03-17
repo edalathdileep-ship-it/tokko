@@ -1,8 +1,8 @@
 'use client'
 import { useState, useCallback, useEffect } from 'react'
 import { useRouter } from 'next/navigation'
-import { Copy, Check, RotateCcw, ArrowRight } from 'lucide-react'
-import { Button } from '@/components/ui/Button'
+import { Copy, Check, RotateCcw } from 'lucide-react'
+import { Button, BtnArrow } from '@/components/ui/Button'
 import { Chip } from '@/components/ui/Chips'
 import { cn, estimateTokens, MODE_META, MODEL_META, formatCost } from '@/lib/utils'
 import { useOptimizerStore, useHistoryStore, useUserStore } from '@/lib/store'
@@ -101,25 +101,31 @@ export function Optimizer() {
 
       {/* Model selector */}
       <div className="flex gap-2 mb-5">
-        {(Object.keys(MODEL_META) as ModelType[]).map((m) => {
-          const meta = MODEL_META[m]
-          return (
-            <button
-              key={m}
-              onClick={() => setModel(m)}
-              className={cn(
-                'flex items-center gap-2 px-3 py-2 rounded-lg border text-[0.8rem] font-grotesk font-medium transition-all',
-                model === m
-                  ? 'border-accent/40 bg-accent/4 text-text'
-                  : 'border-border bg-bg-surface text-text-muted hover:text-text'
-              )}
-            >
-              <span className="w-[7px] h-[7px] rounded-full flex-shrink-0"
-                style={{ background: meta.color }} />
-              {meta.label}
-            </button>
-          )
-        })}
+        {/* Claude — active */}
+        <button
+          onClick={() => setModel('claude')}
+          className={cn(
+            'flex items-center gap-2 px-3 py-2 rounded-lg border text-[0.8rem] font-grotesk font-medium transition-all',
+            model === 'claude'
+              ? 'border-accent/40 bg-accent/4 text-text'
+              : 'border-border bg-bg-surface text-text-muted hover:text-text'
+          )}
+        >
+          <span className="w-[7px] h-[7px] rounded-full flex-shrink-0 bg-accent-purple" />
+          Claude Sonnet
+        </button>
+        {/* GPT-4o — coming soon */}
+        <div className="flex items-center gap-2 px-3 py-2 rounded-lg border border-border bg-bg-surface text-text-muted opacity-50 cursor-not-allowed text-[0.8rem] font-grotesk font-medium">
+          <span className="w-[7px] h-[7px] rounded-full flex-shrink-0 bg-accent" />
+          GPT-4o
+          <span className="font-mono text-[0.55rem] bg-bg-s2 border border-border px-1.5 py-px rounded">soon</span>
+        </div>
+        {/* Gemini — coming soon */}
+        <div className="flex items-center gap-2 px-3 py-2 rounded-lg border border-border bg-bg-surface text-text-muted opacity-50 cursor-not-allowed text-[0.8rem] font-grotesk font-medium">
+          <span className="w-[7px] h-[7px] rounded-full flex-shrink-0 bg-accent-red" />
+          Gemini Pro
+          <span className="font-mono text-[0.55rem] bg-bg-s2 border border-border px-1.5 py-px rounded">soon</span>
+        </div>
       </div>
 
       {/* Input / Output panels */}
@@ -160,7 +166,10 @@ export function Optimizer() {
         {/* Output panel */}
         <div className="flex flex-col">
           <div className="flex items-center justify-between mb-2">
-            <span className="font-mono text-[0.62rem] font-bold tracking-[0.1em] uppercase text-accent">
+            <span className={cn(
+              'font-mono text-[0.62rem] font-bold tracking-[0.1em] uppercase',
+              result ? 'text-accent' : 'text-text-muted'
+            )}>
               Compressed
             </span>
             {result && (
@@ -223,7 +232,7 @@ export function Optimizer() {
           className="flex-1 shadow-compress"
         >
           {isLoading ? 'Compressing...' : atLimit ? '✦ Upgrade to compress more' : (
-            <>Compress prompt <ArrowRight size={16} /></>
+            <>Compress prompt <BtnArrow /></>
           )}
         </Button>
 
@@ -314,7 +323,7 @@ export function Optimizer() {
             </div>
 
             <Button size="lg" className="w-full" onClick={() => { setShowUpgrade(false); window.location.href = '/#pricing' }}>
-              Upgrade to Pro →
+              Upgrade to Pro <BtnArrow />
             </Button>
 
             <p className="text-center font-mono text-[0.62rem] text-text-muted mt-3">

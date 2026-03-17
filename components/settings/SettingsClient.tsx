@@ -276,25 +276,21 @@ export function SettingsClient({ userId, firstName, lastName, email, imageUrl, c
               </span>
             </div>
             <div className="font-sans text-[0.82rem] text-text-muted mt-1">
-              20 compressions per day · Balanced mode · Claude only
+              20 compressions per day · All modes · Claude only
             </div>
           </div>
           <div className="font-grotesk font-bold text-[1.4rem]">$0</div>
         </div>
-        <div className="bg-accent/5 border border-accent/20 rounded-xl p-4 flex items-center justify-between">
+        <div className="bg-bg-surface border border-border rounded-xl p-4 flex items-center justify-between">
           <div>
-            <div className="font-grotesk font-bold text-[0.88rem] text-accent">Upgrade to Pro</div>
+            <div className="font-grotesk font-bold text-[0.88rem] text-text">Paid plans</div>
             <div className="font-sans text-[0.78rem] text-text-muted mt-0.5">
-              Unlimited compressions, all modes, all models
+              Unlimited compressions and more — coming soon
             </div>
           </div>
-          <div className="flex items-center gap-3">
-            <div className="text-right">
-              <div className="font-grotesk font-bold text-[1rem]">$9<span className="text-text-muted font-normal text-[0.78rem]">/mo</span></div>
-              <div className="font-mono text-[0.6rem] text-accent">$7/mo annual</div>
-            </div>
-            <Button size="sm">Upgrade</Button>
-          </div>
+          <span className="font-mono text-[0.65rem] font-bold px-3 py-1.5 rounded-lg bg-bg-s2 border border-border text-text-muted">
+            Coming soon
+          </span>
         </div>
       </Section>
 
@@ -304,7 +300,7 @@ export function SettingsClient({ userId, firstName, lastName, email, imageUrl, c
         <Field label="Default model" value="Claude Sonnet" hint="Your preferred AI model" />
         <div className="mt-4">
           <p className="font-sans text-[0.8rem] text-text-muted">
-            More preferences coming soon — theme, keyboard shortcuts, and notification settings.
+            More preferences coming soon. Theme, keyboard shortcuts, and notification settings.
           </p>
         </div>
       </Section>
