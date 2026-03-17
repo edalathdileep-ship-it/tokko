@@ -111,18 +111,15 @@ export function Optimizer() {
               : 'border-border bg-bg-surface text-text-muted hover:text-text'
           )}
         >
-          <span className="w-[7px] h-[7px] rounded-full flex-shrink-0 bg-accent-purple" />
           Claude Sonnet
         </button>
         {/* GPT-4o — coming soon */}
         <div className="flex items-center gap-2 px-3 py-2 rounded-lg border border-border bg-bg-surface text-text-muted opacity-50 cursor-not-allowed text-[0.8rem] font-grotesk font-medium">
-          <span className="w-[7px] h-[7px] rounded-full flex-shrink-0 bg-accent" />
           GPT-4o
           <span className="font-mono text-[0.55rem] bg-bg-s2 border border-border px-1.5 py-px rounded">soon</span>
         </div>
         {/* Gemini — coming soon */}
         <div className="flex items-center gap-2 px-3 py-2 rounded-lg border border-border bg-bg-surface text-text-muted opacity-50 cursor-not-allowed text-[0.8rem] font-grotesk font-medium">
-          <span className="w-[7px] h-[7px] rounded-full flex-shrink-0 bg-accent-red" />
           Gemini Pro
           <span className="font-mono text-[0.55rem] bg-bg-s2 border border-border px-1.5 py-px rounded">soon</span>
         </div>

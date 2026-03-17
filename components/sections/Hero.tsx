@@ -19,7 +19,7 @@ export function Hero() {
             <h1 className="font-grotesk font-bold tracking-[-0.04em] leading-none mt-7 mb-6"
               style={{ fontSize: 'clamp(2.4rem, 5.5vw, 4.6rem)' }}>
               Stop wasting tokens.<br />
-              <span className="text-text-muted">Pay less.</span>
+              <span className="text-accent">Pay less.</span>
             </h1>
 
             <p className="font-sans text-[1rem] md:text-[1.05rem] text-text-muted leading-[1.68] mb-6 max-w-[460px] mx-auto md:mx-0">
