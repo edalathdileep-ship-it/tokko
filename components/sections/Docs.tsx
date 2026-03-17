@@ -1,6 +1,6 @@
 import { Eyebrow } from '@/components/ui/Chips'
 import Link from 'next/link'
-import { Button, BtnArrow } from '@/components/ui/Button'
+import { Button } from '@/components/ui/Button'
 
 export function Docs() {
   return (
@@ -49,7 +49,7 @@ export function Docs() {
 
             <div className="flex gap-3 flex-wrap">
               <Link href="/auth/signup">
-                <Button size="sm">Get started free <BtnArrow /></Button>
+                <Button size="sm">Get started free</Button>
               </Link>
               <a href="/#pricing">
                 <Button variant="outline" size="sm">View pricing</Button>

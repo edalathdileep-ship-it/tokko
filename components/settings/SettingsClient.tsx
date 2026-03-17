@@ -2,7 +2,7 @@
 import { useState, useEffect } from 'react'
 import { UserButton } from '@clerk/nextjs'
 import { useRouter } from 'next/navigation'
-import { Button, BtnArrow } from '@/components/ui/Button'
+import { Button } from '@/components/ui/Button'
 
 function BYOKSection() {
   const [key, setKey] = useState('')
@@ -293,7 +293,7 @@ export function SettingsClient({ userId, firstName, lastName, email, imageUrl, c
               <div className="font-grotesk font-bold text-[1rem]">$9<span className="text-text-muted font-normal text-[0.78rem]">/mo</span></div>
               <div className="font-mono text-[0.6rem] text-accent">$7/mo annual</div>
             </div>
-            <Button size="sm">Upgrade <BtnArrow /></Button>
+            <Button size="sm">Upgrade</Button>
           </div>
         </div>
       </Section>

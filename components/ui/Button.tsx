@@ -6,17 +6,16 @@ interface ButtonProps extends ButtonHTMLAttributes<HTMLButtonElement> {
   variant?: 'primary' | 'outline' | 'ghost'
   size?: 'sm' | 'md' | 'lg'
   loading?: boolean
-  arrow?: boolean
 }
 
 export const Button = forwardRef<HTMLButtonElement, ButtonProps>(
-  ({ variant = 'primary', size = 'md', loading, arrow = false, className, children, disabled, ...props }, ref) => {
+  ({ variant = 'primary', size = 'md', loading, className, children, disabled, ...props }, ref) => {
     return (
       <button
         ref={ref}
         disabled={disabled || loading}
         className={cn(
-          'group inline-flex items-center justify-center gap-2 font-grotesk font-bold rounded-[9px] select-none',
+          'inline-flex items-center justify-center gap-2 font-grotesk font-bold rounded-[9px] select-none',
           'transition-all duration-[80ms] ease-out cursor-pointer',
           'disabled:opacity-40 disabled:cursor-not-allowed disabled:transform-none',
           size === 'sm' && 'text-[0.76rem] px-[14px] h-[34px]',
@@ -49,30 +48,12 @@ export const Button = forwardRef<HTMLButtonElement, ButtonProps>(
             </svg>
             {children}
           </>
-        ) : (
-          <>
-            {children}
-            {arrow && (
-              <span className="relative inline-flex items-center justify-center w-[14px] h-[14px] overflow-hidden">
-                {/* Small arrow — visible by default, slides out right on hover */}
-                <span className="absolute transition-all duration-200 text-[10px] leading-none
-                  group-hover:translate-x-4 group-hover:opacity-0">
-                  ›
-                </span>
-                {/* Full arrow — hidden left, slides in on hover */}
-                <span className="absolute transition-all duration-200 text-[14px] leading-none
-                  -translate-x-4 opacity-0
-                  group-hover:translate-x-0 group-hover:opacity-100">
-                  ›
-                </span>
-              </span>
-            )}
-          </>
-        )}
+        ) : children}
       </button>
     )
   }
 )
 Button.displayName = 'Button'
 
+// Kept for backward compat — renders nothing
 export const BtnArrow = () => null

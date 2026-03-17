@@ -1,7 +1,7 @@
 'use client'
 import { useState } from 'react'
 import Link from 'next/link'
-import { Button, BtnArrow } from '@/components/ui/Button'
+import { Button } from '@/components/ui/Button'
 import { Check, Minus } from 'lucide-react'
 
 const PLANS = [
@@ -159,7 +159,7 @@ export function Pricing() {
 
               <Link href={plan.id === 'teams' ? '/contact' : '/auth/signup'}>
                 <Button variant={plan.ctaVariant} className="w-full justify-center">
-                  {plan.cta} {plan.ctaVariant === 'primary' && <BtnArrow />}
+                  {plan.cta}
                 </Button>
               </Link>
             </div>

@@ -1,7 +1,7 @@
 'use client'
 import { useState, useEffect } from 'react'
 import Link from 'next/link'
-import { Button, BtnArrow } from '@/components/ui/Button'
+import { Button } from '@/components/ui/Button'
 
 // ── ModelsStrip ───────────────────────────────────────────
 export function ModelsStrip() {
@@ -303,7 +303,7 @@ export function CTABanner() {
         </p>
         <div className="flex gap-3 justify-center flex-wrap">
           <Link href="/auth/signup">
-            <Button size="lg">Get started free <BtnArrow /></Button>
+            <Button size="lg">Get started free</Button>
           </Link>
           <Link href="/#pricing">
             <Button variant="outline" size="lg">View pricing</Button>
