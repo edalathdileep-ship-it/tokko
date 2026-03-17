@@ -88,8 +88,7 @@ function DemoCard() {
         <div className="font-mono text-[0.65rem] text-text-muted bg-bg-s2 px-3 py-1 rounded-md">
           tokko.app
         </div>
-        <div className="flex items-center gap-1.5 font-mono text-[0.68rem] text-text bg-bg-s2 border border-border rounded-md px-2 py-1">
-          <img src="/model-claude.svg" alt="Claude" width={12} height={12} />
+        <div className="font-mono text-[0.68rem] text-text bg-bg-s2 border border-border rounded-md px-2 py-1">
           Claude
         </div>
       </div>
