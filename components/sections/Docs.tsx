@@ -20,9 +20,9 @@ export function Docs() {
 
             {/* Supported sites */}
             <div className="flex items-center gap-3 mb-8 flex-wrap">
-              <div className="flex items-center gap-2 px-3 py-1.5 bg-accent/10 border border-accent/20 rounded-lg">
+              <div className="flex items-center gap-2 px-3 py-1.5 bg-bg-card border border-border rounded-lg">
                 <div className="w-2 h-2 rounded-full bg-accent" />
-                <span className="font-mono text-[0.7rem] text-accent font-bold">Claude.ai — Live</span>
+                <span className="font-mono text-[0.7rem] text-text font-bold">Claude.ai — Live</span>
               </div>
               <div className="flex items-center gap-2 px-3 py-1.5 bg-bg-card border border-border rounded-lg opacity-60">
                 <div className="w-2 h-2 rounded-full bg-text-muted" />
@@ -42,7 +42,7 @@ export function Docs() {
                 { step: '4', text: 'Click Compress — done in 2 seconds' },
               ].map((s) => (
                 <div key={s.step} className="flex items-center gap-4">
-                  <div className="w-8 h-8 rounded-lg bg-accent/10 border border-accent/20 flex items-center justify-center font-mono font-bold text-[0.78rem] text-accent flex-shrink-0">
+                  <div className="w-8 h-8 rounded-lg bg-bg-s2 border border-border flex items-center justify-center font-mono font-bold text-[0.78rem] text-text-muted flex-shrink-0">
                     {s.step}
                   </div>
                   <span className="font-sans text-[0.88rem] text-text-muted">{s.text}</span>
