@@ -89,7 +89,7 @@ function DemoCard() {
           tokko.app
         </div>
         <div className="flex items-center gap-1.5 font-mono text-[0.68rem] text-text bg-bg-s2 border border-border rounded-md px-2 py-1">
-          <div className="w-1.5 h-1.5 rounded-full bg-accent-purple" />
+          <img src="/model-claude.svg" alt="Claude" width={12} height={12} />
           Claude
         </div>
       </div>
