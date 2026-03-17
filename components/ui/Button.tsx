@@ -8,6 +8,12 @@ interface ButtonProps extends ButtonHTMLAttributes<HTMLButtonElement> {
   loading?: boolean
 }
 
+export const BtnArrow = () => (
+  <svg width="8" height="16" viewBox="0 0 12 24" fill="none">
+    <path fillRule="evenodd" clipRule="evenodd" d="M10.1571 12.711L4.50006 18.368L3.08606 16.954L8.03606 12.004L3.08606 7.05401L4.50006 5.64001L10.1571 11.297C10.3445 11.4845 10.4498 11.7389 10.4498 12.004C10.4498 12.2692 10.3445 12.5235 10.1571 12.711Z" fill="currentColor"/>
+  </svg>
+)
+
 export const Button = forwardRef<HTMLButtonElement, ButtonProps>(
   ({ variant = 'primary', size = 'md', loading, className, children, disabled, ...props }, ref) => {
     return (
@@ -15,34 +21,29 @@ export const Button = forwardRef<HTMLButtonElement, ButtonProps>(
         ref={ref}
         disabled={disabled || loading}
         className={cn(
-          // Base
-          'inline-flex items-center justify-center gap-2 font-grotesk font-bold rounded-[9px] transition-all duration-150 cursor-pointer select-none',
-          // Disabled state
-          'disabled:opacity-40 disabled:cursor-not-allowed disabled:transform-none disabled:shadow-none',
-          // Sizes
+          'inline-flex items-center justify-center gap-2 font-grotesk font-bold rounded-[9px] select-none',
+          'transition-all duration-[80ms] ease-out cursor-pointer',
+          'disabled:opacity-40 disabled:cursor-not-allowed disabled:transform-none',
           size === 'sm' && 'text-[0.76rem] px-[14px] h-[34px]',
           size === 'md' && 'text-[0.84rem] px-[22px] h-[44px]',
           size === 'lg' && 'text-[0.96rem] px-[32px] h-[50px]',
-          // Primary variant
           variant === 'primary' && [
-            // Active state
-            'bg-accent text-black shadow-sm',
-            // Hover — subtle lift, slight brightness
-            'hover:bg-[#00f0a8] hover:-translate-y-[2px] hover:shadow-md',
-            // Pressed — sink down
-            'active:translate-y-[1px] active:bg-[#00cc8e] active:shadow-none',
+            // Active
+            'bg-accent text-black',
+            // Hover — brighter, no movement, no glow
+            'hover:brightness-110',
+            // Pressed — scale down, darker
+            'active:scale-[0.96] active:brightness-90',
           ],
-          // Outline variant
           variant === 'outline' && [
             'bg-transparent text-text border border-border',
-            'hover:border-accent/50 hover:text-accent hover:-translate-y-[2px]',
-            'active:translate-y-[1px] active:border-accent active:text-accent',
+            'hover:border-accent/40 hover:text-accent',
+            'active:scale-[0.96] active:bg-bg-surface',
           ],
-          // Ghost variant
           variant === 'ghost' && [
-            'bg-transparent text-text-muted border-none',
+            'bg-transparent text-text-muted',
             'hover:text-text hover:bg-bg-surface',
-            'active:bg-bg-s2',
+            'active:scale-[0.96]',
           ],
           className
         )}
