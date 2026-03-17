@@ -1,5 +1,5 @@
 'use client'
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import { UserButton } from '@clerk/nextjs'
 import { useRouter } from 'next/navigation'
 import { Button, BtnArrow } from '@/components/ui/Button'
