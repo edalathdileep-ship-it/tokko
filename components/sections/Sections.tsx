@@ -128,8 +128,7 @@ export function HowItWorks() {
             <div className="bg-bg-card border border-border rounded-2xl overflow-hidden shadow-panel">
               <div className="bg-bg-surface px-5 py-3 border-b border-border flex items-center justify-between">
                 <span className="font-mono text-[0.68rem] text-text-muted">Tokko · Optimizer</span>
-                <div className="flex items-center gap-1.5 font-mono text-[0.7rem] text-text bg-bg-s2 border border-border rounded px-2 py-1">
-                  <div className="w-1.5 h-1.5 rounded-full bg-accent-purple" />
+                <div className="font-mono text-[0.7rem] text-text bg-bg-s2 border border-border rounded px-2 py-1">
                   Claude
                 </div>
               </div>
