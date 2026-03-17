@@ -20,14 +20,14 @@ export function Docs() {
 
             {/* Supported sites */}
             <div className="flex items-center gap-3 mb-8 flex-wrap">
-              <div className="flex items-center gap-2 px-3 py-1.5 bg-bg-card border border-border rounded-lg">
-                <span className="font-mono text-[0.7rem] text-text font-bold">Claude.ai — Live</span>
+              <div className="px-3 py-1.5 bg-bg-card border border-border rounded-lg">
+                <span className="font-mono text-[0.7rem] text-text font-bold">Claude.ai · Live</span>
               </div>
-              <div className="flex items-center gap-2 px-3 py-1.5 bg-bg-card border border-border rounded-lg opacity-60">
-                <span className="font-mono text-[0.7rem] text-text-muted">ChatGPT — Soon</span>
+              <div className="px-3 py-1.5 bg-bg-card border border-border rounded-lg opacity-60">
+                <span className="font-mono text-[0.7rem] text-text-muted">ChatGPT · Soon</span>
               </div>
-              <div className="flex items-center gap-2 px-3 py-1.5 bg-bg-card border border-border rounded-lg opacity-60">
-                <span className="font-mono text-[0.7rem] text-text-muted">Gemini — Soon</span>
+              <div className="px-3 py-1.5 bg-bg-card border border-border rounded-lg opacity-60">
+                <span className="font-mono text-[0.7rem] text-text-muted">Gemini · Soon</span>
               </div>
             </div>
 

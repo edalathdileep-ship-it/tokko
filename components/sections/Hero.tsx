@@ -59,7 +59,7 @@ export function Hero() {
               </div>
               <div className="w-px h-9 bg-border" />
               <div>
-                <div className="font-grotesk font-bold text-[1.4rem] md:text-[1.6rem] tracking-tight">3 sec</div>
+                <div className="font-grotesk font-bold text-[1.4rem] md:text-[1.6rem] tracking-tight">2 sec</div>
                 <div className="font-mono text-[0.62rem] text-text-muted mt-0.5">to compress</div>
               </div>
             </div>
