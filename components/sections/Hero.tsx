@@ -1,5 +1,5 @@
 import Link from 'next/link'
-import { Button } from '@/components/ui/Button'
+import { Button, BtnArrow } from '@/components/ui/Button'
 import { KickerPill } from '@/components/ui/Chips'
 
 export function Hero() {
@@ -39,7 +39,7 @@ export function Hero() {
 
             <div className="flex gap-3 flex-wrap justify-center md:justify-start mb-10 md:mb-13">
               <Link href="/auth/signup">
-                <Button size="lg">Start compressing free →</Button>
+              <Button size="lg">Start compressing free <BtnArrow /></Button>
               </Link>
               <Link href="/#howitworks">
                 <Button variant="outline" size="lg">See how it works</Button>
