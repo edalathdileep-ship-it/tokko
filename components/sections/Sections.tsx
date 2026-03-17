@@ -67,13 +67,13 @@ export function Features() {
         <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4 md:gap-5">
           {FEATURES.map((f) => (
             <div key={f.title}
-              className="bg-bg-card border border-border rounded-3xl p-6 md:p-8 hover:border-border/60 hover:-translate-y-0.5 transition-all duration-200">
-              <div className="w-11 h-11 rounded-xl flex items-center justify-center mb-5 bg-bg-surface border border-border">
+              className="bg-bg-card border border-border rounded-3xl p-6 md:p-8 hover:border-accent/30 hover:-translate-y-0.5 transition-all duration-200">
+              <div className="w-11 h-11 rounded-xl flex items-center justify-center mb-5 bg-accent/10 border border-accent/20">
                 <img src={`/${f.icon}`} alt={f.title} width={22} height={22} style={{ filter: 'brightness(0) invert(1)' }} />
               </div>
               <h3 className="font-grotesk font-bold text-[0.94rem] tracking-tight mb-2.5">{f.title}</h3>
               <p className="font-sans text-[0.84rem] text-text-muted leading-relaxed">{f.desc}</p>
-              <span className="inline-block mt-4 font-mono text-[0.62rem] font-bold px-2.5 py-1 rounded tracking-[0.06em] bg-bg-s2 border border-border text-text-muted">
+              <span className="inline-block mt-4 font-mono text-[0.62rem] font-bold px-2.5 py-1 rounded tracking-[0.06em] bg-accent/10 border border-accent/20 text-accent">
                 {f.tag}
               </span>
             </div>
