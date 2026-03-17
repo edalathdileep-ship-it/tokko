@@ -17,7 +17,7 @@ export function Hero() {
             <h1 className="font-grotesk font-bold tracking-[-0.04em] leading-none mt-7 mb-6"
               style={{ fontSize: 'clamp(2.4rem, 5.5vw, 4.6rem)' }}>
               Stop wasting tokens.<br />
-              <span className="text-text-muted">Ship faster.</span>
+              <span className="text-text-muted">Pay less.</span>
             </h1>
 
             <p className="font-sans text-[1rem] md:text-[1.05rem] text-text-muted leading-[1.68] mb-6 max-w-[460px] mx-auto md:mx-0">
@@ -39,7 +39,7 @@ export function Hero() {
 
             <div className="flex gap-3 flex-wrap justify-center md:justify-start mb-10 md:mb-13">
               <Link href="/auth/signup">
-              <Button size="lg">Start compressing free <BtnArrow /></Button>
+                <Button size="lg">Start compressing free <BtnArrow /></Button>
               </Link>
               <Link href="/#howitworks">
                 <Button variant="outline" size="lg">See how it works</Button>
@@ -107,8 +107,8 @@ function DemoCard() {
           that takes a list of numbers and returns only the even ones?
         </div>
 
-        <div className="w-full py-3 bg-accent rounded-lg font-grotesk font-bold text-[0.84rem] text-black text-center">
-          Compress →
+        <div className="w-full py-3 bg-accent rounded-lg font-grotesk font-bold text-[0.84rem] text-black text-center flex items-center justify-center gap-2">
+          Compress <img src="/btn-arrow.svg" alt="" width={8} height={14} />
         </div>
 
         {/* Cost after */}
@@ -127,7 +127,7 @@ function DemoCard() {
             −72% tokens saved
           </span>
           <span className="font-mono text-[0.62rem] text-text-muted">
-            At 1000 calls/day → <span className="text-accent">save $142/mo</span>
+            At 1000 calls/day · <span className="text-accent">save $142/mo</span>
           </span>
         </div>
       </div>

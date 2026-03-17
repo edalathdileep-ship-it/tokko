@@ -1,7 +1,7 @@
 'use client'
 import { useState, useEffect } from 'react'
 import Link from 'next/link'
-import { Button } from '@/components/ui/Button'
+import { Button, BtnArrow } from '@/components/ui/Button'
 
 // ── ModelsStrip ───────────────────────────────────────────
 export function ModelsStrip() {
@@ -143,8 +143,8 @@ export function HowItWorks() {
                 <div className="bg-bg-s2 border border-border rounded-lg p-3 font-mono text-[0.72rem] text-text-muted leading-relaxed">
                   Could you please help me write a Python function that filters even numbers...
                 </div>
-                <div className="w-full py-2.5 bg-accent rounded-lg font-grotesk font-bold text-[0.8rem] text-black text-center">
-                  Compress prompt →
+                <div className="w-full py-2.5 bg-accent rounded-lg font-grotesk font-bold text-[0.8rem] text-black text-center flex items-center justify-center gap-2">
+                  Compress prompt <img src="/btn-arrow.svg" alt="" width={7} height={12} />
                 </div>
                 <div className="bg-accent/6 border border-accent/20 rounded-lg p-3 font-mono text-[0.72rem] text-accent leading-relaxed">
                   Python fn: filter even nums list. With examples.
@@ -303,7 +303,7 @@ export function CTABanner() {
         </p>
         <div className="flex gap-3 justify-center flex-wrap">
           <Link href="/auth/signup">
-            <Button size="lg">Get started free →</Button>
+            <Button size="lg">Get started free <BtnArrow /></Button>
           </Link>
           <Link href="/#pricing">
             <Button variant="outline" size="lg">View pricing</Button>

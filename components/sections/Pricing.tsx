@@ -1,7 +1,7 @@
 'use client'
 import { useState } from 'react'
 import Link from 'next/link'
-import { Button } from '@/components/ui/Button'
+import { Button, BtnArrow } from '@/components/ui/Button'
 import { Check, Minus } from 'lucide-react'
 
 const PLANS = [
@@ -31,7 +31,7 @@ const PLANS = [
     monthly: 3,
     annual: 2,
     desc: 'Bring your own Anthropic key. Pay only for the Tokko service.',
-    cta: 'Start free trial →',
+    cta: 'Start free trial',
     ctaVariant: 'outline' as const,
     badge: 'BEST VALUE',
     features: [
@@ -51,7 +51,7 @@ const PLANS = [
     monthly: 9,
     annual: 7,
     desc: 'We handle everything. Just compress and save.',
-    cta: 'Start 7-day free trial →',
+    cta: 'Start 7-day free trial',
     ctaVariant: 'primary' as const,
     badge: 'MOST POPULAR',
     featured: true,
@@ -159,7 +159,7 @@ export function Pricing() {
 
               <Link href={plan.id === 'teams' ? '/contact' : '/auth/signup'}>
                 <Button variant={plan.ctaVariant} className="w-full justify-center">
-                  {plan.cta}
+                  {plan.cta} {plan.ctaVariant === 'primary' && <BtnArrow />}
                 </Button>
               </Link>
             </div>
