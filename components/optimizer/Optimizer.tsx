@@ -22,11 +22,10 @@ export function Optimizer() {
 
   const [copied, setCopied] = useState(false)
   const [showUpgrade, setShowUpgrade] = useState(false)
-  // Always read usage from server — never from localStorage
   const [dailyUsage, setDailyUsage] = useState(0)
-  const [usageLoaded, setUsageLoaded] = useState(false)
 
   const dailyLimit = plan === 'free' ? 20 : Infinity
+  const atLimit = plan === 'free' && dailyUsage >= dailyLimit
   const inputTokens = estimateTokens(input)
 
   // Fetch real usage from server on every mount
@@ -34,11 +33,8 @@ export function Optimizer() {
     setError(null)
     fetch('/api/usage')
       .then(r => r.json())
-      .then(d => {
-        setDailyUsage(d.used ?? 0)
-        setUsageLoaded(true)
-      })
-      .catch(() => setUsageLoaded(true))
+      .then(d => { setDailyUsage(d.used ?? 0) })
+      .catch(() => {})
   }, [])
 
   const handleCompress = useCallback(async () => {
@@ -88,7 +84,7 @@ export function Optimizer() {
               className={cn(
                 'flex-1 px-4 py-3 rounded-lg border transition-all text-left',
                 mode === m
-                  ? 'border-accent bg-accent/4 '
+                  ? 'border-accent bg-accent/4'
                   : 'border-border bg-bg-card hover:border-border/80'
               )}
             >
@@ -111,7 +107,6 @@ export function Optimizer() {
 
       {/* Model selector */}
       <div className="flex gap-2 mb-5">
-        {/* Claude — active */}
         <button
           onClick={() => setModel('claude')}
           className={cn(
@@ -123,12 +118,10 @@ export function Optimizer() {
         >
           Claude Sonnet
         </button>
-        {/* GPT-4o — coming soon */}
         <div className="flex items-center gap-2 px-3 py-2 rounded-lg border border-border bg-bg-surface text-text-muted opacity-50 cursor-not-allowed text-[0.8rem] font-grotesk font-medium">
           GPT-4o
           <span className="font-mono text-[0.55rem] bg-bg-s2 border border-border px-1.5 py-px rounded">soon</span>
         </div>
-        {/* Gemini — coming soon */}
         <div className="flex items-center gap-2 px-3 py-2 rounded-lg border border-border bg-bg-surface text-text-muted opacity-50 cursor-not-allowed text-[0.8rem] font-grotesk font-medium">
           Gemini Pro
           <span className="font-mono text-[0.55rem] bg-bg-s2 border border-border px-1.5 py-px rounded">soon</span>
@@ -229,19 +222,27 @@ export function Optimizer() {
         </div>
       </div>
 
-      {/* Compress button */}
+      {/* Compress / Upgrade button */}
       <div className="flex items-center gap-4">
-        <Button
-          onClick={atLimit ? () => setShowUpgrade(true) : handleCompress}
-          disabled={!input?.trim() || isLoading}
-          loading={isLoading}
-          size="lg"
-          className="flex-1 shadow-compress"
-        >
-          {isLoading ? 'Compressing...' : atLimit ? '✦ Upgrade to compress more' : (
-            <>Compress prompt <BtnArrow /></>
-          )}
-        </Button>
+        {atLimit ? (
+          <Button
+            onClick={() => setShowUpgrade(true)}
+            size="lg"
+            className="flex-1"
+          >
+            Upgrade to compress more
+          </Button>
+        ) : (
+          <Button
+            onClick={handleCompress}
+            disabled={!input?.trim() || isLoading}
+            loading={isLoading}
+            size="lg"
+            className="flex-1"
+          >
+            {isLoading ? 'Compressing...' : 'Compress prompt'}
+          </Button>
+        )}
 
         {(result || input) && (
           <Button variant="outline" size="lg" onClick={reset} className="shrink-0">
@@ -251,23 +252,23 @@ export function Optimizer() {
         )}
       </div>
 
-      {/* Usage indicator (free plan) */}
+      {/* Usage bar */}
       {plan === 'free' && (
         <div className="mt-4 flex items-center justify-between">
           <div className="flex-1 h-1 bg-bg-s2 rounded-full overflow-hidden mr-3">
             <div
               className={cn(
                 'h-full rounded-full transition-all',
-                dailyUsage >= dailyLimit ? 'bg-accent-red' : 'bg-accent'
+                atLimit ? 'bg-accent-red' : 'bg-accent'
               )}
-              style={{ width: `${Math.min(100, (dailyUsage / dailyLimit) * 100)}%` }}
+              style={{ width: `${Math.min(100, (dailyUsage / 20) * 100)}%` }}
             />
           </div>
           <span className={cn(
             'font-mono text-[0.65rem] whitespace-nowrap',
-            dailyUsage >= dailyLimit ? 'text-accent-red' : 'text-text-muted'
+            atLimit ? 'text-accent-red' : 'text-text-muted'
           )}>
-            {dailyUsage} / {dailyLimit} today
+            {dailyUsage} / 20 today
           </span>
         </div>
       )}
@@ -279,14 +280,11 @@ export function Optimizer() {
       {/* Upgrade modal */}
       {showUpgrade && (
         <div className="fixed inset-0 z-50 flex items-center justify-center p-4">
-          {/* Backdrop */}
           <div
             className="absolute inset-0 bg-black/60 backdrop-blur-sm"
             onClick={() => setShowUpgrade(false)}
           />
-          {/* Modal */}
           <div className="relative bg-bg-card border border-border rounded-3xl p-8 max-w-md w-full shadow-2xl">
-            {/* Close */}
             <button
               onClick={() => setShowUpgrade(false)}
               className="absolute top-4 right-4 text-text-muted hover:text-text transition-colors font-mono text-lg"
@@ -294,7 +292,6 @@ export function Optimizer() {
               ×
             </button>
 
-            {/* Icon */}
             <div className="w-12 h-12 rounded-2xl bg-accent/10 border border-accent/20 flex items-center justify-center mb-5 text-xl">
               ⚡
             </div>
@@ -304,16 +301,15 @@ export function Optimizer() {
             </h2>
             <p className="font-sans text-[0.88rem] text-text-muted mb-6">
               You've used all <span className="text-text font-medium">20 free compressions</span> for today.
-              Upgrade to Pro for unlimited compressions, all modes, and all models.
+              Paid plans with unlimited compressions are coming soon.
             </p>
 
-            {/* Plan comparison */}
             <div className="grid grid-cols-2 gap-3 mb-6">
               <div className="bg-bg-surface border border-border rounded-xl p-4">
                 <div className="font-grotesk font-bold text-[0.88rem] mb-1">Free</div>
                 <div className="font-grotesk font-bold text-[1.4rem] mb-2">$0</div>
                 <ul className="space-y-1">
-                  {['20/day limit', 'Balanced only', 'Claude only'].map(f => (
+                  {['20/day limit', 'All modes', 'Claude only'].map(f => (
                     <li key={f} className="font-mono text-[0.65rem] text-text-muted">· {f}</li>
                   ))}
                 </ul>
@@ -330,11 +326,11 @@ export function Optimizer() {
             </div>
 
             <Button size="lg" className="w-full" onClick={() => { setShowUpgrade(false); window.location.href = '/#pricing' }}>
-              Upgrade to Pro <BtnArrow />
+              View pricing
             </Button>
 
             <p className="text-center font-mono text-[0.62rem] text-text-muted mt-3">
-              Or wait 24 hours from your first compression today for your limit to reset
+              Or wait 24 hours for your free limit to reset
             </p>
           </div>
         </div>
