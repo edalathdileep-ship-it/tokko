@@ -53,9 +53,15 @@ export async function checkAndIncrementUsage(userId: string): Promise<{
   const limit = limits[plan] ?? 20
 
   // Reset if 24 hours have passed since last reset
+  // Handle both old date strings (2026-03-17) and new ISO timestamps
   let compressionsToday = profile.compressions_today
-  const lastReset = profile.last_reset_date ? new Date(profile.last_reset_date).getTime() : 0
-  const hoursSinceReset = (Date.now() - lastReset) / (1000 * 60 * 60)
+  let lastResetMs = 0
+  if (profile.last_reset_date) {
+    const parsed = new Date(profile.last_reset_date)
+    // If it's just a date (no time), treat as start of that day UTC
+    lastResetMs = isNaN(parsed.getTime()) ? 0 : parsed.getTime()
+  }
+  const hoursSinceReset = (Date.now() - lastResetMs) / (1000 * 60 * 60)
 
   if (hoursSinceReset >= 24) {
     compressionsToday = 0
@@ -80,8 +86,9 @@ export async function checkAndIncrementUsage(userId: string): Promise<{
     })
     .eq('user_id', userId)
 
-    return { allowed: true, used: compressionsToday + 1, limit, plan: plan as 'free' | 'pro' | 'teams' }
+  return { allowed: true, used: compressionsToday + 1, limit, plan }
 }
+
 export async function getCompressionHistory(userId: string) {
   const supabase = getSupabaseAdmin()
 
