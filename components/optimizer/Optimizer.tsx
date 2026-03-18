@@ -27,7 +27,7 @@ export function Optimizer() {
   const [usageLoaded, setUsageLoaded] = useState(false)
 
   const dailyLimit = plan === 'free' ? 20 : Infinity
-  const atLimit = plan === 'free' && dailyUsage >= dailyLimit
+  const inputTokens = estimateTokens(input)
 
   // Fetch real usage from server on every mount
   useEffect(() => {
