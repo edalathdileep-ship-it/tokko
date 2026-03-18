@@ -124,7 +124,7 @@ export function HowItWorks() {
           </div>
 
           {/* Animated Optimizer Demo */}
-          <div className="hidden md:block sticky top-24">
+          <div className="md:sticky md:top-24">
             <AnimatedOptimizer />
           </div>
         </div>
