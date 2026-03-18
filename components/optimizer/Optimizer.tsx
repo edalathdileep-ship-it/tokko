@@ -23,8 +23,15 @@ export function Optimizer() {
   const [copied, setCopied] = useState(false)
   const [showUpgrade, setShowUpgrade] = useState(false)
 
-  // Clear any stale errors on mount
-  useEffect(() => { setError(null) }, [])
+  // Clear any stale errors on mount + check if daily reset is due
+  useEffect(() => {
+    setError(null)
+    // Check if 24hrs have passed and reset if needed
+    fetch('/api/reset-check', { method: 'POST' })
+      .then(r => r.json())
+      .then(d => { if (d.reset) router.refresh() })
+      .catch(() => {})
+  }, [])
 
   const inputTokens = estimateTokens(input)
   const dailyLimit = plan === 'free' ? 20 : Infinity
