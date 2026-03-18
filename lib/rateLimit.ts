@@ -86,7 +86,7 @@ export async function checkAndIncrementUsage(userId: string): Promise<{
     })
     .eq('user_id', userId)
 
-  return { allowed: true, used: compressionsToday + 1, limit, plan }
+    return { allowed: true, used: compressionsToday + 1, limit, plan: plan as 'free' | 'pro' | 'teams' }
 }
 
 export async function getCompressionHistory(userId: string) {
