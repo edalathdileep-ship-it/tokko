@@ -2,11 +2,11 @@
 import { useState, useCallback, useEffect } from 'react'
 import { useRouter } from 'next/navigation'
 import { Copy, Check, RotateCcw } from 'lucide-react'
-import { Button, BtnArrow } from '@/components/ui/Button'
+import { Button } from '@/components/ui/Button'
 import { Chip } from '@/components/ui/Chips'
-import { cn, estimateTokens, MODE_META, MODEL_META, formatCost } from '@/lib/utils'
+import { cn, estimateTokens, MODE_META, formatCost } from '@/lib/utils'
 import { useOptimizerStore, useHistoryStore, useUserStore } from '@/lib/store'
-import type { CompressionMode, ModelType } from '@/types'
+import type { CompressionMode } from '@/types'
 
 export function Optimizer() {
   const {
@@ -17,25 +17,29 @@ export function Optimizer() {
   } = useOptimizerStore()
 
   const { addEntry } = useHistoryStore()
-  const { dailyUsage, plan, incrementUsage } = useUserStore()
+  const { plan } = useUserStore()
   const router = useRouter()
 
   const [copied, setCopied] = useState(false)
   const [showUpgrade, setShowUpgrade] = useState(false)
+  // Always read usage from server — never from localStorage
+  const [dailyUsage, setDailyUsage] = useState(0)
+  const [usageLoaded, setUsageLoaded] = useState(false)
 
-  // Clear any stale errors on mount + check if daily reset is due
-  useEffect(() => {
-    setError(null)
-    // Check if 24hrs have passed and reset if needed
-    fetch('/api/reset-check', { method: 'POST' })
-      .then(r => r.json())
-      .then(d => { if (d.reset) router.refresh() })
-      .catch(() => {})
-  }, [])
-
-  const inputTokens = estimateTokens(input)
   const dailyLimit = plan === 'free' ? 20 : Infinity
   const atLimit = plan === 'free' && dailyUsage >= dailyLimit
+
+  // Fetch real usage from server on every mount
+  useEffect(() => {
+    setError(null)
+    fetch('/api/usage')
+      .then(r => r.json())
+      .then(d => {
+        setDailyUsage(d.used ?? 0)
+        setUsageLoaded(true)
+      })
+      .catch(() => setUsageLoaded(true))
+  }, [])
 
   const handleCompress = useCallback(async () => {
     if (!input?.trim() || isLoading || atLimit) return
@@ -54,15 +58,14 @@ export function Optimizer() {
 
       setResult(json.data)
       addEntry(json.data)
-      incrementUsage()
-      // Refresh server component to update dashboard stats
+      setDailyUsage(prev => prev + 1)
       router.refresh()
     } catch (err) {
       setError(err instanceof Error ? err.message : 'Compression failed')
     } finally {
       setLoading(false)
     }
-  }, [input, mode, model, isLoading, atLimit, setLoading, setError, setResult, addEntry, incrementUsage, router])
+  }, [input, mode, model, isLoading, atLimit, setLoading, setError, setResult, addEntry, router])
 
   const handleCopy = useCallback(() => {
     if (!result) return

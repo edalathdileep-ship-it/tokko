@@ -5,7 +5,6 @@ import type {
   CompressionMode,
   ModelType,
   HistoryEntry,
-  User,
 } from '@/types'
 
 // ── Optimizer Store ───────────────────────────────────────
@@ -26,18 +25,18 @@ interface OptimizerStore {
 }
 
 export const useOptimizerStore = create<OptimizerStore>((set) => ({
-  input: '' as string,
+  input: '',
   result: null,
   mode: 'balanced',
   model: 'claude',
   isLoading: false,
   error: null,
-  setInput:   (input)   => set({ input }),
-  setResult:  (result)  => set({ result }),
-  setMode:    (mode)    => set({ mode }),
-  setModel:   (model)   => set({ model }),
+  setInput:   (input)     => set({ input }),
+  setResult:  (result)    => set({ result }),
+  setMode:    (mode)      => set({ mode }),
+  setModel:   (model)     => set({ model }),
   setLoading: (isLoading) => set({ isLoading }),
-  setError:   (error)   => set({ error }),
+  setError:   (error)     => set({ error }),
   reset: () => set({ input: '', result: null, error: null, isLoading: false }),
 }))
 
@@ -55,7 +54,7 @@ export const useHistoryStore = create<HistoryStore>()(
       entries: [],
       addEntry: (entry) =>
         set((state) => ({
-          entries: [entry, ...state.entries].slice(0, 100), // keep last 100
+          entries: [entry, ...state.entries].slice(0, 100),
         })),
       removeEntry: (id) =>
         set((state) => ({
@@ -67,25 +66,21 @@ export const useHistoryStore = create<HistoryStore>()(
   )
 )
 
-// ── User / Settings Store (persisted) ─────────────────────
+// ── User Store — NO dailyUsage here, always read from server
 interface UserStore {
   model: ModelType
-  dailyUsage: number
-  plan: 'free' | 'pro' | 'teams'
+  plan: 'free' | 'pro' | 'teams' | 'byok'
   setModel: (model: ModelType) => void
-  incrementUsage: () => void
-  resetUsage: () => void
+  setPlan: (plan: 'free' | 'pro' | 'teams' | 'byok') => void
 }
 
 export const useUserStore = create<UserStore>()(
   persist(
     (set) => ({
       model: 'claude',
-      dailyUsage: 0,
       plan: 'free',
-      setModel:  (model)  => set({ model }),
-      incrementUsage: () => set((s) => ({ dailyUsage: s.dailyUsage + 1 })),
-      resetUsage: () => set({ dailyUsage: 0 }),
+      setModel: (model) => set({ model }),
+      setPlan:  (plan)  => set({ plan }),
     }),
     { name: 'ps-user' }
   )
