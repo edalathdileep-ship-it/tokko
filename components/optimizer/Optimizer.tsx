@@ -166,7 +166,7 @@ export function Optimizer() {
             onChange={(e) => { setInput(e.target.value); setError(null) }}
             placeholder="Paste your prompt here..."
             className={cn(
-              'flex-1 min-h-[200px] p-4 rounded-2xl bg-bg-surface border font-mono text-[0.8rem] text-text',
+              'h-[220px] p-4 rounded-2xl bg-bg-surface border font-mono text-[0.8rem] text-text',
               'placeholder:text-text-muted resize-none outline-none transition-colors',
               'focus:border-accent',
               (error && input.trim()) ? 'border-accent-red' : 'border-border'
@@ -196,7 +196,7 @@ export function Optimizer() {
             )}
           </div>
           <div className={cn(
-            'flex-1 min-h-[200px] p-4 rounded-2xl border font-mono text-[0.8rem] relative',
+            'h-[220px] p-4 rounded-2xl border font-mono text-[0.8rem] relative overflow-y-auto',
             result
               ? 'bg-accent/6 border-accent/20 text-accent'
               : 'bg-bg-surface border-border text-text-muted'
