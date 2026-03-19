@@ -150,7 +150,7 @@ export function Optimizer() {
 
         {/* Input panel */}
         <div className="flex flex-col">
-          <div className="flex items-center justify-between mb-2">
+          <div className="flex items-center justify-between mb-2 h-6">
             <span className="font-mono text-[0.62rem] font-bold tracking-[0.1em] uppercase text-text-muted">
               Original
             </span>
@@ -182,7 +182,7 @@ export function Optimizer() {
 
         {/* Output panel */}
         <div className="flex flex-col">
-          <div className="flex items-center justify-between mb-2">
+          <div className="flex items-center justify-between mb-2 h-6">
             <span className={cn(
               'font-mono text-[0.62rem] font-bold tracking-[0.1em] uppercase',
               result ? 'text-accent' : 'text-text-muted'
