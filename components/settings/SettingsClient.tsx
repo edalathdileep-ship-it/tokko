@@ -266,10 +266,6 @@ export function SettingsClient({ userId, firstName, lastName, email, imageUrl, c
       setDeleting(false)
     }
   }
-    } finally {
-      setDeleting(false)
-    }
-  }
 
   return (
     <div>
