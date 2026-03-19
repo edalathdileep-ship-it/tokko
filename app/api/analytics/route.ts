@@ -106,7 +106,7 @@ export async function GET() {
 
     // ── Peak day ──
     let peakDay = { date: '', compressions: 0 }
-    for (const [date, stats] of dailyMap.entries()) {
+    for (const [date, stats] of Array.from(dailyMap.entries())) {
       if (stats.compressions > peakDay.compressions) {
         peakDay = { date, compressions: stats.compressions }
       }
