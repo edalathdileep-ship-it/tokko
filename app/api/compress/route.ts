@@ -5,6 +5,7 @@ import { compressWithClaude, mockCompress } from '@/lib/compression'
 import { sanitizePrompt, isPromptTooLarge, safeErrorMessage } from '@/lib/security'
 import { checkAndIncrementUsage, saveCompression } from '@/lib/rateLimit'
 import { createClient } from '@supabase/supabase-js'
+import type { CompressionMode, ModelType } from '@/types'
 
 const schema = z.object({
   prompt: z.string().min(1, 'Prompt is required').max(200_000, 'Prompt too long'),
@@ -22,8 +23,8 @@ function getSupabaseAdmin() {
 // Retry wrapper for Claude API — handles 529 (overloaded) and 503 errors
 async function compressWithRetry(
   prompt: string,
-  mode: string,
-  model: string,
+  mode: CompressionMode,
+  model: ModelType,
   apiKey: string,
   maxRetries: number = 2
 ) {
