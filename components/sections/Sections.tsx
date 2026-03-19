@@ -40,11 +40,11 @@ export function ModelsStrip() {
 
 // ── Features ──────────────────────────────────────────────
 const FEATURES = [
-  { icon: 'compress.svg',       title: 'Cut tokens in seconds',     desc: 'Paste your prompt, pick a mode, hit compress. Three levels — Balanced, Aggressive, Smart — so you control how far it goes.', tag: 'Core' },
-  { icon: 'modals.svg',         title: 'One tool, every model',     desc: 'Claude, GPT-4, Gemini — switch models without switching tools. Cost estimates adjust automatically per model.', tag: 'Multi-model' },
+  { icon: 'compress.svg',       title: 'Cut tokens in seconds',     desc: 'Paste your prompt, pick a mode, hit compress. Three levels (Balanced, Aggressive, Smart) so you control how far it goes.', tag: 'Core' },
+  { icon: 'modals.svg',         title: 'One tool, every model',     desc: 'Claude, GPT-4, Gemini. Switch models without switching tools. Cost estimates adjust automatically per model.', tag: 'Multi-model' },
   { icon: 'live-tokens.svg',    title: 'Know before you send',      desc: 'A live token counter shows exactly what your prompt costs before it hits the API. No more guessing, no more surprises.', tag: 'Free' },
   { icon: 'analytic-graph.svg', title: 'See where your money goes', desc: 'Charts, trends, breakdowns. Track tokens saved, cost saved, and compression ratios across every prompt you compress.', tag: 'Analytics' },
-  { icon: 'smart.svg',          title: 'AI that rewrites AI',       desc: 'Smart mode uses Claude to understand what your prompt means before compressing it. Technical terms, constraints, intent — all preserved.', tag: 'AI-powered' },
+  { icon: 'smart.svg',          title: 'AI that rewrites AI',       desc: 'Smart mode uses Claude to understand what your prompt means before compressing it. Technical terms, constraints, and intent stay intact.', tag: 'AI-powered' },
   { icon: 'history.svg',        title: 'Never lose a prompt',       desc: 'Full history of every compression. Compare original vs compressed side by side. Copy any version with one click.', tag: 'Built-in' },
 ]
 
@@ -130,7 +130,7 @@ export function WhoItsFor() {
             If you use AI, you&apos;re overpaying.
           </h2>
           <p className="font-sans text-[0.94rem] md:text-[1rem] text-text-muted leading-relaxed max-w-[520px] mx-auto">
-            Tokko works for anyone who sends prompts — whether it&apos;s 5 a day or 5,000.
+            Tokko works for anyone who sends prompts, whether it&apos;s 5 a day or 5,000.
           </p>
         </div>
 
@@ -155,7 +155,7 @@ export function WhoItsFor() {
 const STEPS = [
   { n: '01', title: 'Paste your prompt', desc: 'Any prompt, any length. A question, a system instruction, a 4,000-word brief. Tokko shows you the token count as you type.' },
   { n: '02', title: 'Pick how hard to compress', desc: 'Balanced keeps full meaning at ~50% off. Aggressive strips everything to keywords at ~75% off. Smart uses AI to decide what stays.' },
-  { n: '03', title: 'Copy and send', desc: 'One click to copy the compressed version. Paste it into Claude, ChatGPT, Gemini, or any AI tool. The output is the same — the bill is not.' },
+  { n: '03', title: 'Copy and send', desc: 'One click to copy the compressed version. Paste it into Claude, ChatGPT, Gemini, or any AI tool. The output stays the same. The bill does not.' },
   { n: '04', title: 'Watch your savings add up', desc: 'Every compression is tracked. Your dashboard shows the total tokens saved, dollars saved, and how your usage trends over time.' },
 ]
 
@@ -433,13 +433,13 @@ export function SocialProof() {
 // ── FAQ ───────────────────────────────────────────────────
 const FAQS = [
   { q: 'How does Tokko compress prompts?', a: 'Tokko removes filler words, redundant phrasing, and unnecessary padding while preserving the core meaning of your prompt. Smart mode uses Claude to understand context before compressing, so technical terms and constraints stay intact.' },
-  { q: 'Will I get the same AI output with a compressed prompt?', a: 'In most cases, yes. AI models are built to understand direct instructions — they don\'t need "please" and "could you kindly" to perform well. Balanced mode is the safest bet. Aggressive mode works best for simple, straightforward prompts.' },
-  { q: 'Which AI models does this work with?', a: 'Any model that accepts text prompts. The compressed output is just cleaner text — paste it into Claude, ChatGPT, Gemini, Mistral, or any other tool. Tokko itself uses Claude for the compression.' },
+  { q: 'Will I get the same AI output with a compressed prompt?', a: 'In most cases, yes. AI models are built to understand direct instructions. They don\'t need "please" and "could you kindly" to perform well. Balanced mode is the safest bet. Aggressive mode works best for simple, straightforward prompts.' },
+  { q: 'Which AI models does this work with?', a: 'Any model that accepts text prompts. The compressed output is just cleaner text. Paste it into Claude, ChatGPT, Gemini, Mistral, or any other tool. Tokko itself uses Claude for the compression.' },
   { q: 'Is the free plan actually free?', a: 'Yes. 20 compressions per day, no time limit, no credit card. If you need more, paid plans start at $3/mo.' },
   { q: 'What is BYOK (Bring Your Own Key)?', a: 'You connect your own Anthropic API key to Tokko. Compressions use your key directly, so you pay Anthropic at their rates. You pay Tokko just $3/mo for the software. Since Tokko cuts your token usage by up to 75%, it pays for itself immediately.' },
-  { q: 'How is Smart mode different from Balanced?', a: 'Balanced uses rules to strip filler. Smart uses Claude to actually understand your prompt before rewriting it — preserving nuance, technical terms, and intent while removing everything that adds no value.' },
+  { q: 'How is Smart mode different from Balanced?', a: 'Balanced uses rules to strip filler. Smart uses Claude to actually understand your prompt before rewriting it. It preserves nuance, technical terms, and intent while removing everything that adds no value.' },
   { q: 'Is my data safe?', a: 'Your prompts are never used to train any model. Compression history is stored in your dashboard and you can delete it at any time. API keys are stored server-side and never exposed to the browser.' },
-  { q: 'Is there a Chrome Extension?', a: 'Yes. The Tokko extension adds a compress button directly inside Claude.ai — no tab switching needed. ChatGPT and Gemini support is coming soon. Generate your token in Settings to connect it.' },
+  { q: 'Is there a Chrome Extension?', a: 'Yes. The Tokko extension adds a compress button directly inside Claude.ai, so there is no tab switching needed. ChatGPT and Gemini support is coming soon. Generate your token in Settings to connect it.' },
 ]
 
 export function FAQ() {

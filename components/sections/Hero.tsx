@@ -16,15 +16,15 @@ export function Hero() {
               <KickerPill>Chrome Extension now available</KickerPill>
             </div>
 
-            <h1 className="font-grotesk font-bold tracking-[-0.04em] leading-none mt-7 mb-6"
+            <h1 className="font-grotesk font-bold tracking-[-0.04em] leading-[1.05] mt-7 mb-6"
               style={{ fontSize: 'clamp(2.4rem, 5.5vw, 4.6rem)' }}>
-              You&apos;re paying for<br />
-              <span className="text-accent">words AI ignores.</span>
+              <span className="block">You&apos;re paying for</span>
+              <span className="block text-accent">words AI ignores.</span>
             </h1>
 
             <p className="font-sans text-[1rem] md:text-[1.05rem] text-text-muted leading-[1.68] mb-6 max-w-[460px] mx-auto md:mx-0">
-              Up to 75% of your prompt is filler — pleasantries, repetition, padding.
-              AI reads past it, but you still pay for every token.
+              Up to 75% of your prompt is filler. Pleasantries, repetition, padding.
+              AI reads past all of it, but you still pay for every token.
               Tokko strips the waste. Same results, fraction of the cost.
             </p>
 

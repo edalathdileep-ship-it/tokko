@@ -21,7 +21,7 @@ const PLANS = [
       { label: 'Compression history',            yes: true },
       { label: 'Chrome Extension access',        yes: true },
       { label: 'Unlimited compressions',         yes: false },
-      { label: 'BYOK — your own API key',        yes: false },
+      { label: 'BYOK (your own API key)',        yes: false },
       { label: 'Priority support',               yes: false },
     ],
   },
