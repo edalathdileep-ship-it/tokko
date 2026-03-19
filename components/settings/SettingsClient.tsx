@@ -10,14 +10,20 @@ function BYOKSection() {
   const [hasKey, setHasKey] = useState(false)
   const [loading, setLoading] = useState(false)
   const [removing, setRemoving] = useState(false)
-  const [status, setStatus] = useState<'idle' | 'success' | 'error'>('idle')
+  const [status, setStatus] = useState<'idle' | 'success' | 'error' | 'fetch-error'>('idle')
   const [error, setError] = useState('')
 
   useEffect(() => {
-    fetch('/api/byok').then(r => r.json()).then(d => {
-      setHasKey(d.hasKey)
-      setMasked(d.masked)
-    })
+    fetch('/api/byok')
+      .then(r => r.json())
+      .then(d => {
+        setHasKey(d.hasKey)
+        setMasked(d.masked)
+      })
+      .catch(() => {
+        setStatus('fetch-error')
+        setError('Could not load your key status. Please refresh the page.')
+      })
   }, [])
 
   async function saveKey() {
@@ -41,6 +47,9 @@ function BYOKSection() {
         setMasked(`sk-ant-...${key.trim().slice(-6)}`)
         setKey('')
       }
+    } catch {
+      setStatus('error')
+      setError('Network error — could not save key. Check your connection.')
     } finally {
       setLoading(false)
     }
@@ -48,11 +57,23 @@ function BYOKSection() {
 
   async function removeKey() {
     setRemoving(true)
-    await fetch('/api/byok', { method: 'DELETE' })
-    setHasKey(false)
-    setMasked(null)
-    setStatus('idle')
-    setRemoving(false)
+    try {
+      const res = await fetch('/api/byok', { method: 'DELETE' })
+      const json = await res.json()
+      if (json.success) {
+        setHasKey(false)
+        setMasked(null)
+        setStatus('idle')
+      } else {
+        setStatus('error')
+        setError('Failed to remove key. Please try again.')
+      }
+    } catch {
+      setStatus('error')
+      setError('Network error — could not remove key. Check your connection.')
+    } finally {
+      setRemoving(false)
+    }
   }
 
   return (
@@ -62,7 +83,12 @@ function BYOKSection() {
         your Anthropic bill goes down, you pay Tokko just <span className="text-text font-medium">$3/mo</span> for the service.
       </p>
 
-      {hasKey ? (
+      {status === 'fetch-error' ? (
+        <div className="flex items-center gap-3 bg-accent-red/5 border border-accent-red/20 rounded-xl px-4 py-3">
+          <div className="w-2 h-2 rounded-full bg-accent-red flex-shrink-0" />
+          <p className="font-mono text-[0.75rem] text-accent-red">{error}</p>
+        </div>
+      ) : hasKey ? (
         <div className="space-y-3">
           <div className="flex items-center gap-3 bg-accent/5 border border-accent/20 rounded-xl px-4 py-3">
             <div className="w-2 h-2 rounded-full bg-accent flex-shrink-0" />
@@ -112,13 +138,21 @@ function ApiTokenSection({ userId }: { userId: string }) {
   const [token, setToken] = useState<string | null>(null)
   const [loading, setLoading] = useState(false)
   const [copied, setCopied] = useState(false)
+  const [error, setError] = useState('')
 
   async function generateToken() {
     setLoading(true)
+    setError('')
     try {
       const res = await fetch('/api/generate-token', { method: 'POST' })
       const json = await res.json()
-      if (json.success) setToken(json.token)
+      if (json.success) {
+        setToken(json.token)
+      } else {
+        setError(json.error || 'Failed to generate token. Please try again.')
+      }
+    } catch {
+      setError('Network error — could not generate token. Check your connection.')
     } finally {
       setLoading(false)
     }
@@ -150,13 +184,18 @@ function ApiTokenSection({ userId }: { userId: string }) {
             </button>
           </div>
           <p className="font-mono text-[0.65rem] text-accent-red">
-            Save this token now — it won't be shown again. Generate a new one if you lose it.
+            Save this token now — it won&apos;t be shown again. Generate a new one if you lose it.
           </p>
         </div>
       ) : (
-        <Button onClick={generateToken} loading={loading} size="sm">
-          Generate API Token
-        </Button>
+        <div className="space-y-3">
+          <Button onClick={generateToken} loading={loading} size="sm">
+            Generate API Token
+          </Button>
+          {error && (
+            <p className="font-mono text-[0.68rem] text-accent-red">{error}</p>
+          )}
+        </div>
       )}
     </div>
   )
@@ -201,6 +240,7 @@ export function SettingsClient({ userId, firstName, lastName, email, imageUrl, c
   const [showDeleteConfirm, setShowDeleteConfirm] = useState(false)
   const [deleteText, setDeleteText] = useState('')
   const [deleting, setDeleting] = useState(false)
+  const [deleteError, setDeleteError] = useState('')
   const router = useRouter()
 
   const fullName = [firstName, lastName].filter(Boolean).join(' ') || 'Not set'
@@ -211,14 +251,21 @@ export function SettingsClient({ userId, firstName, lastName, email, imageUrl, c
 
   async function handleDeleteAccount() {
     setDeleting(true)
+    setDeleteError('')
     try {
       const res = await fetch('/api/delete-account', { method: 'DELETE' })
       const json = await res.json()
       if (json.success) {
         router.push('/')
       } else {
-        alert('Failed to delete account. Please try again.')
+        setDeleteError(json.error || 'Failed to delete account. Please try again.')
       }
+    } catch {
+      setDeleteError('Network error — could not delete account. Check your connection.')
+    } finally {
+      setDeleting(false)
+    }
+  }
     } finally {
       setDeleting(false)
     }
@@ -334,7 +381,7 @@ export function SettingsClient({ userId, firstName, lastName, email, imageUrl, c
                 placeholder="delete my account"
                 className="w-full px-4 py-2.5 bg-bg-surface border border-border rounded-lg font-mono text-[0.84rem] outline-none focus:border-accent-red transition-colors" />
               <div className="flex gap-3">
-                <button onClick={() => { setShowDeleteConfirm(false); setDeleteText('') }}
+                <button onClick={() => { setShowDeleteConfirm(false); setDeleteText(''); setDeleteError('') }}
                   className="font-grotesk font-medium text-[0.84rem] text-text-muted border border-border px-4 py-2 rounded-lg hover:bg-bg-surface transition-colors">
                   Cancel
                 </button>
@@ -345,6 +392,9 @@ export function SettingsClient({ userId, firstName, lastName, email, imageUrl, c
                   {deleting ? 'Deleting...' : 'Permanently delete'}
                 </button>
               </div>
+              {deleteError && (
+                <p className="font-mono text-[0.68rem] text-accent-red">{deleteError}</p>
+              )}
             </div>
           )}
         </div>

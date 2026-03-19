@@ -103,6 +103,7 @@ export function Nav() {
                     {[
                       { href: '/dashboard', label: 'Dashboard', icon: '/icon-dashboard.svg', exact: true },
                       { href: '/dashboard/history', label: 'History', icon: '/icon-history.svg', exact: false },
+                      { href: '/dashboard/analytics', label: 'Analytics', icon: '/analytic-graph.svg', exact: false },
                       { href: '/dashboard/settings', label: 'Settings', icon: '/icon-settings.svg', exact: false },
                     ].map((item) => {
                       const isActive = item.exact ? pathname === item.href : pathname.startsWith(item.href)
@@ -181,6 +182,8 @@ export function Nav() {
               </div>
               <Link href="/dashboard" className="block font-grotesk font-medium text-text-muted hover:text-text py-1" onClick={() => setMobileOpen(false)}>Dashboard</Link>
               <Link href="/dashboard/history" className="block font-grotesk font-medium text-text-muted hover:text-text py-1" onClick={() => setMobileOpen(false)}>History</Link>
+              <Link href="/dashboard/analytics" className="block font-grotesk font-medium text-text-muted hover:text-text py-1" onClick={() => setMobileOpen(false)}>Analytics</Link>
+              <Link href="/dashboard/settings" className="block font-grotesk font-medium text-text-muted hover:text-text py-1" onClick={() => setMobileOpen(false)}>Settings</Link>
               <Link href="/#pricing" className="block font-grotesk font-medium text-accent py-1" onClick={() => setMobileOpen(false)}>Upgrade to Pro</Link>
               <SignOutButton>
                 <button className="font-grotesk font-medium text-text-muted py-1">Sign out</button>

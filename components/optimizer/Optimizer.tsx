@@ -43,21 +43,38 @@ export function Optimizer() {
     setError(null)
 
     try {
+      const controller = new AbortController()
+      const timeout = setTimeout(() => controller.abort(), 30000)
+
       const res = await fetch('/api/compress', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ prompt: input ?? '', mode, model }),
+        signal: controller.signal,
       })
+      clearTimeout(timeout)
+
       const json = await res.json()
 
-      if (!json.success) throw new Error(json.error)
+      if (!json.success) {
+        if (json.limitReached) {
+          setShowUpgrade(true)
+        }
+        throw new Error(json.error)
+      }
 
       setResult(json.data)
       addEntry(json.data)
       setDailyUsage(prev => prev + 1)
       router.refresh()
     } catch (err) {
-      setError(err instanceof Error ? err.message : 'Compression failed')
+      if (err instanceof DOMException && err.name === 'AbortError') {
+        setError('Compression timed out — try a shorter prompt or try again.')
+      } else if (err instanceof TypeError && err.message === 'Failed to fetch') {
+        setError('No internet connection. Check your network and try again.')
+      } else {
+        setError(err instanceof Error ? err.message : 'Compression failed. Please try again.')
+      }
     } finally {
       setLoading(false)
     }

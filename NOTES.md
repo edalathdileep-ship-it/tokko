@@ -122,6 +122,30 @@ ANTHROPIC_API_KEY=✅ set (server-side only, never exposed to browser)
 - Preferences section — UI only, not functional yet
 - Danger Zone — delete account UI only, not functional yet
 
+### Analytics Dashboard (app/dashboard/analytics/page.tsx)
+- Protected by Clerk middleware
+- API route: /api/analytics — aggregates last 90 days of compression data
+- 4 summary stat cards (total compressions, tokens saved, avg reduction, cost saved)
+- Streak counter (consecutive days compressing)
+- Peak day indicator
+- Daily compressions area chart (last 14 days, recharts)
+- Tokens saved per day bar chart
+- Mode breakdown donut chart (Balanced / Aggressive / Smart)
+- Model breakdown donut chart (Claude / GPT-4o / Gemini)
+- Loading skeleton, error state with retry, empty state with CTA
+- Linked from: nav dropdown (desktop + mobile), dashboard stats row
+
+### Error Handling
+- app/error.tsx — route-level error boundary, styled with "Try again" + "Go home"
+- app/global-error.tsx — root layout crash boundary (inline styles fallback)
+- app/not-found.tsx — styled 404 page
+- Optimizer: 30s timeout, network failure detection, specific error messages
+- Settings BYOK: fetch error, save error, remove error all shown inline
+- Settings API token: generate error shown inline
+- Settings delete account: error shown inline (no more alert())
+- History page: fetchError prop, shows error state instead of misleading empty
+- Dashboard stats: orange warning banner when Supabase is down
+
 ### Logo & Branding
 - public/tokko_logo.svg — wordmark "TOKKO" in white, used in Nav + Footer only
 - public/tokko_icon.svg — green rounded square with T, used for favicon + extension
@@ -153,8 +177,9 @@ ANTHROPIC_API_KEY=✅ set (server-side only, never exposed to browser)
 
 ### API Routes
 - app/api/compress/route.ts — main web app compression (Clerk auth, BYOK key priority)
-- app/api/compress-ext/route.ts — extension compression (API token auth)
+- app/api/compress-ext/route.ts — extension compression (API token auth, BYOK key priority)
 - app/api/generate-token/route.ts — generates API token for extension
+- app/api/analytics/route.ts — aggregated compression stats (last 90 days)
 - app/api/status/route.ts — health check for extension popup
 - app/api/byok/route.ts — GET/POST/DELETE user's Anthropic key
 - app/api/delete-account/route.ts — deletes from Supabase + Clerk
@@ -177,7 +202,6 @@ ANTHROPIC_API_KEY=✅ set (server-side only, never exposed to browser)
 - Settings preferences actually saving
 - Chrome Extension not on Chrome Web Store yet (dev mode only)
 - ChatGPT + Gemini extension support
-- Analytics page in dashboard
 
 ---
 
@@ -199,7 +223,7 @@ ANTHROPIC_API_KEY=✅ set (server-side only, never exposed to browser)
 
 ### Phase 4: Growth
 - [ ] Real testimonials from early users
-- [ ] Analytics dashboard page
+- [x] Analytics dashboard page ✅
 
 ---
 
@@ -234,6 +258,7 @@ ANTHROPIC_API_KEY=✅ set (server-side only, never exposed to browser)
 - Free plan limit is 20/day everywhere (was 50, now fixed)
 - Edit profile uses Clerk's UserButton modal — not a custom form
 - Delete account calls /api/delete-account → deletes Supabase + Clerk
+- Session 22: Run increment_user_stats RPC migration in Supabase SQL editor (see lib/schema.sql) — fixes race condition in stat updates. Works without it (fallback in code) but not atomic.
 
 ---
 
@@ -251,4 +276,4 @@ npm run dev
 - To test: claude.ai → click input → Compress button appears
 
 ---
-*Last updated: Session 21 — Fixed daily usage limit stuck bug (was reading from localStorage, now always reads from Supabase via /api/usage route). Store cleaned up — no dailyUsage in localStorage anymore. All files cleaned up (rateLimit, compression, compress-route, store, Optimizer). Honest pricing updated — removed fake features, BYOK and Pro say "Coming soon". GPT-4o and Gemini show "soon" badges in Optimizer. Compression modes never increase tokens (fixed system prompts). "Pay less" green in hero. Model dots removed everywhere. How It Works animation shows on mobile. Nav signup button arrow removed. Reset all 5 users via Supabase SQL. LinkedIn and Reddit posts written. Full code audit done.*
+*Last updated: Session 22 — Full error handling overhaul + analytics dashboard. Fixed: dashboard layout duplicate html/body tags, extension BYOK bug (was burning server credits for BYOK users), optimizer now has 30s timeout + network error detection + auto upgrade modal on limit, BYOK section fetch/save/remove all have error states, API token generation has error handling, delete account replaced alert() with inline error, history page shows error state instead of misleading empty state, dashboard stats show warning banner when Supabase fails, 404 page styled, race condition in saveCompression fixed with atomic SQL RPC (with fallback). New: app/error.tsx + app/global-error.tsx error boundaries, app/not-found.tsx, full analytics dashboard with recharts (daily compressions area chart, tokens saved bar chart, mode/model donut breakdowns, streak counter, peak day), analytics API route, analytics nav links (desktop + mobile + dashboard). SQL migration needed: increment_user_stats RPC function (see lib/schema.sql).*

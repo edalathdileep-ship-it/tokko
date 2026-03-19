@@ -177,21 +177,31 @@ export async function saveCompression(
     return
   }
 
-  // Fetch current profile to get existing totals
-  const { data: profile } = await supabase
-    .from('user_profiles')
-    .select('total_tokens_saved, total_cost_saved')
-    .eq('user_id', userId)
-    .single()
+  // Atomic increment — avoids race condition when two compressions happen at once
+  // Requires the increment_user_stats RPC function (see lib/schema.sql)
+  const { error: rpcError } = await supabase.rpc('increment_user_stats', {
+    p_user_id: userId,
+    p_tokens_saved: data.savedTokens,
+    p_cost_saved: data.costSaved,
+  })
 
-  if (!profile) return
+  if (rpcError) {
+    // Fallback to read-then-write if RPC not set up yet
+    console.warn('[saveCompression] RPC failed, using fallback:', rpcError.message)
+    const { data: profile } = await supabase
+      .from('user_profiles')
+      .select('total_tokens_saved, total_cost_saved')
+      .eq('user_id', userId)
+      .single()
 
-  // Update lifetime stats — increment, don't replace
-  await supabase
-    .from('user_profiles')
-    .update({
-      total_tokens_saved: (profile.total_tokens_saved || 0) + data.savedTokens,
-      total_cost_saved: (profile.total_cost_saved || 0) + data.costSaved,
-    })
-    .eq('user_id', userId)
+    if (!profile) return
+
+    await supabase
+      .from('user_profiles')
+      .update({
+        total_tokens_saved: (profile.total_tokens_saved || 0) + data.savedTokens,
+        total_cost_saved: (profile.total_cost_saved || 0) + data.costSaved,
+      })
+      .eq('user_id', userId)
+  }
 }

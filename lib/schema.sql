@@ -36,3 +36,20 @@ create index if not exists user_profiles_user_id_idx on public.user_profiles(use
 -- Disable RLS for now (we'll use Clerk user_id to filter)
 alter table public.user_profiles disable row level security;
 alter table public.compressions disable row level security;
+
+-- ── Run this migration to fix the race condition in stat updates ──
+-- Atomic increment function — avoids read-then-write race condition
+create or replace function public.increment_user_stats(
+  p_user_id text,
+  p_tokens_saved integer,
+  p_cost_saved numeric
+)
+returns void
+language sql
+as $$
+  update public.user_profiles
+  set
+    total_tokens_saved = total_tokens_saved + p_tokens_saved,
+    total_cost_saved = total_cost_saved + p_cost_saved
+  where user_id = p_user_id;
+$$;

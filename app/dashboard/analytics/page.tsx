@@ -1,21 +1,11 @@
 import { currentUser } from '@clerk/nextjs/server'
 import { redirect } from 'next/navigation'
 import { Nav } from '@/components/layout/Nav'
-import { getCompressionHistory } from '@/lib/rateLimit'
-import { HistoryClient } from '@/components/history/HistoryClient'
+import { AnalyticsClient } from '@/components/analytics/AnalyticsClient'
 
-export default async function HistoryPage() {
+export default async function AnalyticsPage() {
   const user = await currentUser()
   if (!user) redirect('/auth/signin')
-
-  let history: any[] = []
-  let fetchError = false
-
-  try {
-    history = await getCompressionHistory(user.id)
-  } catch {
-    fetchError = true
-  }
 
   return (
     <div className="min-h-screen bg-bg-base">
@@ -26,10 +16,10 @@ export default async function HistoryPage() {
         <div className="mb-8 flex items-center justify-between">
           <div>
             <h1 className="font-grotesk font-bold text-[2rem] tracking-tight mb-1">
-              History
+              Analytics
             </h1>
             <p className="text-text-muted font-sans text-[0.95rem]">
-              Your past compressions
+              Your compression stats over the last 30 days
             </p>
           </div>
           <a
@@ -40,7 +30,7 @@ export default async function HistoryPage() {
           </a>
         </div>
 
-        <HistoryClient history={history} fetchError={fetchError} />
+        <AnalyticsClient />
 
       </main>
     </div>

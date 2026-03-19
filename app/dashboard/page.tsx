@@ -24,24 +24,25 @@ export default async function DashboardPage() {
 
   // Fetch real stats from Supabase
   const stats = await getUserStats(user.id).catch(() => null)
+  const statsError = stats === null
 
   const statCards = [
     {
       label: 'Tokens saved',
-      value: stats && stats.totalTokensSaved > 0 ? formatNumber(stats.totalTokensSaved) : '—',
+      value: statsError ? '—' : stats.totalTokensSaved > 0 ? formatNumber(stats.totalTokensSaved) : '0',
       accent: true,
     },
     {
       label: 'Compressions',
-      value: stats && stats.totalCompressions > 0 ? stats.totalCompressions.toString() : '—',
+      value: statsError ? '—' : stats.totalCompressions > 0 ? stats.totalCompressions.toString() : '0',
     },
     {
       label: 'Avg reduction',
-      value: stats && stats.avgReduction > 0 ? `${stats.avgReduction}%` : '—',
+      value: statsError ? '—' : stats.avgReduction > 0 ? `${stats.avgReduction}%` : '0%',
     },
     {
       label: 'Cost saved',
-      value: stats ? formatCost(stats.totalCostSaved) : '—',
+      value: statsError ? '—' : formatCost(stats.totalCostSaved),
     },
   ]
 
@@ -60,6 +61,16 @@ export default async function DashboardPage() {
           </p>
         </div>
 
+        {/* Stats error banner */}
+        {statsError && (
+          <div className="flex items-center gap-3 bg-accent-orange/5 border border-accent-orange/20 rounded-2xl px-5 py-3 mb-4">
+            <span className="text-accent-orange text-sm">⚠</span>
+            <p className="font-mono text-[0.72rem] text-accent-orange">
+              Could not load your stats right now. Your compressions still work — stats will update once the connection is restored.
+            </p>
+          </div>
+        )}
+
         {/* Stats row */}
         <div className="grid grid-cols-2 md:grid-cols-4 gap-4 mb-8">
           {statCards.map((s) => (
@@ -73,6 +84,18 @@ export default async function DashboardPage() {
             </div>
           ))}
         </div>
+
+        {/* Analytics link */}
+        {!statsError && stats && stats.totalCompressions > 0 && (
+          <div className="mb-4 flex justify-end">
+            <a
+              href="/dashboard/analytics"
+              className="font-mono text-[0.68rem] text-text-muted hover:text-accent transition-colors"
+            >
+              View detailed analytics →
+            </a>
+          </div>
+        )}
 
         {/* Divider */}
         <div className="border-t border-border mb-8" />

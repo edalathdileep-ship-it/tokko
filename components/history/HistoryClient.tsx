@@ -42,7 +42,7 @@ function truncate(text: string, max: number): string {
   return text.length > max ? text.slice(0, max) + '...' : text
 }
 
-export function HistoryClient({ history }: { history: Compression[] }) {
+export function HistoryClient({ history, fetchError = false }: { history: Compression[]; fetchError?: boolean }) {
   const [expanded, setExpanded] = useState<string | null>(null)
   const [copied, setCopied] = useState<string | null>(null)
 
@@ -50,6 +50,26 @@ export function HistoryClient({ history }: { history: Compression[] }) {
     navigator.clipboard.writeText(text)
     setCopied(id)
     setTimeout(() => setCopied(null), 2000)
+  }
+
+  if (fetchError) {
+    return (
+      <div className="flex flex-col items-center justify-center py-24 text-center">
+        <div className="w-16 h-16 rounded-2xl bg-accent-red/10 border border-accent-red/20 flex items-center justify-center mb-4 text-2xl">
+          ⚠️
+        </div>
+        <h3 className="font-grotesk font-bold text-[1.1rem] mb-2">Could not load history</h3>
+        <p className="text-text-muted font-sans text-[0.9rem] mb-6">
+          Something went wrong connecting to the database. Your compressions are safe — try refreshing.
+        </p>
+        <button
+          onClick={() => window.location.reload()}
+          className="font-grotesk font-medium text-[0.88rem] text-accent hover:underline"
+        >
+          Refresh page →
+        </button>
+      </div>
+    )
   }
 
   if (history.length === 0) {

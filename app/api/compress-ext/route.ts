@@ -98,7 +98,14 @@ export async function POST(req: NextRequest) {
     }
 
     // ── 5. Compress ────────────────────────────────────────
-    const apiKey = process.env.ANTHROPIC_API_KEY
+    // BYOK key takes priority over our server key
+    const { data: fullProfile } = await supabase
+      .from('user_profiles')
+      .select('byok_key')
+      .eq('user_id', userId)
+      .single()
+
+    const apiKey = fullProfile?.byok_key || process.env.ANTHROPIC_API_KEY
     const result = apiKey
       ? await compressWithClaude(prompt, mode, model, apiKey)
       : mockCompress(prompt, mode, model)
