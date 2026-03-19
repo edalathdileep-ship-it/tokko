@@ -19,6 +19,35 @@ function getSupabaseAdmin() {
   )
 }
 
+// Retry wrapper for Claude API — handles 529 (overloaded) and 503 errors
+async function compressWithRetry(
+  prompt: string,
+  mode: string,
+  model: string,
+  apiKey: string,
+  maxRetries: number = 2
+) {
+  for (let attempt = 0; attempt <= maxRetries; attempt++) {
+    try {
+      return await compressWithClaude(prompt, mode, model, apiKey)
+    } catch (error: any) {
+      const status = error?.status || error?.statusCode || error?.error?.status
+      const isOverloaded = status === 529 || status === 503
+
+      if (isOverloaded && attempt < maxRetries) {
+        // Wait 2 seconds then retry
+        await new Promise((resolve) => setTimeout(resolve, 2000))
+        continue
+      }
+
+      // Last attempt or non-overload error — rethrow
+      throw error
+    }
+  }
+  // Should never reach here, but TypeScript needs it
+  throw new Error('Compression failed after retries')
+}
+
 export async function POST(req: NextRequest) {
   try {
     const { userId } = await auth()
@@ -68,7 +97,7 @@ export async function POST(req: NextRequest) {
     const apiKey = profile?.byok_key || process.env.ANTHROPIC_API_KEY
 
     const result = apiKey
-      ? await compressWithClaude(prompt, mode, model, apiKey)
+      ? await compressWithRetry(prompt, mode, model, apiKey)
       : mockCompress(prompt, mode, model)
 
     await saveCompression(userId, {
@@ -85,7 +114,36 @@ export async function POST(req: NextRequest) {
 
     return NextResponse.json({ success: true, data: result })
 
-  } catch (err: unknown) {
+  } catch (err: any) {
+    console.error('[Compress error]', err)
+
+    const status = err?.status || err?.statusCode || err?.error?.status
+
+    // Claude is overloaded (even after retries)
+    if (status === 529 || status === 503) {
+      return NextResponse.json(
+        { success: false, error: 'Claude is busy right now. Please try again in a few seconds.' },
+        { status: 529 }
+      )
+    }
+
+    // Rate limited by Anthropic
+    if (status === 429) {
+      return NextResponse.json(
+        { success: false, error: 'Too many requests. Please wait a moment and try again.' },
+        { status: 429 }
+      )
+    }
+
+    // API key invalid
+    if (status === 401) {
+      return NextResponse.json(
+        { success: false, error: 'API key is invalid. Please check your settings.' },
+        { status: 401 }
+      )
+    }
+
+    // Fallback — never leak raw error details
     const safe = safeErrorMessage(err)
     return NextResponse.json({ success: false, error: safe }, { status: 500 })
   }
