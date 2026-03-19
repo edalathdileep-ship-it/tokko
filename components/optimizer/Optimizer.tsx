@@ -309,8 +309,8 @@ export function Optimizer() {
               ×
             </button>
 
-            <div className="w-12 h-12 rounded-2xl bg-accent/10 border border-accent/20 flex items-center justify-center mb-5 text-xl">
-              ⚡
+            <div className="w-12 h-12 rounded-2xl bg-accent/10 border border-accent/20 flex items-center justify-center mb-5">
+              <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#00e5a0" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/></svg>
             </div>
 
             <h2 className="font-grotesk font-bold text-[1.4rem] tracking-tight mb-2">

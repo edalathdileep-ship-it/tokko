@@ -1,7 +1,7 @@
 import { Nav } from '@/components/layout/Nav'
 import { Footer } from '@/components/layout/Footer'
 import { Hero } from '@/components/sections/Hero'
-import { ModelsStrip, Features, HowItWorks, SocialProof, CTABanner, FAQ } from '@/components/sections/Sections'
+import { ModelsStrip, Features, WhoItsFor, HowItWorks, SocialProof, CTABanner, FAQ } from '@/components/sections/Sections'
 import { Pricing } from '@/components/sections/Pricing'
 import { Docs } from '@/components/sections/Docs'
 import { BackgroundEffects } from '@/components/sections/BackgroundEffects'
@@ -15,6 +15,7 @@ export default function Home() {
         <main>
           <Hero />
           <ModelsStrip />
+          <WhoItsFor />
           <Features />
           <HowItWorks />
           <Pricing />

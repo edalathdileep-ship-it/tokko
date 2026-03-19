@@ -40,12 +40,12 @@ export function ModelsStrip() {
 
 // ── Features ──────────────────────────────────────────────
 const FEATURES = [
-  { icon: 'compress.svg',       title: 'Prompt Compressor',   desc: 'Paste any prompt and watch it shrink in real time. Three modes: Balanced, Aggressive, Smart. Full control.', tag: 'Core feature' },
-  { icon: 'modals.svg',         title: 'Multi-Model Support', desc: 'Switch between Claude, GPT-4, and Gemini from one dashboard. Cost estimates update per model automatically.', tag: 'Differentiator' },
-  { icon: 'live-tokens.svg',    title: 'Live Token Counter',  desc: 'See exactly how many tokens your prompt costs before you send it. Updates character by character.', tag: 'Free' },
-  { icon: 'analytic-graph.svg', title: 'Analytics Dashboard', desc: 'Track every compression across every model. Tokens saved, cost saved, compression ratios over time.', tag: 'Pro' },
-  { icon: 'smart.svg',          title: 'Smart Mode',          desc: 'Powered by Claude itself. Understands context, preserves technical terms and constraints while removing filler.', tag: 'AI-powered' },
-  { icon: 'history.svg',        title: 'Compression History', desc: 'Every compression is saved. Go back, restore, compare original vs compressed side by side.', tag: 'Pro' },
+  { icon: 'compress.svg',       title: 'Cut tokens in seconds',     desc: 'Paste your prompt, pick a mode, hit compress. Three levels — Balanced, Aggressive, Smart — so you control how far it goes.', tag: 'Core' },
+  { icon: 'modals.svg',         title: 'One tool, every model',     desc: 'Claude, GPT-4, Gemini — switch models without switching tools. Cost estimates adjust automatically per model.', tag: 'Multi-model' },
+  { icon: 'live-tokens.svg',    title: 'Know before you send',      desc: 'A live token counter shows exactly what your prompt costs before it hits the API. No more guessing, no more surprises.', tag: 'Free' },
+  { icon: 'analytic-graph.svg', title: 'See where your money goes', desc: 'Charts, trends, breakdowns. Track tokens saved, cost saved, and compression ratios across every prompt you compress.', tag: 'Analytics' },
+  { icon: 'smart.svg',          title: 'AI that rewrites AI',       desc: 'Smart mode uses Claude to understand what your prompt means before compressing it. Technical terms, constraints, intent — all preserved.', tag: 'AI-powered' },
+  { icon: 'history.svg',        title: 'Never lose a prompt',       desc: 'Full history of every compression. Compare original vs compressed side by side. Copy any version with one click.', tag: 'Built-in' },
 ]
 
 export function Features() {
@@ -57,10 +57,10 @@ export function Features() {
             Features
           </div>
           <h2 className="font-grotesk font-bold text-[clamp(1.8rem,4vw,3rem)] tracking-[-0.035em] leading-none mb-4">
-            Everything you need to<br />spend less on tokens.
+            Less fluff. Lower bills.<br />Same results.
           </h2>
           <p className="font-sans text-[0.94rem] md:text-[1rem] text-text-muted leading-relaxed max-w-[520px] mx-auto">
-            Built for everyone who uses AI every day.
+            Everything you need to compress prompts, track savings, and stop overpaying for AI.
           </p>
         </div>
 
@@ -84,12 +84,79 @@ export function Features() {
   )
 }
 
+// ── WhoItsFor ─────────────────────────────────────────────
+const PERSONAS = [
+  {
+    role: 'Freelancers and consultants',
+    pain: 'You use Claude or ChatGPT dozens of times a day for clients. Every token adds up across projects.',
+    result: 'Cut your monthly AI bill by half without changing how you work.',
+  },
+  {
+    role: 'Developers using AI APIs',
+    pain: 'Your app sends hundreds of API calls daily. Prompt size directly impacts your infrastructure costs.',
+    result: 'Compress system prompts and instructions before they hit the API. Ship the same features, pay less.',
+  },
+  {
+    role: 'Content creators and writers',
+    pain: 'Long creative briefs and editing instructions eat through your token budget fast.',
+    result: 'Send the same detailed briefs at a fraction of the token cost. Your output stays the same.',
+  },
+  {
+    role: 'Teams with AI subscriptions',
+    pain: 'Your team runs through usage limits by Wednesday. Upgrading plans costs more than you budgeted.',
+    result: 'Every team member compresses before sending. Same productivity, significantly fewer tokens.',
+  },
+  {
+    role: 'Students and researchers',
+    pain: 'On a free plan or tight budget. Every wasted token means fewer questions you can ask.',
+    result: 'Get 2-3x more prompts from the same plan. No upgrade needed.',
+  },
+  {
+    role: 'Anyone with an AI bill',
+    pain: 'You see the charges each month and wonder if you really need to be paying that much.',
+    result: 'You don\'t. Most of what you\'re paying for is filler your AI doesn\'t need.',
+  },
+]
+
+export function WhoItsFor() {
+  return (
+    <section className="py-20 md:py-30 border-t border-border">
+      <div className="max-w-content mx-auto px-4 sm:px-8 md:px-[48px]">
+        <div className="text-center mb-12 md:mb-18">
+          <div className="flex items-center justify-center gap-2.5 font-mono text-[0.68rem] font-bold tracking-[0.14em] uppercase text-accent mb-4">
+            Who it&apos;s for
+          </div>
+          <h2 className="font-grotesk font-bold text-[clamp(1.8rem,4vw,3rem)] tracking-[-0.035em] leading-none mb-4">
+            If you use AI, you&apos;re overpaying.
+          </h2>
+          <p className="font-sans text-[0.94rem] md:text-[1rem] text-text-muted leading-relaxed max-w-[520px] mx-auto">
+            Tokko works for anyone who sends prompts — whether it&apos;s 5 a day or 5,000.
+          </p>
+        </div>
+
+        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4 md:gap-5">
+          {PERSONAS.map((p) => (
+            <div key={p.role}
+              className="bg-bg-card border border-border rounded-3xl p-6 md:p-8 hover:border-accent/30 transition-all duration-200 flex flex-col">
+              <div className="font-grotesk font-bold text-[0.94rem] tracking-tight mb-3">{p.role}</div>
+              <p className="font-sans text-[0.82rem] text-text-muted leading-relaxed mb-4 flex-1">{p.pain}</p>
+              <div className="border-t border-border pt-4">
+                <p className="font-sans text-[0.82rem] text-accent leading-relaxed">{p.result}</p>
+              </div>
+            </div>
+          ))}
+        </div>
+      </div>
+    </section>
+  )
+}
+
 // ── HowItWorks ────────────────────────────────────────────
 const STEPS = [
-  { n: '01', title: 'Paste your prompt', desc: 'Drop in any prompt, a question, instruction, or long document. Tokko counts your tokens live as you type.' },
-  { n: '02', title: 'Choose your compression mode', desc: 'Pick Balanced (50%), Aggressive (75%), or Smart (AI-powered). Hit compress and done in under 2 seconds.' },
-  { n: '03', title: 'Copy and use anywhere', desc: 'Copy the compressed prompt and paste it directly into Claude, ChatGPT, Gemini, or any AI tool.' },
-  { n: '04', title: 'Track your savings over time', desc: 'Every compression is tracked. See your running total of tokens saved, money saved, and compression ratios.' },
+  { n: '01', title: 'Paste your prompt', desc: 'Any prompt, any length. A question, a system instruction, a 4,000-word brief. Tokko shows you the token count as you type.' },
+  { n: '02', title: 'Pick how hard to compress', desc: 'Balanced keeps full meaning at ~50% off. Aggressive strips everything to keywords at ~75% off. Smart uses AI to decide what stays.' },
+  { n: '03', title: 'Copy and send', desc: 'One click to copy the compressed version. Paste it into Claude, ChatGPT, Gemini, or any AI tool. The output is the same — the bill is not.' },
+  { n: '04', title: 'Watch your savings add up', desc: 'Every compression is tracked. Your dashboard shows the total tokens saved, dollars saved, and how your usage trends over time.' },
 ]
 
 export function HowItWorks() {
@@ -102,10 +169,10 @@ export function HowItWorks() {
               <span className="w-6 h-px bg-accent" /> How it works
             </div>
             <h2 className="font-grotesk font-bold text-[clamp(1.8rem,3.5vw,2.8rem)] tracking-tight leading-none mb-4">
-              Three steps.<br />Massive savings.
+              Paste. Compress. Save.<br />That&apos;s it.
             </h2>
             <p className="font-sans text-text-muted leading-relaxed mb-10 max-w-[400px]">
-              No setup, no integration required. Just paste, compress, and copy.
+              No API keys to configure. No plugins to install. Works in your browser, right now.
             </p>
 
             <div className="space-y-0">
@@ -337,10 +404,10 @@ export function SocialProof() {
             Live stats
           </div>
           <h2 className="font-grotesk font-bold text-[clamp(1.8rem,4vw,3rem)] tracking-tight leading-none mb-4">
-            Real numbers. Updated live.
+            People are already saving.
           </h2>
           <p className="font-sans text-[0.94rem] text-text-muted max-w-[480px] mx-auto leading-relaxed">
-            We're just getting started. Every number here is real. No fake stats, no inflated counts.
+            Every number here is real and updates live. No vanity metrics, no inflated counts.
           </p>
         </div>
 
@@ -365,14 +432,14 @@ export function SocialProof() {
 
 // ── FAQ ───────────────────────────────────────────────────
 const FAQS = [
-  { q: 'How does Tokko compress prompts?', a: 'Tokko removes filler words, redundant phrasing, and unnecessary politeness while preserving the core intent and technical details of your prompt. Smart mode uses AI to understand context before compressing.' },
-  { q: 'Will the compressed prompt give the same AI output?', a: 'In most cases yes. AI models are very good at understanding compressed, direct instructions. Balanced mode is the safest (around 50% reduction). Aggressive mode gives bigger savings but works best for simple prompts.' },
-  { q: 'Which AI models does Tokko support?', a: 'Currently Claude (Anthropic), GPT-4o (OpenAI), and Gemini Pro (Google). Mistral and Llama support is coming soon.' },
-  { q: 'Is the free plan really free?', a: 'Yes, 20 compressions per day, forever. No credit card required to sign up.' },
-  { q: 'What is BYOK?', a: 'BYOK means Bring Your Own Key. You connect your existing Anthropic API key to Tokko. We use your key for compressions so you pay Anthropic directly. You pay Tokko just $3/mo for the compression software. Since Tokko cuts your token usage by up to 75%, it pays for itself instantly.' },
-  { q: 'What is Smart mode?', a: 'Smart mode uses Claude to understand your prompt before compressing it, preserving technical terms, constraints, and key instructions while removing everything else.' },
-  { q: 'Is my data safe?', a: 'Your prompts are not used to train any models. We store your compression history in your dashboard. You can delete it at any time.' },
-  { q: 'Is there a Chrome Extension?', a: 'Yes! The Tokko Chrome Extension currently works on Claude.ai. A subtle compress button appears directly in the chat input. ChatGPT and Gemini support is coming soon. Generate your API token from the Settings page to connect it.' },
+  { q: 'How does Tokko compress prompts?', a: 'Tokko removes filler words, redundant phrasing, and unnecessary padding while preserving the core meaning of your prompt. Smart mode uses Claude to understand context before compressing, so technical terms and constraints stay intact.' },
+  { q: 'Will I get the same AI output with a compressed prompt?', a: 'In most cases, yes. AI models are built to understand direct instructions — they don\'t need "please" and "could you kindly" to perform well. Balanced mode is the safest bet. Aggressive mode works best for simple, straightforward prompts.' },
+  { q: 'Which AI models does this work with?', a: 'Any model that accepts text prompts. The compressed output is just cleaner text — paste it into Claude, ChatGPT, Gemini, Mistral, or any other tool. Tokko itself uses Claude for the compression.' },
+  { q: 'Is the free plan actually free?', a: 'Yes. 20 compressions per day, no time limit, no credit card. If you need more, paid plans start at $3/mo.' },
+  { q: 'What is BYOK (Bring Your Own Key)?', a: 'You connect your own Anthropic API key to Tokko. Compressions use your key directly, so you pay Anthropic at their rates. You pay Tokko just $3/mo for the software. Since Tokko cuts your token usage by up to 75%, it pays for itself immediately.' },
+  { q: 'How is Smart mode different from Balanced?', a: 'Balanced uses rules to strip filler. Smart uses Claude to actually understand your prompt before rewriting it — preserving nuance, technical terms, and intent while removing everything that adds no value.' },
+  { q: 'Is my data safe?', a: 'Your prompts are never used to train any model. Compression history is stored in your dashboard and you can delete it at any time. API keys are stored server-side and never exposed to the browser.' },
+  { q: 'Is there a Chrome Extension?', a: 'Yes. The Tokko extension adds a compress button directly inside Claude.ai — no tab switching needed. ChatGPT and Gemini support is coming soon. Generate your token in Settings to connect it.' },
 ]
 
 export function FAQ() {
@@ -386,11 +453,11 @@ export function FAQ() {
             FAQ
           </div>
           <h2 className="font-grotesk font-bold text-[clamp(1.8rem,4vw,3rem)] tracking-tight leading-none mb-4">
-            Questions? We got you.
+            Common questions, straight answers.
           </h2>
           <p className="font-sans text-[0.94rem] md:text-[1rem] text-text-muted max-w-[480px] mx-auto">
-            Everything you need to know about Tokko. Can't find your answer?{' '}
-            <a href="mailto:hello@tokko.app" className="text-accent hover:underline">Email us.</a>
+            Can&apos;t find what you&apos;re looking for?{' '}
+            <a href="mailto:hello@tokko.app" className="text-accent hover:underline">Reach out.</a>
           </p>
         </div>
 
@@ -428,21 +495,21 @@ export function CTABanner() {
       <div className="absolute inset-0 bg-[radial-gradient(ellipse_60%_80%_at_50%_100%,rgba(0,229,160,0.08),transparent)]" />
       <div className="relative max-w-content mx-auto px-4 sm:px-8 md:px-[48px]">
         <h2 className="font-grotesk font-bold text-[clamp(1.8rem,4vw,3.2rem)] tracking-tight leading-none mb-4">
-          Ready to stop wasting tokens?
+          Every prompt you send today<br />costs more than it should.
         </h2>
         <p className="font-sans text-[0.94rem] md:text-[1rem] text-text-muted mb-8 md:mb-9">
-          Start for free. No credit card. 20 compressions a day, forever.
+          Start compressing for free. No credit card, no commitment. See the difference in your first prompt.
         </p>
         <div className="flex gap-3 justify-center flex-wrap">
           <Link href="/auth/signup">
-            <Button size="lg">Get started free</Button>
+            <Button size="lg">Start compressing free</Button>
           </Link>
           <Link href="/#pricing">
             <Button variant="outline" size="lg">View pricing</Button>
           </Link>
         </div>
         <p className="font-mono text-[0.68rem] text-text-muted mt-4">
-          Free forever · No credit card · Upgrade anytime
+          20 free compressions per day · No credit card · Upgrade anytime
         </p>
       </div>
     </section>

@@ -121,8 +121,8 @@ function LoadingState() {
 function ErrorState({ onRetry }: { onRetry: () => void }) {
   return (
     <div className="flex flex-col items-center justify-center py-24 text-center">
-      <div className="w-16 h-16 rounded-2xl bg-accent-red/10 border border-accent-red/20 flex items-center justify-center mb-4 text-2xl">
-        ⚠️
+      <div className="w-16 h-16 rounded-2xl bg-accent-red/10 border border-accent-red/20 flex items-center justify-center mb-4">
+        <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="#ff6b6b" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M10.29 3.86L1.82 18a2 2 0 001.71 3h16.94a2 2 0 001.71-3L13.71 3.86a2 2 0 00-3.42 0z"/><line x1="12" y1="9" x2="12" y2="13"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg>
       </div>
       <h3 className="font-grotesk font-bold text-[1.1rem] mb-2">Could not load analytics</h3>
       <p className="text-text-muted font-sans text-[0.9rem] mb-6">
@@ -142,8 +142,8 @@ function ErrorState({ onRetry }: { onRetry: () => void }) {
 function EmptyState() {
   return (
     <div className="flex flex-col items-center justify-center py-24 text-center">
-      <div className="w-16 h-16 rounded-2xl bg-bg-card border border-border flex items-center justify-center mb-4 text-2xl">
-        📊
+      <div className="w-16 h-16 rounded-2xl bg-bg-card border border-border flex items-center justify-center mb-4">
+        <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="#6b6b85" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><line x1="18" y1="20" x2="18" y2="10"/><line x1="12" y1="20" x2="12" y2="4"/><line x1="6" y1="20" x2="6" y2="14"/></svg>
       </div>
       <h3 className="font-grotesk font-bold text-[1.1rem] mb-2">No data yet</h3>
       <p className="text-text-muted font-sans text-[0.9rem] mb-6">
@@ -324,8 +324,8 @@ export function AnalyticsClient() {
       {/* ── Streak + peak ── */}
       <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
         <div className="bg-bg-card border border-border rounded-2xl p-5 flex items-center gap-4">
-          <div className="w-12 h-12 rounded-xl bg-accent/10 flex items-center justify-center text-xl">
-            🔥
+          <div className="w-12 h-12 rounded-xl bg-accent/10 flex items-center justify-center">
+            <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#00e5a0" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M8.5 14.5A2.5 2.5 0 0011 12c0-1.38-.5-2-1-3-1.072-2.143-.224-4.054 2-6 .5 2.5 2 4.9 4 6.5 2 1.6 3 3.5 3 5.5a7 7 0 11-14 0c0-1.153.433-2.294 1-3a2.5 2.5 0 002.5 2.5z"/></svg>
           </div>
           <div>
             <div className="font-grotesk font-bold text-[1.1rem]">
@@ -338,8 +338,8 @@ export function AnalyticsClient() {
         </div>
         {data.peakDay && (
           <div className="bg-bg-card border border-border rounded-2xl p-5 flex items-center gap-4">
-            <div className="w-12 h-12 rounded-xl bg-accent-purple/10 flex items-center justify-center text-xl">
-              ⚡
+            <div className="w-12 h-12 rounded-xl bg-accent-purple/10 flex items-center justify-center">
+              <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#7b61ff" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/></svg>
             </div>
             <div>
               <div className="font-grotesk font-bold text-[1.1rem]">

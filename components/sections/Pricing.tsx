@@ -80,10 +80,10 @@ export function Pricing() {
             Pricing
           </div>
           <h2 className="font-grotesk font-bold text-[clamp(1.8rem,4vw,3rem)] tracking-tight leading-none mb-3">
-            Start free. Scale when ready.
+            Free to start. Pays for itself when you upgrade.
           </h2>
           <p className="font-sans text-text-muted mb-7">
-            No hidden fees. Cancel anytime.
+            No hidden fees. No surprises. Cancel anytime.
           </p>
 
           {/* BYOK callout */}

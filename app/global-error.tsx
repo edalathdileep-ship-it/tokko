@@ -23,9 +23,9 @@ export default function GlobalError({
               width: '4rem', height: '4rem', borderRadius: '1rem',
               backgroundColor: 'rgba(255,107,107,0.1)', border: '1px solid rgba(255,107,107,0.2)',
               display: 'flex', alignItems: 'center', justifyContent: 'center',
-              margin: '0 auto 1.5rem', fontSize: '1.5rem',
+              margin: '0 auto 1.5rem',
             }}>
-              ⚠️
+              <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="#ff6b6b" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M10.29 3.86L1.82 18a2 2 0 001.71 3h16.94a2 2 0 001.71-3L13.71 3.86a2 2 0 00-3.42 0z"/><line x1="12" y1="9" x2="12" y2="13"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg>
             </div>
             <h2 style={{ fontSize: '1.6rem', fontWeight: 700, marginBottom: '0.5rem', letterSpacing: '-0.02em' }}>
               Something went wrong

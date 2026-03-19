@@ -55,8 +55,8 @@ export function HistoryClient({ history, fetchError = false }: { history: Compre
   if (fetchError) {
     return (
       <div className="flex flex-col items-center justify-center py-24 text-center">
-        <div className="w-16 h-16 rounded-2xl bg-accent-red/10 border border-accent-red/20 flex items-center justify-center mb-4 text-2xl">
-          ⚠️
+        <div className="w-16 h-16 rounded-2xl bg-accent-red/10 border border-accent-red/20 flex items-center justify-center mb-4">
+          <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="#ff6b6b" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M10.29 3.86L1.82 18a2 2 0 001.71 3h16.94a2 2 0 001.71-3L13.71 3.86a2 2 0 00-3.42 0z"/><line x1="12" y1="9" x2="12" y2="13"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg>
         </div>
         <h3 className="font-grotesk font-bold text-[1.1rem] mb-2">Could not load history</h3>
         <p className="text-text-muted font-sans text-[0.9rem] mb-6">
@@ -75,8 +75,8 @@ export function HistoryClient({ history, fetchError = false }: { history: Compre
   if (history.length === 0) {
     return (
       <div className="flex flex-col items-center justify-center py-24 text-center">
-        <div className="w-16 h-16 rounded-2xl bg-bg-card border border-border flex items-center justify-center mb-4 text-2xl">
-          📭
+        <div className="w-16 h-16 rounded-2xl bg-bg-card border border-border flex items-center justify-center mb-4">
+          <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="#6b6b85" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><polyline points="22 12 16 12 14 15 10 15 8 12 2 12"/><path d="M5.45 5.11L2 12v6a2 2 0 002 2h16a2 2 0 002-2v-6l-3.45-6.89A2 2 0 0016.76 4H7.24a2 2 0 00-1.79 1.11z"/></svg>
         </div>
         <h3 className="font-grotesk font-bold text-[1.1rem] mb-2">No compressions yet</h3>
         <p className="text-text-muted font-sans text-[0.9rem] mb-6">

@@ -121,7 +121,7 @@ export function Nav() {
                     <Link href="/#pricing"
                       onClick={() => setProfileOpen(false)}
                       className="flex items-center gap-2.5 px-4 py-2.5 font-sans text-[0.84rem] hover:bg-bg-surface transition-colors">
-                      <span className="text-accent">✦</span>
+                      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#00e5a0" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
                       <span className="text-accent font-medium">Upgrade to Pro</span>
                     </Link>
                   </div>
