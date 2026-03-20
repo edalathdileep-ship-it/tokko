@@ -53,3 +53,21 @@ as $$
     total_cost_saved = total_cost_saved + p_cost_saved
   where user_id = p_user_id;
 $$;
+
+-- ── Saved prompts table (system prompt optimizer) ──
+create table if not exists public.saved_prompts (
+  id uuid default gen_random_uuid() primary key,
+  user_id text not null,
+  name text not null,
+  original_text text not null,
+  compressed_text text not null,
+  original_tokens integer not null,
+  compressed_tokens integer not null,
+  saved_pct integer not null,
+  mode text not null,
+  created_at timestamptz default now(),
+  updated_at timestamptz default now()
+);
+
+create index if not exists saved_prompts_user_id_idx on public.saved_prompts(user_id);
+alter table public.saved_prompts disable row level security;

@@ -107,6 +107,7 @@ export function Nav() {
                   <div className="py-1.5">
                     {[
                       { href: '/dashboard', label: 'Dashboard', icon: '/icon-dashboard.svg', exact: true },
+                      { href: '/dashboard/prompts', label: 'Saved Prompts', icon: '/compress.svg', exact: false },
                       { href: '/dashboard/history', label: 'History', icon: '/icon-history.svg', exact: false },
                       { href: '/dashboard/analytics', label: 'Analytics', icon: '/analytic-graph.svg', exact: false },
                       { href: '/dashboard/settings', label: 'Settings', icon: '/icon-settings.svg', exact: false },
@@ -186,6 +187,7 @@ export function Nav() {
                 </div>
               </div>
               <Link href="/dashboard" className="block font-grotesk font-medium text-text-muted hover:text-text py-1" onClick={() => setMobileOpen(false)}>Dashboard</Link>
+              <Link href="/dashboard/prompts" className="block font-grotesk font-medium text-text-muted hover:text-text py-1" onClick={() => setMobileOpen(false)}>Saved Prompts</Link>
               <Link href="/dashboard/history" className="block font-grotesk font-medium text-text-muted hover:text-text py-1" onClick={() => setMobileOpen(false)}>History</Link>
               <Link href="/dashboard/analytics" className="block font-grotesk font-medium text-text-muted hover:text-text py-1" onClick={() => setMobileOpen(false)}>Analytics</Link>
               <Link href="/dashboard/settings" className="block font-grotesk font-medium text-text-muted hover:text-text py-1" onClick={() => setMobileOpen(false)}>Settings</Link>

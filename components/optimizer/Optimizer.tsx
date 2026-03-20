@@ -23,6 +23,11 @@ export function Optimizer() {
   const [copied, setCopied] = useState(false)
   const [showUpgrade, setShowUpgrade] = useState(false)
   const [dailyUsage, setDailyUsage] = useState(0)
+  const [showSave, setShowSave] = useState(false)
+  const [saveName, setSaveName] = useState('')
+  const [saving, setSaving] = useState(false)
+  const [saveStatus, setSaveStatus] = useState<'idle' | 'success' | 'error'>('idle')
+  const [saveError, setSaveError] = useState('')
 
   const dailyLimit = plan === 'free' ? 20 : Infinity
   const atLimit = plan === 'free' && dailyUsage >= dailyLimit
@@ -86,6 +91,42 @@ export function Optimizer() {
     setCopied(true)
     setTimeout(() => setCopied(false), 2000)
   }, [result])
+
+  const handleSave = useCallback(async () => {
+    if (!result || !saveName.trim() || saving) return
+    setSaving(true)
+    setSaveStatus('idle')
+    setSaveError('')
+    try {
+      const res = await fetch('/api/saved-prompts', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          name: saveName.trim(),
+          original_text: result.original,
+          compressed_text: result.compressed,
+          original_tokens: result.originalTokens,
+          compressed_tokens: result.compressedTokens,
+          saved_pct: Math.round(result.savedPct),
+          mode: result.mode,
+        }),
+      })
+      const json = await res.json()
+      if (json.success) {
+        setSaveStatus('success')
+        setShowSave(false)
+        setSaveName('')
+      } else {
+        setSaveStatus('error')
+        setSaveError(json.error || 'Failed to save')
+      }
+    } catch {
+      setSaveStatus('error')
+      setSaveError('Network error. Check your connection.')
+    } finally {
+      setSaving(false)
+    }
+  }, [result, saveName, saving])
 
   return (
     <div className="w-full">
@@ -222,18 +263,59 @@ export function Optimizer() {
 
           {/* Savings summary */}
           {result && (
-            <div className="mt-2 flex items-center justify-between">
-              <div className="flex gap-2">
-                <Chip variant="green">−{Math.round(result.savedPct)}% tokens</Chip>
-                <Chip variant="muted">saved {formatCost(result.costSaved)}</Chip>
+            <div className="mt-2">
+              <div className="flex items-center justify-between">
+                <div className="flex gap-2">
+                  <Chip variant="green">−{Math.round(result.savedPct)}% tokens</Chip>
+                  <Chip variant="muted">saved {formatCost(result.costSaved)}</Chip>
+                </div>
+                <div className="flex items-center gap-3">
+                  <button
+                    onClick={() => { setShowSave(!showSave); setSaveStatus('idle'); setSaveError('') }}
+                    className="font-mono text-[0.68rem] text-text-muted hover:text-accent transition-colors"
+                  >
+                    {saveStatus === 'success' ? 'Saved' : 'Save'}
+                  </button>
+                  <button
+                    onClick={handleCopy}
+                    className="flex items-center gap-1.5 font-mono text-[0.68rem] text-text-muted hover:text-accent transition-colors"
+                  >
+                    {copied ? <Check size={12} /> : <Copy size={12} />}
+                    {copied ? 'Copied!' : 'Copy'}
+                  </button>
+                </div>
               </div>
-              <button
-                onClick={handleCopy}
-                className="flex items-center gap-1.5 font-mono text-[0.68rem] text-text-muted hover:text-accent transition-colors"
-              >
-                {copied ? <Check size={12} /> : <Copy size={12} />}
-                {copied ? 'Copied!' : 'Copy'}
-              </button>
+
+              {/* Save form */}
+              {showSave && saveStatus !== 'success' && (
+                <div className="mt-3 flex gap-2">
+                  <input
+                    type="text"
+                    value={saveName}
+                    onChange={(e) => setSaveName(e.target.value)}
+                    placeholder="Name this prompt (e.g. System prompt v2)"
+                    className="flex-1 px-3 py-2 bg-bg-surface border border-border rounded-lg font-mono text-[0.78rem] text-text outline-none focus:border-accent transition-colors placeholder:text-text-muted"
+                    onKeyDown={(e) => {
+                      if (e.key === 'Enter' && saveName.trim()) handleSave()
+                    }}
+                  />
+                  <button
+                    onClick={handleSave}
+                    disabled={!saveName.trim() || saving}
+                    className="font-grotesk font-medium text-[0.82rem] bg-accent text-black px-4 py-2 rounded-lg hover:bg-accent-hover transition-colors disabled:opacity-40 disabled:cursor-not-allowed whitespace-nowrap"
+                  >
+                    {saving ? 'Saving...' : 'Save prompt'}
+                  </button>
+                </div>
+              )}
+              {saveStatus === 'error' && (
+                <p className="mt-2 font-mono text-[0.68rem] text-accent-red">{saveError}</p>
+              )}
+              {saveStatus === 'success' && (
+                <p className="mt-2 font-mono text-[0.68rem] text-accent">
+                  Saved. <a href="/dashboard/prompts" className="underline">View saved prompts</a>
+                </p>
+              )}
             </div>
           )}
         </div>
@@ -262,7 +344,7 @@ export function Optimizer() {
         )}
 
         {(result || input) && (
-          <Button variant="outline" size="lg" onClick={reset} className="shrink-0">
+          <Button variant="outline" size="lg" onClick={() => { reset(); setShowSave(false); setSaveName(''); setSaveStatus('idle'); setSaveError('') }} className="shrink-0">
             <RotateCcw size={15} />
             Reset
           </Button>
