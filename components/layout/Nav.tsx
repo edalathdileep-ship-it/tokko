@@ -48,10 +48,15 @@ export function Nav() {
         {/* Nav links — only show when NOT signed in */}
         {!isSignedIn && (
           <div className="hidden md:flex items-center gap-8">
-            {['Features', 'How it works', 'Pricing', 'Docs'].map((item) => (
-              <Link key={item} href={`/#${item.toLowerCase().replace(/ /g, '')}`}
+            {[
+              { label: 'Features', href: '/#features' },
+              { label: 'How it works', href: '/#howitworks' },
+              { label: 'Pricing', href: '/#pricing' },
+              { label: 'API Docs', href: '/docs' },
+            ].map((item) => (
+              <Link key={item.label} href={item.href}
                 className="font-grotesk font-medium text-[0.88rem] text-text-muted hover:text-text transition-colors">
-                {item}
+                {item.label}
               </Link>
             ))}
           </div>
@@ -191,11 +196,16 @@ export function Nav() {
             </>
           ) : (
             <>
-              {['Features', 'How it works', 'Pricing', 'Docs'].map((item) => (
-                <Link key={item} href={`/#${item.toLowerCase().replace(/ /g, '')}`}
+              {[
+                { label: 'Features', href: '/#features' },
+                { label: 'How it works', href: '/#howitworks' },
+                { label: 'Pricing', href: '/#pricing' },
+                { label: 'API Docs', href: '/docs' },
+              ].map((item) => (
+                <Link key={item.label} href={item.href}
                   className="block font-grotesk font-medium text-text-muted hover:text-text py-1"
                   onClick={() => setMobileOpen(false)}>
-                  {item}
+                  {item.label}
                 </Link>
               ))}
               <div className="pt-2 flex flex-col gap-2">

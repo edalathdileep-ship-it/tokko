@@ -135,6 +135,23 @@ ANTHROPIC_API_KEY=✅ set (server-side only, never exposed to browser)
 - Loading skeleton, error state with retry, empty state with CTA
 - Linked from: nav dropdown (desktop + mobile), dashboard stats row
 
+### Public API (app/api/v1/compress/route.ts)
+- Endpoint: POST /api/v1/compress
+- Auth: Bearer token (Authorization: Bearer tkk_xxx)
+- CORS open for any origin
+- Request: { prompt, mode?, model? } with Zod validation
+- Response: { compressed, usage: { original_tokens, compressed_tokens, tokens_saved, reduction_pct, cost_saved_usd }, meta }
+- Rate limit headers: X-RateLimit-Limit, X-RateLimit-Remaining
+- Error format: { error: { message, code, status } }
+- BYOK key priority (uses user's key if set)
+- Not protected by Clerk middleware (handles own auth)
+
+### API Docs Page (app/docs/page.tsx)
+- Full API reference at /docs
+- Sections: Authentication, Compress endpoint, Response format, Errors, Examples
+- Code examples in cURL, Python, JavaScript, and Anthropic SDK integration
+- Linked from nav ("API Docs") for logged-out users
+
 ### Error Handling
 - app/error.tsx — route-level error boundary, styled with "Try again" + "Go home"
 - app/global-error.tsx — root layout crash boundary (inline styles fallback)
@@ -178,7 +195,8 @@ ANTHROPIC_API_KEY=✅ set (server-side only, never exposed to browser)
 ### API Routes
 - app/api/compress/route.ts — main web app compression (Clerk auth, BYOK key priority)
 - app/api/compress-ext/route.ts — extension compression (API token auth, BYOK key priority)
-- app/api/generate-token/route.ts — generates API token for extension
+- app/api/v1/compress/route.ts — public API (Bearer token auth, CORS open, clean JSON response)
+- app/api/generate-token/route.ts — generates API token for extension + API
 - app/api/analytics/route.ts — aggregated compression stats (last 90 days)
 - app/api/status/route.ts — health check for extension popup
 - app/api/byok/route.ts — GET/POST/DELETE user's Anthropic key
