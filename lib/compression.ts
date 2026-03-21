@@ -2,6 +2,188 @@ import Anthropic from '@anthropic-ai/sdk'
 import { type CompressionMode, type ModelType } from '@/types'
 import { calcCostSaved, genId } from '@/lib/utils'
 
+// ── Constraint extraction patterns ───────────────────────
+// These patterns detect instructions that MUST survive compression.
+// If any are found in the original but missing from compressed, they get auto-added back.
+
+interface ExtractedConstraint {
+  type: string     // e.g. 'format', 'prohibition', 'requirement', 'number', 'url'
+  value: string    // the actual text found
+  pattern: string  // what to search for in compressed output (lowercase)
+}
+
+function extractConstraints(text: string): ExtractedConstraint[] {
+  const constraints: ExtractedConstraint[] = []
+  const lower = text.toLowerCase()
+
+  // ── Format instructions ──
+  const formatPatterns = [
+    { regex: /\b(respond|reply|output|return|format|answer)\b[^.]*?\b(json|xml|html|markdown|csv|yaml|plain text|bullet points?|numbered list)\b/gi, type: 'format' },
+    { regex: /\b(in|as|using)\s+(json|xml|html|markdown|csv|yaml)\s*(format)?\b/gi, type: 'format' },
+  ]
+  for (const { regex, type } of formatPatterns) {
+    let match
+    while ((match = regex.exec(text)) !== null) {
+      // Extract the key format word (json, xml, etc)
+      const formatWord = match[0].match(/\b(json|xml|html|markdown|csv|yaml|plain text|bullet points?|numbered list)\b/i)
+      if (formatWord) {
+        constraints.push({ type, value: match[0].trim(), pattern: formatWord[0].toLowerCase() })
+      }
+    }
+  }
+
+  // ── Prohibitions (never, do not, don't, must not) ──
+  const prohibitionRegex = /\b(never|do not|don'?t|must not|should not|shouldn'?t|cannot|can'?t|avoid|refrain from|prohibited from)\b[^.!?\n]{3,80}[.!?\n]/gi
+  let match
+  while ((match = prohibitionRegex.exec(text)) !== null) {
+    const sentence = match[0].trim()
+    // Extract the core action being prohibited
+    const keywords = sentence
+      .replace(/\b(never|do not|don'?t|must not|should not|shouldn'?t|cannot|can'?t|avoid|refrain from|prohibited from)\b/gi, '')
+      .replace(/[^a-zA-Z0-9\s]/g, '')
+      .trim()
+      .split(/\s+/)
+      .filter(w => w.length > 3)
+      .slice(0, 3)
+    if (keywords.length > 0) {
+      constraints.push({ type: 'prohibition', value: sentence, pattern: keywords.join(' ').toLowerCase() })
+    }
+  }
+
+  // ── Requirements (always, must, required, ensure) ──
+  const requirementRegex = /\b(always|must|required?|ensure|make sure|guarantee|mandatory)\b[^.!?\n]{3,80}[.!?\n]/gi
+  while ((match = requirementRegex.exec(text)) !== null) {
+    const sentence = match[0].trim()
+    const keywords = sentence
+      .replace(/\b(always|must|required?|ensure|make sure|guarantee|mandatory)\b/gi, '')
+      .replace(/[^a-zA-Z0-9\s]/g, '')
+      .trim()
+      .split(/\s+/)
+      .filter(w => w.length > 3)
+      .slice(0, 3)
+    if (keywords.length > 0) {
+      constraints.push({ type: 'requirement', value: sentence, pattern: keywords.join(' ').toLowerCase() })
+    }
+  }
+
+  // ── Numeric constraints (under 100 words, max 5 items, limit 3) ──
+  const numberRegex = /\b(under|over|max|min|limit|at least|at most|no more than|no fewer than|exactly|up to|within)\s*\d+\b[^.!?\n]{0,40}/gi
+  while ((match = numberRegex.exec(text)) !== null) {
+    const numMatch = match[0].match(/\d+/)
+    if (numMatch) {
+      constraints.push({ type: 'number', value: match[0].trim(), pattern: numMatch[0] })
+    }
+  }
+
+  // ── Specific numbers that appear as standalone values (percentages, prices, counts) ──
+  const standaloneNumRegex = /\b\d+(?:\.\d+)?(?:\s*%|\s*(?:words?|tokens?|items?|steps?|sentences?|paragraphs?|minutes?|seconds?|dollars?|USD|EUR))\b/gi
+  while ((match = standaloneNumRegex.exec(text)) !== null) {
+    const numMatch = match[0].match(/\d+(?:\.\d+)?/)
+    if (numMatch) {
+      constraints.push({ type: 'number', value: match[0].trim(), pattern: numMatch[0] })
+    }
+  }
+
+  // ── URLs ──
+  const urlRegex = /https?:\/\/[^\s<>"{}|\\^`\]]+/gi
+  while ((match = urlRegex.exec(text)) !== null) {
+    constraints.push({ type: 'url', value: match[0], pattern: match[0].toLowerCase() })
+  }
+
+  // ── Email addresses ──
+  const emailRegex = /[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}/gi
+  while ((match = emailRegex.exec(text)) !== null) {
+    constraints.push({ type: 'email', value: match[0], pattern: match[0].toLowerCase() })
+  }
+
+  // ── Code-like patterns (variable names, function calls) ──
+  const codeRegex = /\b[a-zA-Z_][a-zA-Z0-9_]*\s*\([^)]*\)/g
+  while ((match = codeRegex.exec(text)) !== null) {
+    if (match[0].length > 4 && !['that(', 'this(', 'which(', 'what('].some(s => match![0].toLowerCase().startsWith(s))) {
+      constraints.push({ type: 'code', value: match[0], pattern: match[0].split('(')[0].toLowerCase() })
+    }
+  }
+
+  // ── Key-value pairs with colons (response format keys) ──
+  const keyValueRegex = /\bkeys?:\s*([a-zA-Z_]+(?:\s*,\s*[a-zA-Z_]+)*)/gi
+  while ((match = keyValueRegex.exec(text)) !== null) {
+    const keys = match[1].split(',').map(k => k.trim().toLowerCase()).filter(k => k.length > 1)
+    for (const key of keys) {
+      constraints.push({ type: 'key', value: key, pattern: key })
+    }
+  }
+
+  // Deduplicate by pattern
+  const seen = new Set<string>()
+  return constraints.filter(c => {
+    if (seen.has(c.pattern)) return false
+    seen.add(c.pattern)
+    return true
+  })
+}
+
+function checkConstraints(original: string, compressed: string): {
+  passed: boolean
+  missing: ExtractedConstraint[]
+  total: number
+} {
+  const constraints = extractConstraints(original)
+  const compressedLower = compressed.toLowerCase()
+
+  const missing = constraints.filter(c => {
+    // For multi-word patterns, check if key words are present
+    const words = c.pattern.split(/\s+/)
+    if (words.length === 1) {
+      return !compressedLower.includes(c.pattern)
+    }
+    // For multi-word: require at least 2/3 of words present
+    const found = words.filter(w => compressedLower.includes(w))
+    return found.length < Math.ceil(words.length * 0.66)
+  })
+
+  return {
+    passed: missing.length === 0,
+    missing,
+    total: constraints.length,
+  }
+}
+
+function repairCompressed(compressed: string, missing: ExtractedConstraint[]): string {
+  if (missing.length === 0) return compressed
+
+  // Group missing constraints by type for clean formatting
+  const repairs: string[] = []
+
+  for (const m of missing) {
+    switch (m.type) {
+      case 'format':
+      case 'requirement':
+      case 'prohibition':
+        repairs.push(m.value)
+        break
+      case 'number':
+        repairs.push(m.value)
+        break
+      case 'url':
+      case 'email':
+        repairs.push(m.value)
+        break
+      case 'key':
+        // Don't add individual keys, they'll come with format constraints
+        break
+      case 'code':
+        repairs.push(m.value)
+        break
+    }
+  }
+
+  if (repairs.length === 0) return compressed
+
+  // Append missing constraints to the end
+  const repairBlock = repairs.join('. ')
+  return `${compressed.trimEnd()}\n\n${repairBlock}`
+}
+
 // ── System prompts per mode ───────────────────────────────
 const SYSTEM_PROMPTS: Record<CompressionMode, string> = {
   balanced: `You are a prompt compression engine. Your ONLY job is to rewrite the user's text using fewer words while preserving full meaning.
@@ -92,6 +274,23 @@ export async function compressWithClaude(
     compressedTokens = retry.usage.output_tokens
   }
 
+  // ── Constraint integrity check (Option 4) ─────────────
+  // Extracts critical patterns (format rules, prohibitions, requirements,
+  // numbers, URLs, code) from the original and verifies they survived
+  // compression. If anything was dropped, auto-repairs by appending it.
+  const constraintCheck = checkConstraints(prompt, compressed)
+  let warnings: string[] = []
+
+  if (!constraintCheck.passed) {
+    console.log(`[compression] ${constraintCheck.missing.length}/${constraintCheck.total} constraints missing, auto-repairing`)
+    compressed = repairCompressed(compressed, constraintCheck.missing)
+    warnings = constraintCheck.missing.map(m =>
+      `Restored ${m.type}: "${m.value.length > 60 ? m.value.slice(0, 60) + '...' : m.value}"`
+    )
+    // Rough token recount after repair (real count comes from API, this is estimate)
+    compressedTokens = Math.ceil(compressed.length / 4)
+  }
+
   const savedTokens = Math.max(0, originalTokens - compressedTokens)
   const savedPct = originalTokens > 0 ? Math.max(0, Math.round((savedTokens / originalTokens) * 100)) : 0
   const costSaved = calcCostSaved(originalTokens, compressedTokens, model)
@@ -108,6 +307,12 @@ export async function compressWithClaude(
     mode,
     model,
     timestamp: new Date().toISOString(),
+    constraints: {
+      total: constraintCheck.total,
+      passed: constraintCheck.passed,
+      repaired: constraintCheck.missing.length,
+      warnings,
+    },
   }
 }
 

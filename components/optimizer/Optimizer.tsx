@@ -261,6 +261,22 @@ export function Optimizer() {
             )}
           </div>
 
+          {/* Constraint check feedback */}
+          {result?.constraints && result.constraints.total > 0 && (
+            <div className={cn(
+              'mt-2 flex items-center gap-2 px-3 py-2 rounded-lg font-mono text-[0.68rem]',
+              result.constraints.passed
+                ? 'bg-accent/5 border border-accent/20 text-accent'
+                : 'bg-accent-orange/5 border border-accent-orange/20 text-accent-orange'
+            )}>
+              {result.constraints.passed ? (
+                <span>{result.constraints.total} constraint{result.constraints.total !== 1 ? 's' : ''} detected and preserved</span>
+              ) : (
+                <span>{result.constraints.repaired} constraint{result.constraints.repaired !== 1 ? 's' : ''} were dropped during compression and auto-restored</span>
+              )}
+            </div>
+          )}
+
           {/* Savings summary */}
           {result && (
             <div className="mt-2">

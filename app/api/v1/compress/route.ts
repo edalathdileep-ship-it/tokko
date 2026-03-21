@@ -151,6 +151,12 @@ export async function POST(req: NextRequest) {
           reduction_pct: result.savedPct,
           cost_saved_usd: result.costSaved,
         },
+        constraints: result.constraints ? {
+          detected: result.constraints.total,
+          preserved: result.constraints.passed,
+          repaired: result.constraints.repaired,
+          warnings: result.constraints.warnings,
+        } : null,
         meta: {
           mode: result.mode,
           model: result.model,

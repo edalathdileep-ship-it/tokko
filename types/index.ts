@@ -20,6 +20,12 @@ export interface CompressResult {
   model: ModelType
   timestamp: string
   id: string
+  constraints?: {
+    total: number
+    passed: boolean
+    repaired: number
+    warnings: string[]
+  }
 }
 
 export interface CompressResponse {
