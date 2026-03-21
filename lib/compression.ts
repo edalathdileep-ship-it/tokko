@@ -348,5 +348,11 @@ export function mockCompress(prompt: string, mode: CompressionMode, model: Model
     mode,
     model,
     timestamp: new Date().toISOString(),
+    constraints: {
+      total: 0,
+      passed: true,
+      repaired: 0,
+      warnings: [] as string[],
+    },
   }
 }
