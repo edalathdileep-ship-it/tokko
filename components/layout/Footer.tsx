@@ -73,12 +73,11 @@ export function Footer() {
         {/* Bottom bar */}
         <div className="pt-7 border-t border-border flex flex-col sm:flex-row items-center justify-between gap-3">
           <p className="font-mono text-[0.68rem] text-text-muted">
-            Built with ❤️ for AI power users
+            Built for AI power users
           </p>
-          <div className="flex items-center gap-1.5 font-mono text-[0.68rem] text-accent">
-            <span className="w-1.5 h-1.5 rounded-full bg-accent animate-pulse" />
-            All systems operational
-          </div>
+          <p className="font-mono text-[0.68rem] text-text-muted">
+            @tokko 2026. All rights reserved.
+          </p>
         </div>
       </div>
     </footer>

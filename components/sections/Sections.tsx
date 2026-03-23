@@ -6,29 +6,26 @@ import { Button } from '@/components/ui/Button'
 // ── ModelsStrip ───────────────────────────────────────────
 export function ModelsStrip() {
   const models = [
-    { label: 'Claude', icon: '/model-claude.svg' },
-    { label: 'GPT-4o', icon: '/model-chatgpt.svg' },
-    { label: 'Gemini Pro', icon: '/model-gemini.svg' },
-    { label: 'Claude Code', icon: '/model-claudecode.png' },
-    { label: 'Mistral', icon: null, soon: true },
-    { label: 'Llama 3', icon: null, soon: true },
+    { label: 'Claude', soon: false },
+    { label: 'GPT-4o', soon: false },
+    { label: 'Gemini Pro', soon: false },
+    { label: 'Claude Code', soon: false },
+    { label: 'Mistral', soon: true },
+    { label: 'Llama 3', soon: true },
   ]
   return (
     <div className="border-y border-border bg-bg-surface/60 py-5">
       <div className="max-w-content mx-auto px-4 sm:px-8 md:px-[48px] flex items-center gap-6 flex-wrap">
         <span className="font-mono text-[0.68rem] text-text-muted whitespace-nowrap">
-          Works with every major model →
+          Works with every major model
         </span>
         <div className="flex gap-2 flex-wrap">
           {models.map((m) => (
             <div key={m.label}
-              className={`flex items-center gap-2 px-3 py-2 rounded-lg border border-border bg-bg-surface font-grotesk font-medium text-[0.78rem] ${m.soon ? 'opacity-50' : ''}`}>
-              {m.icon && (
-                <img src={m.icon} alt={m.label} width={16} height={16} className="flex-shrink-0 rounded-sm" />
-              )}
+              className={`px-3 py-2 rounded-lg border border-border bg-bg-surface font-grotesk font-medium text-[0.78rem] ${m.soon ? 'opacity-50' : ''}`}>
               {m.label}
               {m.soon && (
-                <span className="font-mono text-[0.55rem] text-text-muted bg-bg-s2 px-1.5 py-px rounded">soon</span>
+                <span className="font-mono text-[0.55rem] text-text-muted bg-bg-s2 px-1.5 py-px rounded ml-2">soon</span>
               )}
             </div>
           ))}
