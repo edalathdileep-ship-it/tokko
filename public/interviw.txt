@@ -1,0 +1,29 @@
+. How do you approach a design problem when the brief is vague or keeps changing?
+2. Tell me about a complex design system you built and the trade-offs you made.
+3. How do you reduce friction in a flow without removing necessary steps?
+4. Walk me through a recent feature you shipped and the impact it created.
+5. How do you design for users across different regions, languages, and abilities?
+6. What's your collaboration approach when working with PMs and engineers?
+7. How do you structure a component library used by multiple product teams?
+8. How do you identify and fix usability issues after a feature has already launched?
+9. Explain your end-to-end design process from discovery to handoff.
+10. How do you measure whether a design change actually helped users?
+11. How would you design an infinite scroll experience without harming usability?
+12. How do you move forward when product requirements are unclear or contradictory?
+13. What causes cognitive overload in interfaces and how do you prevent it?
+14. When should you use progressive disclosure — and when does it hide too much?
+15. How do you design for accessibility without compromising the visual experience?
+16. How do you handle the tension between fast shipping and design quality?
+17. What are the trade-offs between a highly guided flow vs. giving users full control?
+18. How do you design for async actions — loading, errors, empty states, and timeouts?
+19. Tell me about a time data changed your design direction completely.
+20. How do you diagnose why users are dropping off at a specific point in a flow?
+21. How do you prevent conflicting design patterns from creeping into a product over time?
+22. How do you balance business goals with genuine user needs when they conflict?
+23. How would you design a reusable design system that scales across a large organisation?
+24. How do you approach designing a net-new feature with no existing patterns to reference?
+25. What are the most common mistakes designers make during developer handoff?
+
+𝗧𝗵𝗲𝘀𝗲 𝗮𝗿𝗲𝗻'𝘁 𝘁𝗵𝗲𝗼𝗿𝘆 𝗾𝘂𝗲𝘀𝘁𝗶𝗼𝗻𝘀.
+
+Every single one has a real answer rooted in real project experience.

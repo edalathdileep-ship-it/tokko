@@ -1,0 +1,146 @@
+# Tokko — Designing and shipping a SaaS product with zero coding experience
+
+## A product design case study by Dileep
+
+---
+
+## The short version
+
+I'm a product designer. I had never written a line of code. Over a few weeks, I designed and built a full-stack SaaS product from scratch, shipped it live, got real users, posted it on Reddit, received honest (sometimes brutal) feedback, and learned more about product thinking than any course could teach me.
+
+This is the story of what I built, what worked, what didn't, and what I'd do differently.
+
+---
+
+## The problem I noticed
+
+People who use AI tools like Claude, ChatGPT, and Gemini are running out of messages or paying more than they need to. I watched friends and colleagues hit their daily limits by midweek. I noticed my own prompts were full of filler: "Could you please kindly help me understand how I might go about..." when all I really needed was "explain X."
+
+The question I started with: what if you could automatically strip the filler from a prompt before sending it, so you get the same AI response with fewer tokens?
+
+---
+
+## What I designed and built
+
+Tokko is a web app and Chrome extension that compresses AI prompts. You paste a prompt, choose a compression level, and get a shorter version that produces the same output from the AI.
+
+### Core features I shipped
+
+- Prompt compressor with three modes (Balanced, Aggressive, AI-powered Smart mode)
+- Real-time token counter
+- Compression history with side-by-side comparison
+- Analytics dashboard with daily charts, streaks, and breakdowns
+- Chrome extension that adds a compress button inside Claude.ai
+- Public REST API with docs so developers can integrate compression into their own apps
+- Saved prompts library for system prompts you reuse
+- Playground that sends both original and compressed prompts to Claude and shows both AI responses side by side, so users can verify quality themselves
+- Constraint integrity system that automatically detects critical instructions (format rules, prohibitions, numeric limits, URLs) and ensures they survive compression
+- BYOK (Bring Your Own Key) support for users who want to use their own API key
+
+### Tech stack
+
+Next.js 14 with App Router, TypeScript, Tailwind CSS, Clerk for auth, Supabase for database, Anthropic SDK for compression, Zustand for state management. Deployed on Vercel.
+
+I built all of this through vibe coding, using AI assistants to help me write the code while I focused on the product decisions and design.
+
+---
+
+## Design decisions
+
+### Visual direction
+
+Dark theme only. The target audience uses AI tools all day, and most AI interfaces are dark. I didn't want Tokko to feel like a jarring context switch.
+
+Accent color: #00e5a0 (green). Used sparingly for CTAs, success states, and the compressed output. Everything else is muted grays and whites. The green draws your eye to the thing that matters: the result.
+
+Typography: Space Grotesk for headings (geometric, modern), DM Sans for body (clean, readable), DM Mono for code and data (technical credibility).
+
+### UX decisions I'm proud of
+
+Error states everywhere. Not just "something went wrong" but specific messages: "No internet connection," "Claude is busy, try again in a few seconds," "Daily limit reached." I built 15 different error states across 8 components because I've been frustrated by apps that fail silently.
+
+The constraint integrity check. After every compression, Tokko scans the original prompt for critical patterns and verifies they survived. If the AI accidentally dropped "Never reveal pricing" during compression, the system catches it and adds it back. No extra API calls, no extra cost. Just pattern matching. This came from a Reddit comment asking how I handle edge cases. I didn't have an answer at first. Then I built one.
+
+The Playground. Instead of telling users "trust me, compression preserves quality," I built a tool where they can see both AI responses side by side and judge for themselves. Showing is always better than telling.
+
+Loading states, empty states, skeleton screens. Every component has three visual states: loading, empty, and populated. This is basic UX hygiene but most side projects skip it.
+
+### Information architecture
+
+The landing page flow: Hero (problem statement) → Models supported → Who it's for (6 personas) → Features → How it works → Pricing → Chrome extension → Live stats → FAQ → CTA.
+
+The "Who it's for" section was added after I realized the landing page told people what Tokko does but never who should care. Each card has a specific persona, their pain point, and the result Tokko gives them.
+
+The dashboard: Greeting → Stats cards → Optimizer → (links to History, Analytics, Saved Prompts, Playground, Settings). The optimizer is front and center because that's the core action. Everything else supports it.
+
+---
+
+## What the market told me
+
+I posted Tokko on Reddit (r/SideProject, r/Claude) and community forums. The reception taught me more than building did.
+
+### Feedback that validated the idea
+
+"This is an interesting angle since token cost is becoming a real concern for heavy users."
+
+"Prompt compression targets real token waste issues well."
+
+People understood the problem. Token costs are real and growing.
+
+### Feedback that challenged the core
+
+"Aren't you sending the entire prompt and then using more tokens to summarize it... just to return another prompt?????"
+
+This was the comment that hit hardest. And they were right. For one-off prompts, you spend tokens to save tokens. The math doesn't work.
+
+The only scenario where Tokko's economics make sense is system prompts that get reused thousands of times (compress once, save forever) or subscription users trying to stretch their message limits (they're not paying per token).
+
+That's a much narrower audience than "everyone who uses AI."
+
+### How I responded
+
+I didn't get defensive. I replied honestly: "You're right. For one-off prompts, you're spending tokens to save tokens. That doesn't make sense and I won't pretend it does." That reply got more engagement than any feature announcement.
+
+---
+
+## What I learned
+
+### About product
+
+Validation before building. I built 22 sessions worth of features before getting the market feedback that challenged the core idea. If I'd posted a landing page with a waitlist first, I would have learned this in week one instead of week four.
+
+A narrow use case isn't a failure. Tokko works for a specific scenario (reusable system prompts at scale). I was trying to make it work for everyone. The feedback helped me see the difference.
+
+Features don't fix a weak value proposition. I kept adding features (analytics, playground, API, saved prompts, constraint detection) when I should have been talking to potential users first.
+
+### About design
+
+Error states matter more than happy paths. The first version of Tokko had no error handling. When the API failed, users saw a white screen. Now there are 15 specific error states. This is the difference between a prototype and a product.
+
+Copy is design. Rewriting the landing page headline from "Stop wasting tokens" to "75% of your prompt is wasted money" changed how people understood the product. Words are a design material.
+
+Show, don't tell. Building the Playground (side-by-side output comparison) was more convincing than any explanation I could write about compression quality.
+
+### About building
+
+A designer who can ship is dangerous (in a good way). I went from zero code to a deployed product with auth, database, API, Chrome extension, and real-time analytics. I didn't write every line from scratch. I used AI assistants to write the code. But I made every product decision: what to build, how it should work, what the edge cases are, what happens when things fail.
+
+Vibe coding is real. It has limits. But for a designer who understands what needs to be built and why, it's a genuine superpower.
+
+---
+
+## The product
+
+Live at tokko-seven.vercel.app
+
+Built in ~4 weeks, 22 working sessions, by a designer with zero prior coding experience.
+
+---
+
+## What I'd build next
+
+If I continue with Tokko, I'd pivot from "make prompts shorter" to "make prompts better." A tool that analyzes your prompt and tells you what's wrong: contradictory instructions, missing format rules, vague constraints, wasted tokens. That's a problem people can't solve themselves, and the economics work because better prompts save you money on every call.
+
+If I start something new, I start with the feedback loop first: landing page, waitlist, conversations with potential users. Then build only after I know people want it.
+
+Either way, I'm a designer who can ship now. That doesn't go away.

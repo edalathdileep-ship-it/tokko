@@ -19,7 +19,7 @@ export function Hero() {
             <h1 className="font-grotesk font-bold tracking-[-0.04em] leading-[1.08] mt-7 mb-6"
               style={{ fontSize: 'clamp(2.2rem, 5vw, 3.6rem)' }}>
               <span className="block">75% of your prompt</span>
-              <span className="block text-accent">is wasted money.</span>
+              <span className="block text-text">is wasted money.</span>
             </h1>
 
             <p className="font-sans text-[1rem] md:text-[1.05rem] text-text-muted leading-[1.68] mb-6 max-w-[460px] mx-auto md:mx-0">
@@ -27,17 +27,6 @@ export function Hero() {
               adds nothing. AI reads past all of it, but you still pay for every token.
               Tokko strips the waste. Same results, fraction of the cost.
             </p>
-
-            <div className="flex items-center gap-2 justify-center md:justify-start mb-8">
-              <div className="flex -space-x-2">
-                {['#a855f7','#f59e0b','#3b82f6','#ec4899'].map((c, i) => (
-                  <div key={i} className="w-7 h-7 rounded-full border-2 border-bg-base" style={{ background: c }} />
-                ))}
-              </div>
-              <span className="font-sans text-[0.82rem] text-text-muted">
-                Saving on AI costs right now
-              </span>
-            </div>
 
             <div className="flex gap-3 flex-wrap justify-center md:justify-start mb-10 md:mb-13">
               <Link href="/auth/signup">
